@@ -14,9 +14,7 @@ def benchmark_application(app_name):
     coresim_result_lines = coresim_result_text.splitlines()
     num_lines = len(coresim_result_lines)
 
-    result_lines = coresim_result_lines[num_lines - 3:num_lines - 1]
-    print 'CoreSIM  : ', result_lines[0]
-    print 'CoreSIM  : ', result_lines[1]
+    coresim_result_lines = coresim_result_lines[num_lines - 3:num_lines - 1]
 
     os.system("make  -C ./" + app_name + "/verilator/ > scratch/verilator_" + app_name + "_out.txt");
 
@@ -27,7 +25,10 @@ def benchmark_application(app_name):
     num_lines = len(verilator_result_lines)
 
     result_lines = verilator_result_lines[num_lines - 3:num_lines - 1]
+
+    print 'CoreSIM  : ', coresim_result_lines[0]
     print 'Verilator: ', result_lines[0]
+    print 'CoreSIM  : ', coresim_result_lines[1]
     print 'Verilator: ', result_lines[1]
     
 
