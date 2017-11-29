@@ -3,9 +3,7 @@ import os
 
 # Utility functions
 def benchmark_application(app_name):
-    os.system("cd ./" + app_name "/coresim");
-    os.system("~/CppWorkspace/coreir/bin/simulator -i /Users/dillon/CppWorkspace/verilator_coresim_benchmarks/" + app_name + "/" + app_name + ".json")
-    os.system("cd ../..");
+    os.system("cd ./" + app_name + "/coresim; ~/CppWorkspace/coreir/bin/simulator -i /Users/dillon/CppWorkspace/verilator_coresim_benchmarks/" + app_name + "/coresim/" + app_name + ".json; cd ../..");
 
     call(["make", "-C" , "./" + app_name + "/coresim/"])
     os.system("./" + app_name + "/coresim/a.out > scratch/coresim_" + app_name + "_out.txt");
