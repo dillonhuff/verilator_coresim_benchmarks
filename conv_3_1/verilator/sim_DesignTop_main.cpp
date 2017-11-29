@@ -25,7 +25,7 @@ int main(int argc, char** argv) {
 
   std::clock_t start, end;
 
-  int nRuns = 1e2;
+  int nRuns = 1e5;
 
   start = std::clock();
 
@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     top->eval();
 
     // if (top->clk == 0) {
-    cout << "out " << i << " = " << top->out << endl;
+    //cout << "out " << i << " = " << top->out << endl;
     // }
 
     if (top->clk == 1) {

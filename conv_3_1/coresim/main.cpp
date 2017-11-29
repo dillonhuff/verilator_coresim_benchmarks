@@ -25,7 +25,7 @@ int main() {
 
 
 
-  int nRuns = 1e2;
+  int nRuns = 1e5;
 
   std::clock_t start, end;
   start = std::clock();
@@ -46,7 +46,7 @@ int main() {
     
     // if ((state.self_clk_last == 0) &&
     //     ((i + 1) % 2 == 1)) {
-    cout << "out " << i << " = " << state.self_out << endl;
+    //cout << "out " << i << " = " << state.self_out << endl;
     // }
 
 
