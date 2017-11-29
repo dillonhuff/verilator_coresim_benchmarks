@@ -90,23 +90,19 @@ if (((state->self_clk_last) == 0) && ((state->self_clk) == 1)) {
 // ----- Done
 
 // ----- Update combinational logic after clock
-lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0);
-lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0);
-lb_p4_clamped_stencil_update_stream$mem_2$mem_rdata = ((state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out ]);
-lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0);
-lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0);
-lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata = ((state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out ]);
+lb_p4_clamped_stencil_update_stream$mem_2$mem_rdata = ((state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ (state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0) ]);
+lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata = ((state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ (state->lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0) ]);
 lb_p4_clamped_stencil_update_stream$mem_2$zero_const_out = 0b0000;
 lb_p4_clamped_stencil_update_stream$mem_2$max_const_out = 0b1010;
 lb_p4_clamped_stencil_update_stream$mem_2$c1_out = 0b0001;
-lb_p4_clamped_stencil_update_stream$mem_2$add_w_out = MASK( 4, (lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$c1_out) );
-lb_p4_clamped_stencil_update_stream$mem_2$add_r_out = MASK( 4, (lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$c1_out) );
+lb_p4_clamped_stencil_update_stream$mem_2$add_w_out = MASK( 4, ((state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0) + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$c1_out) );
+lb_p4_clamped_stencil_update_stream$mem_2$add_r_out = MASK( 4, ((state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0) + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$c1_out) );
 lb_p4_clamped_stencil_update_stream$mem_1$zero_const_out = 0b0000;
 lb_p4_clamped_stencil_update_stream_wen_out = 1;
 lb_p4_clamped_stencil_update_stream$mem_1$max_const_out = 0b1010;
 lb_p4_clamped_stencil_update_stream$mem_1$c1_out = 0b0001;
-lb_p4_clamped_stencil_update_stream$mem_1$add_w_out = MASK( 4, (lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$c1_out) );
-lb_p4_clamped_stencil_update_stream$mem_1$add_r_out = MASK( 4, (lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$c1_out) );
+lb_p4_clamped_stencil_update_stream$mem_1$add_w_out = MASK( 4, ((state->lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0) + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$c1_out) );
+lb_p4_clamped_stencil_update_stream$mem_1$add_r_out = MASK( 4, ((state->lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0) + /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$c1_out) );
 (state->self_out) = (((0b0000000000000000 + (lb_p4_clamped_stencil_update_stream$mem_2$mem_rdata * 0b0000000000000011)) + (lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata * 0b0000000000000101)) + ((state->self_in_0) * 0b0000000000000111));
 
 // ----- Done
