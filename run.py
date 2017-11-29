@@ -26,6 +26,7 @@ def benchmark_application(app_name):
 
     result_lines = verilator_result_lines[num_lines - 3:num_lines - 1]
 
+    print '=============== ' + app_name + ' timing ===================='
     print 'CoreSIM  : ', coresim_result_lines[0]
     print 'Verilator: ', result_lines[0]
     print 'CoreSIM  : ', coresim_result_lines[1]
