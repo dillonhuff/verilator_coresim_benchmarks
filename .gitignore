@@ -2,3 +2,6 @@
 scratch/
 conv_3_1/coresim/a.out
 conv_3_1/verilator/obj_dir/
+
+parallel_ops/coresim/a.out
+parallel_ops/verilator/obj_dir/
