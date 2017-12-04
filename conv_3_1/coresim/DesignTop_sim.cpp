@@ -1,6 +1,5 @@
 #include "DesignTop_sim.h"
-#include <thread>
-
+#include <immintrin.h>
 using namespace bsim;
 
 #define SIGN_EXTEND(start, end, x) (((x) & ((1ULL << (start)) - 1)) | (((x) & (1ULL << ((start) - 1))) ? (((1ULL << ((end) - (start))) - 1) << (start)) : 0))
@@ -80,6 +79,12 @@ if (((state->self_clk_last) == 0) && ((state->self_clk) == 1)) {
 // ----- Done
 
 // ----- Updating sequential logic
+(state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_w_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_w_out) : lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out);
+(state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_r_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_r_out) : lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out);
+(state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ] = ((/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out) ? (state->self_in_0) : (state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ]);
+(state->lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$add_w_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$add_w_out) : lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out);
+(state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out ] = ((/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out) ? lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata : (state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out ]);
+(state->lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$add_r_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_1$add_r_out) : lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out);
 (state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_w_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_w_out) : lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out);
 (state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0) = (/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out ? (MASK( 1, (/* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_r_out == /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$max_const_out) ) ? /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$zero_const_out : /* LOCAL */lb_p4_clamped_stencil_update_stream$mem_2$add_r_out) : lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out);
 (state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ] = ((/* LOCAL */lb_p4_clamped_stencil_update_stream_wen_out) ? (state->self_in_0) : (state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ]);
