@@ -40,6 +40,7 @@ os.system("mkdir scratch");
 benchmark_application("conv_3_1")
 
 # Harris
+benchmark_application("harris")
 
 # Parallel logic ops stress test
 benchmark_application("parallel_ops")
