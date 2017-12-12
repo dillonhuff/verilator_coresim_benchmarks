@@ -23,7 +23,7 @@ int main(int argc, char** argv) {
   cout << "Initial out = " << top->out << endl;
   cout << "Initial in  = " << top->in_0 << endl;
 
-  int nRuns = 1e8;
+  int nRuns = 1e6;
 
   std::clock_t start, end;  
   start = std::clock();

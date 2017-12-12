@@ -40,7 +40,7 @@ int main() {
   state.lb_padded_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
   state.lb_padded_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   
-  int nRuns = 1e8;
+  int nRuns = 1e6;
 
   std::clock_t start, end;
   start = std::clock();
