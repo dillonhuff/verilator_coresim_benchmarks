@@ -39,7 +39,8 @@ os.system("mkdir scratch");
 # ------------------- Correctness testing conv_3_1
 
 ## run coresim
-os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/");
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/tmp_conv_3_1.json");
+os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json");
 
 os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json; cd ../..");
 
