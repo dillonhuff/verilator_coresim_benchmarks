@@ -25,18 +25,32 @@ int main(int argc, char** argv) {
   cout << "Initial out = " << top->out << endl;
   cout << "Initial in  = " << top->in_0 << endl;
 
-  // std::vector<unsigned char> image; //the raw pixels
-  // unsigned width, height;
+  std::vector<unsigned char> image; //the raw pixels
+  unsigned width, height;
 
-  // //unsigned error = lodepng::decode(image, width, height, "./input_conv_bw.png");
-  // //unsigned error = lodepng::decode(image, width, height, "./input.png");
+  unsigned error = lodepng::decode(image, width, height, "../input_conv_bw.png");
+  //unsigned error = lodepng::decode(image, width, height, "./input.png");
 
-  // //if there's an error, display it
-  // if(error) {
-  //   //std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
-  // }
+  //if there's an error, display it
+  if(error) {
+    std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+  }
 
-  // cout << "Width  = " << width << endl;
-  // cout << "Height = " << height << endl;
+  cout << "Width  = " << width << endl;
+  cout << "Height = " << height << endl;
+
+  for (int i = 0; i < image.size(); i++) {
+    top->clk = i % 2;
+    top->eval();
+
+    if (top->clk == 0) {
+    cout << "out " << i << " = " << top->out << endl;
+    }
+
+    if (top->clk == 1) {
+
+      top->in_0 = image[i];
+    }
+  }
   
 }
