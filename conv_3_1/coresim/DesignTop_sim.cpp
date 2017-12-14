@@ -78,15 +78,11 @@ lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata = ((state->lb_p4_clamped_ste
 lb_p4_clamped_stencil_update_stream$mem_1$add_r_out = MASK(0b00000000000000000000000000000100, (lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out  +  0b0001));
 (state->self_out) = (((0b0000000000000000  +  (lb_p4_clamped_stencil_update_stream$mem_2$mem_rdata  *  0b0000000000000011))  +  (lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata  *  0b0000000000000101))  +  ((state->self_in_0)  *  0b0000000000000111));
 (state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0) = (0b1 ? (MASK(0b00000000000000000000000000000001, (lb_p4_clamped_stencil_update_stream$mem_2$add_w_out  ==  0b1010)) ? 0b0000 : lb_p4_clamped_stencil_update_stream$mem_2$add_w_out) : lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out);
-;
 (state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0) = (0b1 ? (MASK(0b00000000000000000000000000000001, (lb_p4_clamped_stencil_update_stream$mem_2$add_r_out  ==  0b1010)) ? 0b0000 : lb_p4_clamped_stencil_update_stream$mem_2$add_r_out) : lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out);
-;
 (state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ] = ((0b1) ? (state->self_in_0) : (state->lb_p4_clamped_stencil_update_stream$mem_1$mem)[ lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out ]);
 (state->lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0) = (0b1 ? (MASK(0b00000000000000000000000000000001, (lb_p4_clamped_stencil_update_stream$mem_1$add_w_out  ==  0b1010)) ? 0b0000 : lb_p4_clamped_stencil_update_stream$mem_1$add_w_out) : lb_p4_clamped_stencil_update_stream$mem_1$waddr$reg0_out);
-;
 (state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out ] = ((0b1) ? lb_p4_clamped_stencil_update_stream$mem_1$mem_rdata : (state->lb_p4_clamped_stencil_update_stream$mem_2$mem)[ lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out ]);
 (state->lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0) = (0b1 ? (MASK(0b00000000000000000000000000000001, (lb_p4_clamped_stencil_update_stream$mem_1$add_r_out  ==  0b1010)) ? 0b0000 : lb_p4_clamped_stencil_update_stream$mem_1$add_r_out) : lb_p4_clamped_stencil_update_stream$mem_1$raddr$reg0_out);
-;
 lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0);
 lb_p4_clamped_stencil_update_stream$mem_2$add_w_out = MASK(0b00000000000000000000000000000100, (lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0_out  +  0b0001));
 lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0_out = (state->lb_p4_clamped_stencil_update_stream$mem_2$raddr$reg0);

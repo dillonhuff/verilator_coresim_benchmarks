@@ -49,12 +49,11 @@ os.system("diff ./full_image_test/verilator_ex/verilator_conv_output.txt ./full_
 
 os.system("cat scratch/conv_3_1_diff.txt")
 
+# conv_3_1
+benchmark_application("conv_3_1")
 
-# # conv_3_1
-# benchmark_application("conv_3_1")
+# Harris
+benchmark_application("harris")
 
-# # Harris
-# benchmark_application("harris")
-
-# # Parallel logic ops stress test
-# benchmark_application("parallel_ops")
+# Parallel logic ops stress test
+benchmark_application("parallel_ops")
