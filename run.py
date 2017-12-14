@@ -39,13 +39,13 @@ os.system("mkdir scratch");
 # Correctness testing conv_3_1
 
 ## run coresim
-os.system("cd ./full_image_test/coresim/; make -j; ./a.out")
+os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
-os.system("cd ./full_image_test/verilator_ex/; make -j")
+os.system("cd ./check_conv_3_1/verilator_ex/; make -j")
 
 ## Compare outputs
-os.system("diff ./full_image_test/verilator_ex/verilator_conv_output.txt ./full_image_test/coresim/coresim_conv_output.txt > scratch/conv_3_1_diff.txt")
+os.system("diff ./check_conv_3_1/verilator_ex/verilator_conv_output.txt ./check_conv_3_1/coresim/coresim_conv_output.txt > scratch/conv_3_1_diff.txt")
 
 os.system("cat scratch/conv_3_1_diff.txt")
 
