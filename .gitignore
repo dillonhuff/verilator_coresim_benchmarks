@@ -15,14 +15,16 @@ harris/coresim/cachegrind*
 parallel_ops/verilator/cachegrind*
 harris/verilator/cachegrind*
 
-full_image_test/verilator_ex/obj_dir/*
-full_image_test/a.out
+check_conv_3_1/verilator_ex/obj_dir/*
+check_conv_3_1/verilator_ex/obj_dir/*
+check_conv_3_1/a.out
 
 *DS_Store
 
 *.txt
 
-full_image_test/coresim/DesignTop_sim.o
-full_image_test/coresim/a.out
+check_conv_3_1/coresim/DesignTop_sim.o
+check_conv_3_1/coresim/a.out
 harris/coresim/a.out.dSYM/
 parallel_ops/coresim/a.out.dSYM/
+

@@ -49,6 +49,9 @@ os.system("diff ./check_conv_3_1/verilator_ex/verilator_conv_output.txt ./check_
 
 os.system("cat scratch/conv_3_1_diff.txt")
 
+# Correctness testing harris
+
+
 # conv_3_1
 benchmark_application("conv_3_1")
 
