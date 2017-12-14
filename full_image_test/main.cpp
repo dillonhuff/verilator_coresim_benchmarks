@@ -6,7 +6,7 @@
 
 using namespace std;
 
-int main() {
+int main(const int argc, char** argv) {
   std::vector<unsigned char> image; //the raw pixels
   unsigned width, height;
 
@@ -61,5 +61,5 @@ int main() {
       state.self_in_0 = image[i];
     }
   }
-  
+
 }
