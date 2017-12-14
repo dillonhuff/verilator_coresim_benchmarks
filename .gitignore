@@ -12,6 +12,9 @@ harris/verilator/obj_dir/
 parallel_ops/coresim/cachegrind*
 harris/coresim/cachegrind*
 
+parallel_ops/verilator/cachegrind*
+harris/verilator/cachegrind*
+
 full_image_test/verilator_ex/obj_dir/*
 full_image_test/a.out
 

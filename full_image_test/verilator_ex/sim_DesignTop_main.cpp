@@ -41,6 +41,8 @@ int main(int argc, char** argv) {
   cout << "Total pixels = " << width*height << endl;
   cout << "Image size   = " << image.size() << endl;
 
+  vector<unsigned char> output;
+
   clock_t start, end;
 
   start = clock();
@@ -50,7 +52,7 @@ int main(int argc, char** argv) {
     top->eval();
 
     if (top->clk == 0) {
-      cout << "out " << i << " = " << top->out << endl;
+      output.push_back(top->out);
     }
 
     if (top->clk == 1) {
@@ -60,6 +62,10 @@ int main(int argc, char** argv) {
   }
 
   end = std::clock();
+
+  for (auto& pixel : output) {
+    cout << pixel << endl;
+  }
 
   cout << "DONE." << endl;
 

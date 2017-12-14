@@ -47,6 +47,8 @@ int main(const int argc, char** argv) {
 
   clock_t start, end;
 
+  vector<unsigned char> output;
+  
   start = clock();
 
   for (int i = 0; i < image.size(); i++) {
@@ -58,7 +60,7 @@ int main(const int argc, char** argv) {
     
     if ((state.self_clk_last == 0) &&
         ((i + 1) % 2 == 1)) {
-      cout << "out " << i << " = " << state.self_out << endl;
+      output.push_back(state.self_out);
     }
 
     if ((state.self_clk_last == 1) &&
@@ -69,6 +71,10 @@ int main(const int argc, char** argv) {
 
   end = std::clock();
 
+  for (auto& pixel : output) {
+    cout << pixel << endl;
+  }
+  
   cout << "DONE." << endl;
 
   double time_ms =
