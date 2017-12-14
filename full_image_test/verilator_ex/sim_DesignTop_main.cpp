@@ -7,6 +7,11 @@
 
 #include "../lodepng.h"
 
+#include <bitset>
+#include <fstream>
+#include <string>
+#include <iostream>
+
 using namespace std;
 
 int main(int argc, char** argv) {
@@ -63,14 +68,17 @@ int main(int argc, char** argv) {
 
   end = std::clock();
 
-  for (auto& pixel : output) {
-    cout << pixel << endl;
-  }
-
   cout << "DONE." << endl;
 
   double time_ms =
     (end - start) / (double)(CLOCKS_PER_SEC / 1000);
 
   cout << "Verilator time = " << time_ms << " ms" << endl;
+
+  std::ofstream outf("verilator_conv_output.txt");
+  for (auto& pixel : output) {
+    outf << bitset<16>(pixel) << endl;
+  }
+  outf.close();
+
 }

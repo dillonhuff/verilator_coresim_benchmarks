@@ -4,6 +4,10 @@
 
 #include <bitset>
 
+#include <fstream>
+#include <string>
+#include <iostream>
+
 using namespace std;
 
 int main(const int argc, char** argv) {
@@ -71,15 +75,16 @@ int main(const int argc, char** argv) {
 
   end = std::clock();
 
-  for (auto& pixel : output) {
-    cout << pixel << endl;
-  }
-  
   cout << "DONE." << endl;
 
   double time_ms =
     (end - start) / (double)(CLOCKS_PER_SEC / 1000);
 
   cout << "CoreSIM time = " << time_ms << " ms" << endl;
-  
+
+  std::ofstream out("coresim_conv_output.txt");
+  for (auto& pixel : output) {
+    out << bitset<16>(pixel) << endl;
+  }
+  out.close();
 }
