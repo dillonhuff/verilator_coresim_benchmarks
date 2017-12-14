@@ -57,7 +57,7 @@ os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../
 os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 
 ## run verilator
-os.system("cd ./check_harris/verilator_ex/; make -j")
+os.system("cd ./check_harris/verilator/; make -j")
 
 ## Compare outputs
 os.system("diff ./check_harris/verilator_ex/verilator_conv_output.txt ./check_harris/coresim/coresim_conv_output.txt > scratch/harris_diff.txt")
