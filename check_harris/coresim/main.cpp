@@ -19,39 +19,39 @@ void set_defaults(circuit_state* state) {
   state->lb_padded_2_stencil_update_stream$reg_2_1 = 0;
   state->lb_padded_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_padded_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  state->lb_padded_2_stencil_update_stream$mem_2$mem[ 486 ] = 0;
+  //state->lb_padded_2_stencil_update_stream$mem_2$mem[ 486 ];
   state->lb_padded_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_padded_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
-  state->lb_padded_2_stencil_update_stream$mem_1$mem[ 486 ] = 0;
+  //state->lb_padded_2_stencil_update_stream$mem_1$mem[ 486 ];
   state->lb_p3_cim_stencil_update_stream$reg_1_2 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_0_2 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_0_1 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_2_1 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  state->lb_p3_cim_stencil_update_stream$mem_2$mem[ 482 ] = 0;
+  //state->lb_p3_cim_stencil_update_stream$mem_2$mem[ 482 ];
   state->lb_p3_cim_stencil_update_stream$reg_1_1 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0 = 0;
-  state->lb_p3_cim_stencil_update_stream$mem_1$mem[ 482 ] = 0;
+  //state->lb_p3_cim_stencil_update_stream$mem_1$mem[ 482 ];
   state->lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  state->lb_grad_yy_2_stencil_update_stream$mem_2$mem[ 484 ] = 0;
+  //state->lb_grad_yy_2_stencil_update_stream$mem_2$mem[ 484 ];
   state->lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
-  state->lb_grad_yy_2_stencil_update_stream$mem_1$mem[ 484 ] = 0;
+  //state->lb_grad_yy_2_stencil_update_stream$mem_1$mem[ 484 ];
   state->lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  state->lb_grad_xy_2_stencil_update_stream$mem_2$mem[ 484 ] = 0;
+  //state->lb_grad_xy_2_stencil_update_stream$mem_2$mem[ 484 ];
   state->lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
-  state->lb_grad_xy_2_stencil_update_stream$mem_1$mem[ 484 ] = 0;
+  //state->lb_grad_xy_2_stencil_update_stream$mem_1$mem[ 484 ];
   state->lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  state->lb_grad_xx_2_stencil_update_stream$mem_2$mem[ 484 ] = 0;
+  //state->lb_grad_xx_2_stencil_update_stream$mem_2$mem[ 484 ];
   state->lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
-  state->lb_grad_xx_2_stencil_update_stream$mem_1$mem[ 484 ] = 0;
+  //state->lb_grad_xx_2_stencil_update_stream$mem_1$mem[ 484 ];
   state->lb_grad_yy_2_stencil_update_stream$reg_0_1 = 0;
   state->lb_grad_yy_2_stencil_update_stream$reg_0_2 = 0;
   state->lb_grad_yy_2_stencil_update_stream$reg_1_1 = 0;
@@ -94,6 +94,7 @@ int main() {
 
   cout << "Starting CoreSim" << endl;
   circuit_state state;
+  set_defaults(&state);
 
   state.self_in_0 = 1;
   state.self_clk = 1;
@@ -110,7 +111,7 @@ int main() {
   for (int i = 0; i < image.size(); i++) {
     state.self_clk = i % 2;
 
-    cout << "half cycle " << i << endl;
+    //cout << "half cycle " << i << endl;
     simulate(&state);
 
     state.self_clk_last = state.self_clk;
@@ -135,7 +136,7 @@ int main() {
 
   cout << "CoreSIM time = " << time_ms << " ms" << endl;
 
-  std::ofstream out("coresim_conv_output.txt");
+  std::ofstream out("coresim_harris_output.txt");
   for (auto& pixel : output) {
     out << bitset<16>(pixel) << endl;
   }
