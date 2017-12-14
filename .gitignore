@@ -21,3 +21,8 @@ full_image_test/a.out
 *DS_Store
 
 *.txt
+
+full_image_test/coresim/DesignTop_sim.o
+full_image_test/coresim/a.out
+harris/coresim/a.out.dSYM/
+parallel_ops/coresim/a.out.dSYM/
