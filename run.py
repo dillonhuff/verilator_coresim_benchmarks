@@ -36,11 +36,25 @@ def benchmark_application(app_name):
 #Setup
 os.system("mkdir scratch");
 
-# conv_3_1
-benchmark_application("conv_3_1")
+# Correctness testing conv_3_1
 
-# Harris
-benchmark_application("harris")
+## run coresim
+os.system("cd ./full_image_test/coresim/; make -j; ./a.out")
 
-# Parallel logic ops stress test
-benchmark_application("parallel_ops")
+## run verilator
+os.system("cd ./full_image_test/verilator_ex/; make -j")
+
+## Compare outputs
+os.system("diff ./full_image_test/verilator_ex/verilator_conv_output.txt ./full_image_test/coresim/coresim_conv_output.txt > scratch/conv_3_1_diff.txt")
+
+os.system("cat scratch/conv_3_1_diff.txt")
+
+
+# # conv_3_1
+# benchmark_application("conv_3_1")
+
+# # Harris
+# benchmark_application("harris")
+
+# # Parallel logic ops stress test
+# benchmark_application("parallel_ops")
