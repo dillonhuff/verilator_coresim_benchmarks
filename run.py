@@ -39,17 +39,24 @@ os.system("mkdir scratch");
 # Correctness testing conv_3_1
 
 ## run coresim
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/");
+
 os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json; cd ../..");
 
 os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
+os.system("cd ./check_conv_3_1/coreir -i ./conv_3_1.json ./verilator/conv_3_1.v");
+### Create verilog
+os.system("coreir -i ../harris.json -o harris.v")
 os.system("cd ./check_conv_3_1/verilator_ex/; make -j")
 
 ## Compare outputs
 os.system("diff ./check_conv_3_1/verilator_ex/verilator_conv_output.txt ./check_conv_3_1/coresim/coresim_conv_output.txt > scratch/conv_3_1_diff.txt")
 
+print 'Difference between conv_3_1 outputs:'
 os.system("cat scratch/conv_3_1_diff.txt")
+print 'End of diff.'
 
 # Correctness testing harris
 os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json; cd ../..");
@@ -60,9 +67,11 @@ os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 os.system("cd ./check_harris/verilator/; make -j")
 
 ## Compare outputs
-os.system("diff ./check_harris/verilator_ex/verilator_conv_output.txt ./check_harris/coresim/coresim_conv_output.txt > scratch/harris_diff.txt")
+os.system("diff ./check_harris/verilator/verilator_harris_output.txt ./check_harris/coresim/coresim_harris_output.txt > scratch/harris_diff.txt")
 
+print 'Difference between Harris outputs:'
 os.system("cat scratch/harris_diff.txt")
+print 'End of diff.'
 
 # # conv_3_1
 # benchmark_application("conv_3_1")

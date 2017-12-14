@@ -69,10 +69,10 @@ void set_defaults(circuit_state* state) {
   state->lb_grad_xx_2_stencil_update_stream$reg_2_1 = 0;
   state->self_in_0 = 0;
   state->self_out = 0;
-  state->lb_grad_xx_2_stencil_update_stream$reg_2_2 = 0;
-  state->lb_grad_xy_2_stencil_update_stream$reg_2_2 = 0;
-  state->lb_grad_yy_2_stencil_update_stream$reg_2_2 = 0;
-  state->lb_p3_cim_stencil_update_stream$reg_2_2 = 0;
+  //state->lb_grad_xx_2_stencil_update_stream$reg_2_2 = 0;
+  //state->lb_grad_xy_2_stencil_update_stream$reg_2_2 = 0;
+  //state->lb_grad_yy_2_stencil_update_stream$reg_2_2 = 0;
+  //state->lb_p3_cim_stencil_update_stream$reg_2_2 = 0;
   state->lb_padded_2_stencil_update_stream$reg_1_1 = 0;
   
 }
@@ -82,11 +82,10 @@ int main() {
   unsigned width, height;
 
   unsigned error = lodepng::decode(image, width, height, "../../images/input_conv_bw.png");
-  //unsigned error = lodepng::decode(image, width, height, "./input.png");
 
-  //if there's an error, display it
   if(error) {
     std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
+    assert(false);
   }
 
   cout << "Width  = " << width << endl;
@@ -115,7 +114,9 @@ int main() {
     simulate(&state);
 
     state.self_clk_last = state.self_clk;
-    
+
+// (state->self_out) = (MASK(0b00000000000000000000000000000001, (MASK(0b00000000000000000000000000000001, ((MASK(0b00000000000000000000000000000001, (((int16_t) smax_762_763_764$max_mux_out)  >=  ((int16_t) sub_746_749_750_out))) ? smax_762_763_764$max_mux_out : sub_746_749_750_out)  <  lb_p3_cim_stencil_update_stream$reg_1_1_out))  &  MASK(0b00000000000000000000000000000001, (0b0000000001100100  <=  lb_p3_cim_stencil_update_stream$reg_1_1_out)))) ? 0b0000000000000000 : 0b0000000011111111);
+
     if ((state.self_clk_last == 0) &&
         ((i + 1) % 2 == 1)) {
       output.push_back(state.self_out);

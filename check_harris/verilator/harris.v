@@ -1,5 +1,34 @@
 
 
+module corebit_and (
+  input in0,
+  input in1,
+  output out
+);
+  assign out = in0 & in1;
+
+endmodule //corebit_and
+
+module coreir_reg #(parameter init=1, parameter width=1) (
+  input clk,
+  input [width-1:0] in,
+  output [width-1:0] out
+);
+reg [width-1:0] outReg=init;
+always @(posedge clk) begin
+  outReg <= in;
+end
+assign out = outReg;
+
+endmodule //coreir_reg
+
+module corebit_const #(parameter value=1) (
+  output out
+);
+  assign out = value;
+
+endmodule //corebit_const
+
 module coreir_add #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -8,6 +37,32 @@ module coreir_add #(parameter width=1) (
   assign out = in0 + in1;
 
 endmodule //coreir_add
+
+module mem #(parameter depth=1, parameter width=1) (
+  input clk,
+  input [width-1:0] wdata,
+  input [$clog2(depth)-1:0] waddr,
+  input wen,
+  output [width-1:0] rdata,
+  input [$clog2(depth)-1:0] raddr
+);
+reg [width-1:0] data[depth];
+always @(posedge clk) begin
+  if (wen) begin
+    data[waddr] <= wdata;
+  end
+end
+assign rdata = data[raddr];
+
+endmodule //mem
+
+module corebit_term (
+                     /* verilator lint_off UNUSED */
+  input in
+);
+
+
+endmodule //corebit_term
 
 module coreir_sub #(parameter width=1) (
   input [width-1:0] in0,
@@ -18,48 +73,6 @@ module coreir_sub #(parameter width=1) (
 
 endmodule //coreir_sub
 
-module corebit_and (
-  input in0,
-  input in1,
-  output out
-);
-  assign out = in0 & in1;
-
-endmodule //corebit_and
-
-module corebit_const #(parameter value=1) (
-  output out
-);
-  assign out = value;
-
-endmodule //corebit_const
-
-module corebit_term (
-                     /* verilator lint_off UNUSED */
-  input in
-);
-
-
-endmodule //corebit_term
-
-module coreir_ult #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 < in1;
-
-endmodule //coreir_ult
-
-module wire_U0 (
-  input [15:0] in,
-  output [15:0] out
-);
-  //All the connections
-  assign out[15:0] = in[15:0];
-
-endmodule //wire_U0
-
 module coreir_ashr #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -68,6 +81,15 @@ module coreir_ashr #(parameter width=1) (
   assign out = $signed(in0) >>> in1;
 
 endmodule //coreir_ashr
+
+module coreir_mul #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output [width-1:0] out
+);
+  assign out = in0 * in1;
+
+endmodule //coreir_mul
 
 module coreir_const #(parameter value=1, parameter width=1) (
   output [width-1:0] out
@@ -95,36 +117,14 @@ module coreir_mux #(parameter width=1) (
 
 endmodule //coreir_mux
 
-module coreir_reg #(parameter init=1, parameter width=1) (
-  input clk,
-  input [width-1:0] in,
-  output [width-1:0] out
+module coreir_neq #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
 );
-reg [width-1:0] outReg=init;
-always @(posedge clk) begin
-  outReg <= in;
-end
-assign out = outReg;
+  assign out = in0 != in1;
 
-endmodule //coreir_reg
-
-module mem #(parameter depth=1, parameter width=1) (
-  input clk,
-  input [width-1:0] wdata,
-  input [$clog2(depth)-1:0] waddr,
-  input wen,
-  output [width-1:0] rdata,
-  input [$clog2(depth)-1:0] raddr
-);
-reg [width-1:0] data[depth];
-always @(posedge clk) begin
-  if (wen) begin
-    data[waddr] <= wdata;
-  end
-end
-assign rdata = data[raddr];
-
-endmodule //mem
+endmodule //coreir_neq
 
 module coreir_sge #(parameter width=1) (
   input [width-1:0] in0,
@@ -135,61 +135,6 @@ module coreir_sge #(parameter width=1) (
 
 endmodule //coreir_sge
 
-module smax_U9 (
-  input [15:0] in0,
-  input [15:0] in1,
-  output [15:0] out
-);
-  //Wire declarations for instance 'max_mux' (Module coreir_mux)
-  wire [15:0] max_mux__in0;
-  wire [15:0] max_mux__in1;
-  wire [15:0] max_mux__out;
-  wire  max_mux__sel;
-  coreir_mux #(.width(16)) max_mux(
-    .in0(max_mux__in0),
-    .in1(max_mux__in1),
-    .out(max_mux__out),
-    .sel(max_mux__sel)
-  );
-
-  //Wire declarations for instance 'scomp' (Module coreir_sge)
-  wire [15:0] scomp__in0;
-  wire [15:0] scomp__in1;
-  wire  scomp__out;
-  coreir_sge #(.width(16)) scomp(
-    .in0(scomp__in0),
-    .in1(scomp__in1),
-    .out(scomp__out)
-  );
-
-  //All the connections
-  assign max_mux__in0[15:0] = in1[15:0];
-  assign max_mux__in1[15:0] = in0[15:0];
-  assign out[15:0] = max_mux__out[15:0];
-  assign max_mux__sel = scomp__out;
-  assign scomp__in0[15:0] = in0[15:0];
-  assign scomp__in1[15:0] = in1[15:0];
-
-endmodule //smax_U9
-
-module coreir_mul #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output [width-1:0] out
-);
-  assign out = in0 * in1;
-
-endmodule //coreir_mul
-
-module coreir_neq #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 != in1;
-
-endmodule //coreir_neq
-
 module coreir_ule #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -199,1358 +144,20 @@ module coreir_ule #(parameter width=1) (
 
 endmodule //coreir_ule
 
-module reg_U17 #(parameter init=1) (
-  input  clk,
-  input  en,
-  input [8:0] in,
-  output [8:0] out
+module coreir_ult #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
 );
-  //Wire declarations for instance 'enMux' (Module coreir_mux)
-  wire [8:0] enMux__in0;
-  wire [8:0] enMux__in1;
-  wire [8:0] enMux__out;
-  wire  enMux__sel;
-  coreir_mux #(.width(9)) enMux(
-    .in0(enMux__in0),
-    .in1(enMux__in1),
-    .out(enMux__out),
-    .sel(enMux__sel)
-  );
+  assign out = in0 < in1;
 
-  //Wire declarations for instance 'reg0' (Module coreir_reg)
-  wire  reg0__clk;
-  wire [8:0] reg0__in;
-  wire [8:0] reg0__out;
-  coreir_reg #(.init(init),.width(9)) reg0(
-    .clk(reg0__clk),
-    .in(reg0__in),
-    .out(reg0__out)
-  );
-
-  //All the connections
-  assign enMux__in0[8:0] = reg0__out[8:0];
-  assign enMux__in1[8:0] = in[8:0];
-  assign reg0__in[8:0] = enMux__out[8:0];
-  assign enMux__sel = en;
-  assign reg0__clk = clk;
-  assign out[8:0] = reg0__out[8:0];
-
-endmodule //reg_U17
-
-module LinebufferMem_U16 (
-  input  clk,
-  output [15:0] rdata,
-  output  valid,
-  input [15:0] wdata,
-  input  wen
-);
-  //Wire declarations for instance 'add_r' (Module coreir_add)
-  wire [8:0] add_r__in0;
-  wire [8:0] add_r__in1;
-  wire [8:0] add_r__out;
-  coreir_add #(.width(9)) add_r(
-    .in0(add_r__in0),
-    .in1(add_r__in1),
-    .out(add_r__out)
-  );
-
-  //Wire declarations for instance 'add_w' (Module coreir_add)
-  wire [8:0] add_w__in0;
-  wire [8:0] add_w__in1;
-  wire [8:0] add_w__out;
-  coreir_add #(.width(9)) add_w(
-    .in0(add_w__in0),
-    .in1(add_w__in1),
-    .out(add_w__out)
-  );
-
-  //Wire declarations for instance 'c1' (Module coreir_const)
-  wire [8:0] c1__out;
-  coreir_const #(.value(9'd1),.width(9)) c1(
-    .out(c1__out)
-  );
-
-  //Wire declarations for instance 'max_const' (Module coreir_const)
-  wire [8:0] max_const__out;
-  coreir_const #(.value(9'd486),.width(9)) max_const(
-    .out(max_const__out)
-  );
-
-  //Wire declarations for instance 'mem' (Module mem)
-  wire  mem__clk;
-  wire [8:0] mem__raddr;
-  wire [15:0] mem__rdata;
-  wire [8:0] mem__waddr;
-  wire [15:0] mem__wdata;
-  wire  mem__wen;
-  mem #(.depth(486),.width(16)) mem(
-    .clk(mem__clk),
-    .raddr(mem__raddr),
-    .rdata(mem__rdata),
-    .waddr(mem__waddr),
-    .wdata(mem__wdata),
-    .wen(mem__wen)
-  );
-
-  //Wire declarations for instance 'raddr' (Module reg_U17)
-  wire  raddr__clk;
-  wire  raddr__en;
-  wire [8:0] raddr__in;
-  wire [8:0] raddr__out;
-  reg_U17 #(.init(9'd0)) raddr(
-    .clk(raddr__clk),
-    .en(raddr__en),
-    .in(raddr__in),
-    .out(raddr__out)
-  );
-
-  //Wire declarations for instance 'raddr_eq' (Module coreir_eq)
-  wire [8:0] raddr_eq__in0;
-  wire [8:0] raddr_eq__in1;
-  wire  raddr_eq__out;
-  coreir_eq #(.width(9)) raddr_eq(
-    .in0(raddr_eq__in0),
-    .in1(raddr_eq__in1),
-    .out(raddr_eq__out)
-  );
-
-  //Wire declarations for instance 'raddr_mux' (Module coreir_mux)
-  wire [8:0] raddr_mux__in0;
-  wire [8:0] raddr_mux__in1;
-  wire [8:0] raddr_mux__out;
-  wire  raddr_mux__sel;
-  coreir_mux #(.width(9)) raddr_mux(
-    .in0(raddr_mux__in0),
-    .in1(raddr_mux__in1),
-    .out(raddr_mux__out),
-    .sel(raddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'veq' (Module coreir_neq)
-  wire [8:0] veq__in0;
-  wire [8:0] veq__in1;
-  wire  veq__out;
-  coreir_neq #(.width(9)) veq(
-    .in0(veq__in0),
-    .in1(veq__in1),
-    .out(veq__out)
-  );
-
-  //Wire declarations for instance 'waddr' (Module reg_U17)
-  wire  waddr__clk;
-  wire  waddr__en;
-  wire [8:0] waddr__in;
-  wire [8:0] waddr__out;
-  reg_U17 #(.init(9'd0)) waddr(
-    .clk(waddr__clk),
-    .en(waddr__en),
-    .in(waddr__in),
-    .out(waddr__out)
-  );
-
-  //Wire declarations for instance 'waddr_eq' (Module coreir_eq)
-  wire [8:0] waddr_eq__in0;
-  wire [8:0] waddr_eq__in1;
-  wire  waddr_eq__out;
-  coreir_eq #(.width(9)) waddr_eq(
-    .in0(waddr_eq__in0),
-    .in1(waddr_eq__in1),
-    .out(waddr_eq__out)
-  );
-
-  //Wire declarations for instance 'waddr_mux' (Module coreir_mux)
-  wire [8:0] waddr_mux__in0;
-  wire [8:0] waddr_mux__in1;
-  wire [8:0] waddr_mux__out;
-  wire  waddr_mux__sel;
-  coreir_mux #(.width(9)) waddr_mux(
-    .in0(waddr_mux__in0),
-    .in1(waddr_mux__in1),
-    .out(waddr_mux__out),
-    .sel(waddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'zero_const' (Module coreir_const)
-  wire [8:0] zero_const__out;
-  coreir_const #(.value(9'd0),.width(9)) zero_const(
-    .out(zero_const__out)
-  );
-
-  //All the connections
-  assign add_r__in0[8:0] = raddr__out[8:0];
-  assign add_r__in1[8:0] = c1__out[8:0];
-  assign raddr_eq__in0[8:0] = add_r__out[8:0];
-  assign raddr_mux__in0[8:0] = add_r__out[8:0];
-  assign add_w__in0[8:0] = waddr__out[8:0];
-  assign add_w__in1[8:0] = c1__out[8:0];
-  assign waddr_eq__in0[8:0] = add_w__out[8:0];
-  assign waddr_mux__in0[8:0] = add_w__out[8:0];
-  assign raddr_eq__in1[8:0] = max_const__out[8:0];
-  assign waddr_eq__in1[8:0] = max_const__out[8:0];
-  assign mem__clk = clk;
-  assign mem__raddr[8:0] = raddr__out[8:0];
-  assign rdata[15:0] = mem__rdata[15:0];
-  assign mem__waddr[8:0] = waddr__out[8:0];
-  assign mem__wdata[15:0] = wdata[15:0];
-  assign mem__wen = wen;
-  assign raddr__clk = clk;
-  assign raddr__en = wen;
-  assign raddr__in[8:0] = raddr_mux__out[8:0];
-  assign veq__in0[8:0] = raddr__out[8:0];
-  assign raddr_mux__sel = raddr_eq__out;
-  assign raddr_mux__in1[8:0] = zero_const__out[8:0];
-  assign waddr__clk = clk;
-  assign valid = veq__out;
-  assign waddr__en = wen;
-  assign veq__in1[8:0] = waddr__out[8:0];
-  assign waddr__in[8:0] = waddr_mux__out[8:0];
-  assign waddr_mux__sel = waddr_eq__out;
-  assign waddr_mux__in1[8:0] = zero_const__out[8:0];
-
-endmodule //LinebufferMem_U16
-
-module Linebuffer_U6 (
-  input  clk,
-  input [15:0] in,
-  output [15:0] out_0_0,
-  output [15:0] out_0_1,
-  output [15:0] out_0_2,
-  output [15:0] out_1_0,
-  output [15:0] out_1_1,
-  output [15:0] out_1_2,
-  output [15:0] out_2_0,
-  output [15:0] out_2_1,
-  output [15:0] out_2_2,
-  input  wen
-);
-  //Wire declarations for instance 'mem_1' (Module LinebufferMem_U16)
-  wire  mem_1__clk;
-  wire [15:0] mem_1__rdata;
-  wire  mem_1__valid;
-  wire [15:0] mem_1__wdata;
-  wire  mem_1__wen;
-  LinebufferMem_U16 mem_1(
-    .clk(mem_1__clk),
-    .rdata(mem_1__rdata),
-    .valid(mem_1__valid),
-    .wdata(mem_1__wdata),
-    .wen(mem_1__wen)
-  );
-
-  //Wire declarations for instance 'mem_1_valid_term' (Module corebit_term)
-  wire  mem_1_valid_term__in;
-  corebit_term mem_1_valid_term(
-    .in(mem_1_valid_term__in)
-  );
-
-  //Wire declarations for instance 'mem_2' (Module LinebufferMem_U16)
-  wire  mem_2__clk;
-  wire [15:0] mem_2__rdata;
-  wire  mem_2__valid;
-  wire [15:0] mem_2__wdata;
-  wire  mem_2__wen;
-  LinebufferMem_U16 mem_2(
-    .clk(mem_2__clk),
-    .rdata(mem_2__rdata),
-    .valid(mem_2__valid),
-    .wdata(mem_2__wdata),
-    .wen(mem_2__wen)
-  );
-
-  //Wire declarations for instance 'mem_2_valid_term' (Module corebit_term)
-  wire  mem_2_valid_term__in;
-  corebit_term mem_2_valid_term(
-    .in(mem_2_valid_term__in)
-  );
-
-  //Wire declarations for instance 'reg_0_1' (Module coreir_reg)
-  wire  reg_0_1__clk;
-  wire [15:0] reg_0_1__in;
-  wire [15:0] reg_0_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_1(
-    .clk(reg_0_1__clk),
-    .in(reg_0_1__in),
-    .out(reg_0_1__out)
-  );
-
-  //Wire declarations for instance 'reg_0_2' (Module coreir_reg)
-  wire  reg_0_2__clk;
-  wire [15:0] reg_0_2__in;
-  wire [15:0] reg_0_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_2(
-    .clk(reg_0_2__clk),
-    .in(reg_0_2__in),
-    .out(reg_0_2__out)
-  );
-
-  //Wire declarations for instance 'reg_1_1' (Module coreir_reg)
-  wire  reg_1_1__clk;
-  wire [15:0] reg_1_1__in;
-  wire [15:0] reg_1_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_1(
-    .clk(reg_1_1__clk),
-    .in(reg_1_1__in),
-    .out(reg_1_1__out)
-  );
-
-  //Wire declarations for instance 'reg_1_2' (Module coreir_reg)
-  wire  reg_1_2__clk;
-  wire [15:0] reg_1_2__in;
-  wire [15:0] reg_1_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_2(
-    .clk(reg_1_2__clk),
-    .in(reg_1_2__in),
-    .out(reg_1_2__out)
-  );
-
-  //Wire declarations for instance 'reg_2_1' (Module coreir_reg)
-  wire  reg_2_1__clk;
-  wire [15:0] reg_2_1__in;
-  wire [15:0] reg_2_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_1(
-    .clk(reg_2_1__clk),
-    .in(reg_2_1__in),
-    .out(reg_2_1__out)
-  );
-
-  //Wire declarations for instance 'reg_2_2' (Module coreir_reg)
-  wire  reg_2_2__clk;
-  wire [15:0] reg_2_2__in;
-  wire [15:0] reg_2_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_2(
-    .clk(reg_2_2__clk),
-    .in(reg_2_2__in),
-    .out(reg_2_2__out)
-  );
-
-  //All the connections
-  assign mem_1__clk = clk;
-  assign mem_2__wdata[15:0] = mem_1__rdata[15:0];
-  assign reg_1_1__in[15:0] = mem_1__rdata[15:0];
-  assign out_1_2[15:0] = mem_1__rdata[15:0];
-  assign mem_1_valid_term__in = mem_1__valid;
-  assign mem_1__wdata[15:0] = in[15:0];
-  assign mem_1__wen = wen;
-  assign mem_2__clk = clk;
-  assign reg_2_1__in[15:0] = mem_2__rdata[15:0];
-  assign out_0_2[15:0] = mem_2__rdata[15:0];
-  assign mem_2_valid_term__in = mem_2__valid;
-  assign mem_2__wen = wen;
-  assign reg_0_1__clk = clk;
-  assign reg_0_1__in[15:0] = in[15:0];
-  assign reg_0_2__in[15:0] = reg_0_1__out[15:0];
-  assign out_2_1[15:0] = reg_0_1__out[15:0];
-  assign reg_0_2__clk = clk;
-  assign out_2_0[15:0] = reg_0_2__out[15:0];
-  assign reg_1_1__clk = clk;
-  assign reg_1_2__in[15:0] = reg_1_1__out[15:0];
-  assign out_1_1[15:0] = reg_1_1__out[15:0];
-  assign reg_1_2__clk = clk;
-  assign out_1_0[15:0] = reg_1_2__out[15:0];
-  assign reg_2_1__clk = clk;
-  assign reg_2_2__in[15:0] = reg_2_1__out[15:0];
-  assign out_0_1[15:0] = reg_2_1__out[15:0];
-  assign reg_2_2__clk = clk;
-  assign out_0_0[15:0] = reg_2_2__out[15:0];
-  assign out_2_2[15:0] = in[15:0];
-
-endmodule //Linebuffer_U6
-
-module LinebufferMem_U15 (
-  input  clk,
-  output [15:0] rdata,
-  output  valid,
-  input [15:0] wdata,
-  input  wen
-);
-  //Wire declarations for instance 'add_r' (Module coreir_add)
-  wire [8:0] add_r__in0;
-  wire [8:0] add_r__in1;
-  wire [8:0] add_r__out;
-  coreir_add #(.width(9)) add_r(
-    .in0(add_r__in0),
-    .in1(add_r__in1),
-    .out(add_r__out)
-  );
-
-  //Wire declarations for instance 'add_w' (Module coreir_add)
-  wire [8:0] add_w__in0;
-  wire [8:0] add_w__in1;
-  wire [8:0] add_w__out;
-  coreir_add #(.width(9)) add_w(
-    .in0(add_w__in0),
-    .in1(add_w__in1),
-    .out(add_w__out)
-  );
-
-  //Wire declarations for instance 'c1' (Module coreir_const)
-  wire [8:0] c1__out;
-  coreir_const #(.value(9'd1),.width(9)) c1(
-    .out(c1__out)
-  );
-
-  //Wire declarations for instance 'max_const' (Module coreir_const)
-  wire [8:0] max_const__out;
-  coreir_const #(.value(9'd482),.width(9)) max_const(
-    .out(max_const__out)
-  );
-
-  //Wire declarations for instance 'mem' (Module mem)
-  wire  mem__clk;
-  wire [8:0] mem__raddr;
-  wire [15:0] mem__rdata;
-  wire [8:0] mem__waddr;
-  wire [15:0] mem__wdata;
-  wire  mem__wen;
-  mem #(.depth(482),.width(16)) mem(
-    .clk(mem__clk),
-    .raddr(mem__raddr),
-    .rdata(mem__rdata),
-    .waddr(mem__waddr),
-    .wdata(mem__wdata),
-    .wen(mem__wen)
-  );
-
-  //Wire declarations for instance 'raddr' (Module reg_U17)
-  wire  raddr__clk;
-  wire  raddr__en;
-  wire [8:0] raddr__in;
-  wire [8:0] raddr__out;
-  reg_U17 #(.init(9'd0)) raddr(
-    .clk(raddr__clk),
-    .en(raddr__en),
-    .in(raddr__in),
-    .out(raddr__out)
-  );
-
-  //Wire declarations for instance 'raddr_eq' (Module coreir_eq)
-  wire [8:0] raddr_eq__in0;
-  wire [8:0] raddr_eq__in1;
-  wire  raddr_eq__out;
-  coreir_eq #(.width(9)) raddr_eq(
-    .in0(raddr_eq__in0),
-    .in1(raddr_eq__in1),
-    .out(raddr_eq__out)
-  );
-
-  //Wire declarations for instance 'raddr_mux' (Module coreir_mux)
-  wire [8:0] raddr_mux__in0;
-  wire [8:0] raddr_mux__in1;
-  wire [8:0] raddr_mux__out;
-  wire  raddr_mux__sel;
-  coreir_mux #(.width(9)) raddr_mux(
-    .in0(raddr_mux__in0),
-    .in1(raddr_mux__in1),
-    .out(raddr_mux__out),
-    .sel(raddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'veq' (Module coreir_neq)
-  wire [8:0] veq__in0;
-  wire [8:0] veq__in1;
-  wire  veq__out;
-  coreir_neq #(.width(9)) veq(
-    .in0(veq__in0),
-    .in1(veq__in1),
-    .out(veq__out)
-  );
-
-  //Wire declarations for instance 'waddr' (Module reg_U17)
-  wire  waddr__clk;
-  wire  waddr__en;
-  wire [8:0] waddr__in;
-  wire [8:0] waddr__out;
-  reg_U17 #(.init(9'd0)) waddr(
-    .clk(waddr__clk),
-    .en(waddr__en),
-    .in(waddr__in),
-    .out(waddr__out)
-  );
-
-  //Wire declarations for instance 'waddr_eq' (Module coreir_eq)
-  wire [8:0] waddr_eq__in0;
-  wire [8:0] waddr_eq__in1;
-  wire  waddr_eq__out;
-  coreir_eq #(.width(9)) waddr_eq(
-    .in0(waddr_eq__in0),
-    .in1(waddr_eq__in1),
-    .out(waddr_eq__out)
-  );
-
-  //Wire declarations for instance 'waddr_mux' (Module coreir_mux)
-  wire [8:0] waddr_mux__in0;
-  wire [8:0] waddr_mux__in1;
-  wire [8:0] waddr_mux__out;
-  wire  waddr_mux__sel;
-  coreir_mux #(.width(9)) waddr_mux(
-    .in0(waddr_mux__in0),
-    .in1(waddr_mux__in1),
-    .out(waddr_mux__out),
-    .sel(waddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'zero_const' (Module coreir_const)
-  wire [8:0] zero_const__out;
-  coreir_const #(.value(9'd0),.width(9)) zero_const(
-    .out(zero_const__out)
-  );
-
-  //All the connections
-  assign add_r__in0[8:0] = raddr__out[8:0];
-  assign add_r__in1[8:0] = c1__out[8:0];
-  assign raddr_eq__in0[8:0] = add_r__out[8:0];
-  assign raddr_mux__in0[8:0] = add_r__out[8:0];
-  assign add_w__in0[8:0] = waddr__out[8:0];
-  assign add_w__in1[8:0] = c1__out[8:0];
-  assign waddr_eq__in0[8:0] = add_w__out[8:0];
-  assign waddr_mux__in0[8:0] = add_w__out[8:0];
-  assign raddr_eq__in1[8:0] = max_const__out[8:0];
-  assign waddr_eq__in1[8:0] = max_const__out[8:0];
-  assign mem__clk = clk;
-  assign mem__raddr[8:0] = raddr__out[8:0];
-  assign rdata[15:0] = mem__rdata[15:0];
-  assign mem__waddr[8:0] = waddr__out[8:0];
-  assign mem__wdata[15:0] = wdata[15:0];
-  assign mem__wen = wen;
-  assign raddr__clk = clk;
-  assign raddr__en = wen;
-  assign raddr__in[8:0] = raddr_mux__out[8:0];
-  assign veq__in0[8:0] = raddr__out[8:0];
-  assign raddr_mux__sel = raddr_eq__out;
-  assign raddr_mux__in1[8:0] = zero_const__out[8:0];
-  assign waddr__clk = clk;
-  assign valid = veq__out;
-  assign waddr__en = wen;
-  assign veq__in1[8:0] = waddr__out[8:0];
-  assign waddr__in[8:0] = waddr_mux__out[8:0];
-  assign waddr_mux__sel = waddr_eq__out;
-  assign waddr_mux__in1[8:0] = zero_const__out[8:0];
-
-endmodule //LinebufferMem_U15
-
-module Linebuffer_U5 (
-  input  clk,
-  input [15:0] in,
-  output [15:0] out_0_0,
-  output [15:0] out_0_1,
-  output [15:0] out_0_2,
-  output [15:0] out_1_0,
-  output [15:0] out_1_1,
-  output [15:0] out_1_2,
-  output [15:0] out_2_0,
-  output [15:0] out_2_1,
-  output [15:0] out_2_2,
-  input  wen
-);
-  //Wire declarations for instance 'mem_1' (Module LinebufferMem_U15)
-  wire  mem_1__clk;
-  wire [15:0] mem_1__rdata;
-  wire  mem_1__valid;
-  wire [15:0] mem_1__wdata;
-  wire  mem_1__wen;
-  LinebufferMem_U15 mem_1(
-    .clk(mem_1__clk),
-    .rdata(mem_1__rdata),
-    .valid(mem_1__valid),
-    .wdata(mem_1__wdata),
-    .wen(mem_1__wen)
-  );
-
-  //Wire declarations for instance 'mem_1_valid_term' (Module corebit_term)
-  wire  mem_1_valid_term__in;
-  corebit_term mem_1_valid_term(
-    .in(mem_1_valid_term__in)
-  );
-
-  //Wire declarations for instance 'mem_2' (Module LinebufferMem_U15)
-  wire  mem_2__clk;
-  wire [15:0] mem_2__rdata;
-  wire  mem_2__valid;
-  wire [15:0] mem_2__wdata;
-  wire  mem_2__wen;
-  LinebufferMem_U15 mem_2(
-    .clk(mem_2__clk),
-    .rdata(mem_2__rdata),
-    .valid(mem_2__valid),
-    .wdata(mem_2__wdata),
-    .wen(mem_2__wen)
-  );
-
-  //Wire declarations for instance 'mem_2_valid_term' (Module corebit_term)
-  wire  mem_2_valid_term__in;
-  corebit_term mem_2_valid_term(
-    .in(mem_2_valid_term__in)
-  );
-
-  //Wire declarations for instance 'reg_0_1' (Module coreir_reg)
-  wire  reg_0_1__clk;
-  wire [15:0] reg_0_1__in;
-  wire [15:0] reg_0_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_1(
-    .clk(reg_0_1__clk),
-    .in(reg_0_1__in),
-    .out(reg_0_1__out)
-  );
-
-  //Wire declarations for instance 'reg_0_2' (Module coreir_reg)
-  wire  reg_0_2__clk;
-  wire [15:0] reg_0_2__in;
-  wire [15:0] reg_0_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_2(
-    .clk(reg_0_2__clk),
-    .in(reg_0_2__in),
-    .out(reg_0_2__out)
-  );
-
-  //Wire declarations for instance 'reg_1_1' (Module coreir_reg)
-  wire  reg_1_1__clk;
-  wire [15:0] reg_1_1__in;
-  wire [15:0] reg_1_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_1(
-    .clk(reg_1_1__clk),
-    .in(reg_1_1__in),
-    .out(reg_1_1__out)
-  );
-
-  //Wire declarations for instance 'reg_1_2' (Module coreir_reg)
-  wire  reg_1_2__clk;
-  wire [15:0] reg_1_2__in;
-  wire [15:0] reg_1_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_2(
-    .clk(reg_1_2__clk),
-    .in(reg_1_2__in),
-    .out(reg_1_2__out)
-  );
-
-  //Wire declarations for instance 'reg_2_1' (Module coreir_reg)
-  wire  reg_2_1__clk;
-  wire [15:0] reg_2_1__in;
-  wire [15:0] reg_2_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_1(
-    .clk(reg_2_1__clk),
-    .in(reg_2_1__in),
-    .out(reg_2_1__out)
-  );
-
-  //Wire declarations for instance 'reg_2_2' (Module coreir_reg)
-  wire  reg_2_2__clk;
-  wire [15:0] reg_2_2__in;
-  wire [15:0] reg_2_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_2(
-    .clk(reg_2_2__clk),
-    .in(reg_2_2__in),
-    .out(reg_2_2__out)
-  );
-
-  //All the connections
-  assign mem_1__clk = clk;
-  assign mem_2__wdata[15:0] = mem_1__rdata[15:0];
-  assign reg_1_1__in[15:0] = mem_1__rdata[15:0];
-  assign out_1_2[15:0] = mem_1__rdata[15:0];
-  assign mem_1_valid_term__in = mem_1__valid;
-  assign mem_1__wdata[15:0] = in[15:0];
-  assign mem_1__wen = wen;
-  assign mem_2__clk = clk;
-  assign reg_2_1__in[15:0] = mem_2__rdata[15:0];
-  assign out_0_2[15:0] = mem_2__rdata[15:0];
-  assign mem_2_valid_term__in = mem_2__valid;
-  assign mem_2__wen = wen;
-  assign reg_0_1__clk = clk;
-  assign reg_0_1__in[15:0] = in[15:0];
-  assign reg_0_2__in[15:0] = reg_0_1__out[15:0];
-  assign out_2_1[15:0] = reg_0_1__out[15:0];
-  assign reg_0_2__clk = clk;
-  assign out_2_0[15:0] = reg_0_2__out[15:0];
-  assign reg_1_1__clk = clk;
-  assign reg_1_2__in[15:0] = reg_1_1__out[15:0];
-  assign out_1_1[15:0] = reg_1_1__out[15:0];
-  assign reg_1_2__clk = clk;
-  assign out_1_0[15:0] = reg_1_2__out[15:0];
-  assign reg_2_1__clk = clk;
-  assign reg_2_2__in[15:0] = reg_2_1__out[15:0];
-  assign out_0_1[15:0] = reg_2_1__out[15:0];
-  assign reg_2_2__clk = clk;
-  assign out_0_0[15:0] = reg_2_2__out[15:0];
-  assign out_2_2[15:0] = in[15:0];
-
-endmodule //Linebuffer_U5
-
-module LinebufferMem_U14 (
-  input  clk,
-  output [15:0] rdata,
-  output  valid,
-  input [15:0] wdata,
-  input  wen
-);
-  //Wire declarations for instance 'add_r' (Module coreir_add)
-  wire [8:0] add_r__in0;
-  wire [8:0] add_r__in1;
-  wire [8:0] add_r__out;
-  coreir_add #(.width(9)) add_r(
-    .in0(add_r__in0),
-    .in1(add_r__in1),
-    .out(add_r__out)
-  );
-
-  //Wire declarations for instance 'add_w' (Module coreir_add)
-  wire [8:0] add_w__in0;
-  wire [8:0] add_w__in1;
-  wire [8:0] add_w__out;
-  coreir_add #(.width(9)) add_w(
-    .in0(add_w__in0),
-    .in1(add_w__in1),
-    .out(add_w__out)
-  );
-
-  //Wire declarations for instance 'c1' (Module coreir_const)
-  wire [8:0] c1__out;
-  coreir_const #(.value(9'd1),.width(9)) c1(
-    .out(c1__out)
-  );
-
-  //Wire declarations for instance 'max_const' (Module coreir_const)
-  wire [8:0] max_const__out;
-  coreir_const #(.value(9'd484),.width(9)) max_const(
-    .out(max_const__out)
-  );
-
-  //Wire declarations for instance 'mem' (Module mem)
-  wire  mem__clk;
-  wire [8:0] mem__raddr;
-  wire [15:0] mem__rdata;
-  wire [8:0] mem__waddr;
-  wire [15:0] mem__wdata;
-  wire  mem__wen;
-  mem #(.depth(484),.width(16)) mem(
-    .clk(mem__clk),
-    .raddr(mem__raddr),
-    .rdata(mem__rdata),
-    .waddr(mem__waddr),
-    .wdata(mem__wdata),
-    .wen(mem__wen)
-  );
-
-  //Wire declarations for instance 'raddr' (Module reg_U17)
-  wire  raddr__clk;
-  wire  raddr__en;
-  wire [8:0] raddr__in;
-  wire [8:0] raddr__out;
-  reg_U17 #(.init(9'd0)) raddr(
-    .clk(raddr__clk),
-    .en(raddr__en),
-    .in(raddr__in),
-    .out(raddr__out)
-  );
-
-  //Wire declarations for instance 'raddr_eq' (Module coreir_eq)
-  wire [8:0] raddr_eq__in0;
-  wire [8:0] raddr_eq__in1;
-  wire  raddr_eq__out;
-  coreir_eq #(.width(9)) raddr_eq(
-    .in0(raddr_eq__in0),
-    .in1(raddr_eq__in1),
-    .out(raddr_eq__out)
-  );
-
-  //Wire declarations for instance 'raddr_mux' (Module coreir_mux)
-  wire [8:0] raddr_mux__in0;
-  wire [8:0] raddr_mux__in1;
-  wire [8:0] raddr_mux__out;
-  wire  raddr_mux__sel;
-  coreir_mux #(.width(9)) raddr_mux(
-    .in0(raddr_mux__in0),
-    .in1(raddr_mux__in1),
-    .out(raddr_mux__out),
-    .sel(raddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'veq' (Module coreir_neq)
-  wire [8:0] veq__in0;
-  wire [8:0] veq__in1;
-  wire  veq__out;
-  coreir_neq #(.width(9)) veq(
-    .in0(veq__in0),
-    .in1(veq__in1),
-    .out(veq__out)
-  );
-
-  //Wire declarations for instance 'waddr' (Module reg_U17)
-  wire  waddr__clk;
-  wire  waddr__en;
-  wire [8:0] waddr__in;
-  wire [8:0] waddr__out;
-  reg_U17 #(.init(9'd0)) waddr(
-    .clk(waddr__clk),
-    .en(waddr__en),
-    .in(waddr__in),
-    .out(waddr__out)
-  );
-
-  //Wire declarations for instance 'waddr_eq' (Module coreir_eq)
-  wire [8:0] waddr_eq__in0;
-  wire [8:0] waddr_eq__in1;
-  wire  waddr_eq__out;
-  coreir_eq #(.width(9)) waddr_eq(
-    .in0(waddr_eq__in0),
-    .in1(waddr_eq__in1),
-    .out(waddr_eq__out)
-  );
-
-  //Wire declarations for instance 'waddr_mux' (Module coreir_mux)
-  wire [8:0] waddr_mux__in0;
-  wire [8:0] waddr_mux__in1;
-  wire [8:0] waddr_mux__out;
-  wire  waddr_mux__sel;
-  coreir_mux #(.width(9)) waddr_mux(
-    .in0(waddr_mux__in0),
-    .in1(waddr_mux__in1),
-    .out(waddr_mux__out),
-    .sel(waddr_mux__sel)
-  );
-
-  //Wire declarations for instance 'zero_const' (Module coreir_const)
-  wire [8:0] zero_const__out;
-  coreir_const #(.value(9'd0),.width(9)) zero_const(
-    .out(zero_const__out)
-  );
-
-  //All the connections
-  assign add_r__in0[8:0] = raddr__out[8:0];
-  assign add_r__in1[8:0] = c1__out[8:0];
-  assign raddr_eq__in0[8:0] = add_r__out[8:0];
-  assign raddr_mux__in0[8:0] = add_r__out[8:0];
-  assign add_w__in0[8:0] = waddr__out[8:0];
-  assign add_w__in1[8:0] = c1__out[8:0];
-  assign waddr_eq__in0[8:0] = add_w__out[8:0];
-  assign waddr_mux__in0[8:0] = add_w__out[8:0];
-  assign raddr_eq__in1[8:0] = max_const__out[8:0];
-  assign waddr_eq__in1[8:0] = max_const__out[8:0];
-  assign mem__clk = clk;
-  assign mem__raddr[8:0] = raddr__out[8:0];
-  assign rdata[15:0] = mem__rdata[15:0];
-  assign mem__waddr[8:0] = waddr__out[8:0];
-  assign mem__wdata[15:0] = wdata[15:0];
-  assign mem__wen = wen;
-  assign raddr__clk = clk;
-  assign raddr__en = wen;
-  assign raddr__in[8:0] = raddr_mux__out[8:0];
-  assign veq__in0[8:0] = raddr__out[8:0];
-  assign raddr_mux__sel = raddr_eq__out;
-  assign raddr_mux__in1[8:0] = zero_const__out[8:0];
-  assign waddr__clk = clk;
-  assign valid = veq__out;
-  assign waddr__en = wen;
-  assign veq__in1[8:0] = waddr__out[8:0];
-  assign waddr__in[8:0] = waddr_mux__out[8:0];
-  assign waddr_mux__sel = waddr_eq__out;
-  assign waddr_mux__in1[8:0] = zero_const__out[8:0];
-
-endmodule //LinebufferMem_U14
-
-module Linebuffer_U4 (
-  input  clk,
-  input [15:0] in,
-  output [15:0] out_0_0,
-  output [15:0] out_0_1,
-  output [15:0] out_0_2,
-  output [15:0] out_1_0,
-  output [15:0] out_1_1,
-  output [15:0] out_1_2,
-  output [15:0] out_2_0,
-  output [15:0] out_2_1,
-  output [15:0] out_2_2,
-  input  wen
-);
-  //Wire declarations for instance 'mem_1' (Module LinebufferMem_U14)
-  wire  mem_1__clk;
-  wire [15:0] mem_1__rdata;
-  wire  mem_1__valid;
-  wire [15:0] mem_1__wdata;
-  wire  mem_1__wen;
-  LinebufferMem_U14 mem_1(
-    .clk(mem_1__clk),
-    .rdata(mem_1__rdata),
-    .valid(mem_1__valid),
-    .wdata(mem_1__wdata),
-    .wen(mem_1__wen)
-  );
-
-  //Wire declarations for instance 'mem_1_valid_term' (Module corebit_term)
-  wire  mem_1_valid_term__in;
-  corebit_term mem_1_valid_term(
-    .in(mem_1_valid_term__in)
-  );
-
-  //Wire declarations for instance 'mem_2' (Module LinebufferMem_U14)
-  wire  mem_2__clk;
-  wire [15:0] mem_2__rdata;
-  wire  mem_2__valid;
-  wire [15:0] mem_2__wdata;
-  wire  mem_2__wen;
-  LinebufferMem_U14 mem_2(
-    .clk(mem_2__clk),
-    .rdata(mem_2__rdata),
-    .valid(mem_2__valid),
-    .wdata(mem_2__wdata),
-    .wen(mem_2__wen)
-  );
-
-  //Wire declarations for instance 'mem_2_valid_term' (Module corebit_term)
-  wire  mem_2_valid_term__in;
-  corebit_term mem_2_valid_term(
-    .in(mem_2_valid_term__in)
-  );
-
-  //Wire declarations for instance 'reg_0_1' (Module coreir_reg)
-  wire  reg_0_1__clk;
-  wire [15:0] reg_0_1__in;
-  wire [15:0] reg_0_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_1(
-    .clk(reg_0_1__clk),
-    .in(reg_0_1__in),
-    .out(reg_0_1__out)
-  );
-
-  //Wire declarations for instance 'reg_0_2' (Module coreir_reg)
-  wire  reg_0_2__clk;
-  wire [15:0] reg_0_2__in;
-  wire [15:0] reg_0_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_0_2(
-    .clk(reg_0_2__clk),
-    .in(reg_0_2__in),
-    .out(reg_0_2__out)
-  );
-
-  //Wire declarations for instance 'reg_1_1' (Module coreir_reg)
-  wire  reg_1_1__clk;
-  wire [15:0] reg_1_1__in;
-  wire [15:0] reg_1_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_1(
-    .clk(reg_1_1__clk),
-    .in(reg_1_1__in),
-    .out(reg_1_1__out)
-  );
-
-  //Wire declarations for instance 'reg_1_2' (Module coreir_reg)
-  wire  reg_1_2__clk;
-  wire [15:0] reg_1_2__in;
-  wire [15:0] reg_1_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_1_2(
-    .clk(reg_1_2__clk),
-    .in(reg_1_2__in),
-    .out(reg_1_2__out)
-  );
-
-  //Wire declarations for instance 'reg_2_1' (Module coreir_reg)
-  wire  reg_2_1__clk;
-  wire [15:0] reg_2_1__in;
-  wire [15:0] reg_2_1__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_1(
-    .clk(reg_2_1__clk),
-    .in(reg_2_1__in),
-    .out(reg_2_1__out)
-  );
-
-  //Wire declarations for instance 'reg_2_2' (Module coreir_reg)
-  wire  reg_2_2__clk;
-  wire [15:0] reg_2_2__in;
-  wire [15:0] reg_2_2__out;
-  coreir_reg #(.init(16'd0),.width(16)) reg_2_2(
-    .clk(reg_2_2__clk),
-    .in(reg_2_2__in),
-    .out(reg_2_2__out)
-  );
-
-  //All the connections
-  assign mem_1__clk = clk;
-  assign mem_2__wdata[15:0] = mem_1__rdata[15:0];
-  assign reg_1_1__in[15:0] = mem_1__rdata[15:0];
-  assign out_1_2[15:0] = mem_1__rdata[15:0];
-  assign mem_1_valid_term__in = mem_1__valid;
-  assign mem_1__wdata[15:0] = in[15:0];
-  assign mem_1__wen = wen;
-  assign mem_2__clk = clk;
-  assign reg_2_1__in[15:0] = mem_2__rdata[15:0];
-  assign out_0_2[15:0] = mem_2__rdata[15:0];
-  assign mem_2_valid_term__in = mem_2__valid;
-  assign mem_2__wen = wen;
-  assign reg_0_1__clk = clk;
-  assign reg_0_1__in[15:0] = in[15:0];
-  assign reg_0_2__in[15:0] = reg_0_1__out[15:0];
-  assign out_2_1[15:0] = reg_0_1__out[15:0];
-  assign reg_0_2__clk = clk;
-  assign out_2_0[15:0] = reg_0_2__out[15:0];
-  assign reg_1_1__clk = clk;
-  assign reg_1_2__in[15:0] = reg_1_1__out[15:0];
-  assign out_1_1[15:0] = reg_1_1__out[15:0];
-  assign reg_1_2__clk = clk;
-  assign out_1_0[15:0] = reg_1_2__out[15:0];
-  assign reg_2_1__clk = clk;
-  assign reg_2_2__in[15:0] = reg_2_1__out[15:0];
-  assign out_0_1[15:0] = reg_2_1__out[15:0];
-  assign reg_2_2__clk = clk;
-  assign out_0_0[15:0] = reg_2_2__out[15:0];
-  assign out_2_2[15:0] = in[15:0];
-
-endmodule //Linebuffer_U4
+endmodule //coreir_ult
 
 module DesignTop (
   input  clk,
   input [15:0] in_0,
   output [15:0] out
 );
-  //Wire declarations for instance '_628_pt' (Module wire_U0)
-  wire [15:0] _628_pt__in;
-  wire [15:0] _628_pt__out;
-  wire_U0 _628_pt(
-    .in(_628_pt__in),
-    .out(_628_pt__out)
-  );
-
-  //Wire declarations for instance '_630_pt' (Module wire_U0)
-  wire [15:0] _630_pt__in;
-  wire [15:0] _630_pt__out;
-  wire_U0 _630_pt(
-    .in(_630_pt__in),
-    .out(_630_pt__out)
-  );
-
-  //Wire declarations for instance '_633_pt' (Module wire_U0)
-  wire [15:0] _633_pt__in;
-  wire [15:0] _633_pt__out;
-  wire_U0 _633_pt(
-    .in(_633_pt__in),
-    .out(_633_pt__out)
-  );
-
-  //Wire declarations for instance '_638_pt' (Module wire_U0)
-  wire [15:0] _638_pt__in;
-  wire [15:0] _638_pt__out;
-  wire_U0 _638_pt(
-    .in(_638_pt__in),
-    .out(_638_pt__out)
-  );
-
-  //Wire declarations for instance '_642_pt' (Module wire_U0)
-  wire [15:0] _642_pt__in;
-  wire [15:0] _642_pt__out;
-  wire_U0 _642_pt(
-    .in(_642_pt__in),
-    .out(_642_pt__out)
-  );
-
-  //Wire declarations for instance '_645_pt' (Module wire_U0)
-  wire [15:0] _645_pt__in;
-  wire [15:0] _645_pt__out;
-  wire_U0 _645_pt(
-    .in(_645_pt__in),
-    .out(_645_pt__out)
-  );
-
-  //Wire declarations for instance '_654_pt' (Module wire_U0)
-  wire [15:0] _654_pt__in;
-  wire [15:0] _654_pt__out;
-  wire_U0 _654_pt(
-    .in(_654_pt__in),
-    .out(_654_pt__out)
-  );
-
-  //Wire declarations for instance '_656_pt' (Module wire_U0)
-  wire [15:0] _656_pt__in;
-  wire [15:0] _656_pt__out;
-  wire_U0 _656_pt(
-    .in(_656_pt__in),
-    .out(_656_pt__out)
-  );
-
-  //Wire declarations for instance '_658_pt' (Module wire_U0)
-  wire [15:0] _658_pt__in;
-  wire [15:0] _658_pt__out;
-  wire_U0 _658_pt(
-    .in(_658_pt__in),
-    .out(_658_pt__out)
-  );
-
-  //Wire declarations for instance '_660_pt' (Module wire_U0)
-  wire [15:0] _660_pt__in;
-  wire [15:0] _660_pt__out;
-  wire_U0 _660_pt(
-    .in(_660_pt__in),
-    .out(_660_pt__out)
-  );
-
-  //Wire declarations for instance '_662_pt' (Module wire_U0)
-  wire [15:0] _662_pt__in;
-  wire [15:0] _662_pt__out;
-  wire_U0 _662_pt(
-    .in(_662_pt__in),
-    .out(_662_pt__out)
-  );
-
-  //Wire declarations for instance '_664_pt' (Module wire_U0)
-  wire [15:0] _664_pt__in;
-  wire [15:0] _664_pt__out;
-  wire_U0 _664_pt(
-    .in(_664_pt__in),
-    .out(_664_pt__out)
-  );
-
-  //Wire declarations for instance '_666_pt' (Module wire_U0)
-  wire [15:0] _666_pt__in;
-  wire [15:0] _666_pt__out;
-  wire_U0 _666_pt(
-    .in(_666_pt__in),
-    .out(_666_pt__out)
-  );
-
-  //Wire declarations for instance '_668_pt' (Module wire_U0)
-  wire [15:0] _668_pt__in;
-  wire [15:0] _668_pt__out;
-  wire_U0 _668_pt(
-    .in(_668_pt__in),
-    .out(_668_pt__out)
-  );
-
-  //Wire declarations for instance '_670_pt' (Module wire_U0)
-  wire [15:0] _670_pt__in;
-  wire [15:0] _670_pt__out;
-  wire_U0 _670_pt(
-    .in(_670_pt__in),
-    .out(_670_pt__out)
-  );
-
-  //Wire declarations for instance '_672_pt' (Module wire_U0)
-  wire [15:0] _672_pt__in;
-  wire [15:0] _672_pt__out;
-  wire_U0 _672_pt(
-    .in(_672_pt__in),
-    .out(_672_pt__out)
-  );
-
-  //Wire declarations for instance '_675_pt' (Module wire_U0)
-  wire [15:0] _675_pt__in;
-  wire [15:0] _675_pt__out;
-  wire_U0 _675_pt(
-    .in(_675_pt__in),
-    .out(_675_pt__out)
-  );
-
-  //Wire declarations for instance '_680_pt' (Module wire_U0)
-  wire [15:0] _680_pt__in;
-  wire [15:0] _680_pt__out;
-  wire_U0 _680_pt(
-    .in(_680_pt__in),
-    .out(_680_pt__out)
-  );
-
-  //Wire declarations for instance '_684_pt' (Module wire_U0)
-  wire [15:0] _684_pt__in;
-  wire [15:0] _684_pt__out;
-  wire_U0 _684_pt(
-    .in(_684_pt__in),
-    .out(_684_pt__out)
-  );
-
-  //Wire declarations for instance '_687_pt' (Module wire_U0)
-  wire [15:0] _687_pt__in;
-  wire [15:0] _687_pt__out;
-  wire_U0 _687_pt(
-    .in(_687_pt__in),
-    .out(_687_pt__out)
-  );
-
-  //Wire declarations for instance '_698_pt' (Module wire_U0)
-  wire [15:0] _698_pt__in;
-  wire [15:0] _698_pt__out;
-  wire_U0 _698_pt(
-    .in(_698_pt__in),
-    .out(_698_pt__out)
-  );
-
-  //Wire declarations for instance '_700_pt' (Module wire_U0)
-  wire [15:0] _700_pt__in;
-  wire [15:0] _700_pt__out;
-  wire_U0 _700_pt(
-    .in(_700_pt__in),
-    .out(_700_pt__out)
-  );
-
-  //Wire declarations for instance '_702_pt' (Module wire_U0)
-  wire [15:0] _702_pt__in;
-  wire [15:0] _702_pt__out;
-  wire_U0 _702_pt(
-    .in(_702_pt__in),
-    .out(_702_pt__out)
-  );
-
-  //Wire declarations for instance '_704_pt' (Module wire_U0)
-  wire [15:0] _704_pt__in;
-  wire [15:0] _704_pt__out;
-  wire_U0 _704_pt(
-    .in(_704_pt__in),
-    .out(_704_pt__out)
-  );
-
-  //Wire declarations for instance '_706_pt' (Module wire_U0)
-  wire [15:0] _706_pt__in;
-  wire [15:0] _706_pt__out;
-  wire_U0 _706_pt(
-    .in(_706_pt__in),
-    .out(_706_pt__out)
-  );
-
-  //Wire declarations for instance '_708_pt' (Module wire_U0)
-  wire [15:0] _708_pt__in;
-  wire [15:0] _708_pt__out;
-  wire_U0 _708_pt(
-    .in(_708_pt__in),
-    .out(_708_pt__out)
-  );
-
-  //Wire declarations for instance '_710_pt' (Module wire_U0)
-  wire [15:0] _710_pt__in;
-  wire [15:0] _710_pt__out;
-  wire_U0 _710_pt(
-    .in(_710_pt__in),
-    .out(_710_pt__out)
-  );
-
-  //Wire declarations for instance '_712_pt' (Module wire_U0)
-  wire [15:0] _712_pt__in;
-  wire [15:0] _712_pt__out;
-  wire_U0 _712_pt(
-    .in(_712_pt__in),
-    .out(_712_pt__out)
-  );
-
-  //Wire declarations for instance '_720_pt' (Module wire_U0)
-  wire [15:0] _720_pt__in;
-  wire [15:0] _720_pt__out;
-  wire_U0 _720_pt(
-    .in(_720_pt__in),
-    .out(_720_pt__out)
-  );
-
-  //Wire declarations for instance '_722_pt' (Module wire_U0)
-  wire [15:0] _722_pt__in;
-  wire [15:0] _722_pt__out;
-  wire_U0 _722_pt(
-    .in(_722_pt__in),
-    .out(_722_pt__out)
-  );
-
-  //Wire declarations for instance '_724_pt' (Module wire_U0)
-  wire [15:0] _724_pt__in;
-  wire [15:0] _724_pt__out;
-  wire_U0 _724_pt(
-    .in(_724_pt__in),
-    .out(_724_pt__out)
-  );
-
-  //Wire declarations for instance '_726_pt' (Module wire_U0)
-  wire [15:0] _726_pt__in;
-  wire [15:0] _726_pt__out;
-  wire_U0 _726_pt(
-    .in(_726_pt__in),
-    .out(_726_pt__out)
-  );
-
-  //Wire declarations for instance '_728_pt' (Module wire_U0)
-  wire [15:0] _728_pt__in;
-  wire [15:0] _728_pt__out;
-  wire_U0 _728_pt(
-    .in(_728_pt__in),
-    .out(_728_pt__out)
-  );
-
-  //Wire declarations for instance '_730_pt' (Module wire_U0)
-  wire [15:0] _730_pt__in;
-  wire [15:0] _730_pt__out;
-  wire_U0 _730_pt(
-    .in(_730_pt__in),
-    .out(_730_pt__out)
-  );
-
-  //Wire declarations for instance '_732_pt' (Module wire_U0)
-  wire [15:0] _732_pt__in;
-  wire [15:0] _732_pt__out;
-  wire_U0 _732_pt(
-    .in(_732_pt__in),
-    .out(_732_pt__out)
-  );
-
-  //Wire declarations for instance '_734_pt' (Module wire_U0)
-  wire [15:0] _734_pt__in;
-  wire [15:0] _734_pt__out;
-  wire_U0 _734_pt(
-    .in(_734_pt__in),
-    .out(_734_pt__out)
-  );
-
-  //Wire declarations for instance '_751_pt' (Module wire_U0)
-  wire [15:0] _751_pt__in;
-  wire [15:0] _751_pt__out;
-  wire_U0 _751_pt(
-    .in(_751_pt__in),
-    .out(_751_pt__out)
-  );
-
-  //Wire declarations for instance '_753_pt' (Module wire_U0)
-  wire [15:0] _753_pt__in;
-  wire [15:0] _753_pt__out;
-  wire_U0 _753_pt(
-    .in(_753_pt__in),
-    .out(_753_pt__out)
-  );
-
-  //Wire declarations for instance '_755_pt' (Module wire_U0)
-  wire [15:0] _755_pt__in;
-  wire [15:0] _755_pt__out;
-  wire_U0 _755_pt(
-    .in(_755_pt__in),
-    .out(_755_pt__out)
-  );
-
-  //Wire declarations for instance '_757_pt' (Module wire_U0)
-  wire [15:0] _757_pt__in;
-  wire [15:0] _757_pt__out;
-  wire_U0 _757_pt(
-    .in(_757_pt__in),
-    .out(_757_pt__out)
-  );
-
-  //Wire declarations for instance '_759_pt' (Module wire_U0)
-  wire [15:0] _759_pt__in;
-  wire [15:0] _759_pt__out;
-  wire_U0 _759_pt(
-    .in(_759_pt__in),
-    .out(_759_pt__out)
-  );
-
-  //Wire declarations for instance '_761_pt' (Module wire_U0)
-  wire [15:0] _761_pt__in;
-  wire [15:0] _761_pt__out;
-  wire_U0 _761_pt(
-    .in(_761_pt__in),
-    .out(_761_pt__out)
-  );
-
-  //Wire declarations for instance '_763_pt' (Module wire_U0)
-  wire [15:0] _763_pt__in;
-  wire [15:0] _763_pt__out;
-  wire_U0 _763_pt(
-    .in(_763_pt__in),
-    .out(_763_pt__out)
-  );
-
-  //Wire declarations for instance '_765_pt' (Module wire_U0)
-  wire [15:0] _765_pt__in;
-  wire [15:0] _765_pt__out;
-  wire_U0 _765_pt(
-    .in(_765_pt__in),
-    .out(_765_pt__out)
-  );
-
   //Wire declarations for instance 'add_637_640_641' (Module coreir_add)
   wire [15:0] add_637_640_641__in0;
   wire [15:0] add_637_640_641__in1;
@@ -2005,32 +612,390 @@ module DesignTop (
     .out(const7__739$2__out)
   );
 
-  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream' (Module Linebuffer_U4)
-  wire  lb_grad_xx_2_stencil_update_stream__clk;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__in;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_0_0;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_0_1;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_0_2;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_1_0;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_1_1;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_1_2;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_2_0;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_2_1;
-  wire [15:0] lb_grad_xx_2_stencil_update_stream__out_2_2;
-  wire  lb_grad_xx_2_stencil_update_stream__wen;
-  Linebuffer_U4 lb_grad_xx_2_stencil_update_stream(
-    .clk(lb_grad_xx_2_stencil_update_stream__clk),
-    .in(lb_grad_xx_2_stencil_update_stream__in),
-    .out_0_0(lb_grad_xx_2_stencil_update_stream__out_0_0),
-    .out_0_1(lb_grad_xx_2_stencil_update_stream__out_0_1),
-    .out_0_2(lb_grad_xx_2_stencil_update_stream__out_0_2),
-    .out_1_0(lb_grad_xx_2_stencil_update_stream__out_1_0),
-    .out_1_1(lb_grad_xx_2_stencil_update_stream__out_1_1),
-    .out_1_2(lb_grad_xx_2_stencil_update_stream__out_1_2),
-    .out_2_0(lb_grad_xx_2_stencil_update_stream__out_2_0),
-    .out_2_1(lb_grad_xx_2_stencil_update_stream__out_2_1),
-    .out_2_2(lb_grad_xx_2_stencil_update_stream__out_2_2),
-    .wen(lb_grad_xx_2_stencil_update_stream__wen)
+  //Wire declarations for instance 'in_0_auto_reg' (Module coreir_reg)
+  wire  in_0_auto_reg__clk;
+  wire [15:0] in_0_auto_reg__in;
+  wire [15:0] in_0_auto_reg__out;
+  coreir_reg #(.init(16'd0),.width(16)) in_0_auto_reg(
+    .clk(in_0_auto_reg__clk),
+    .in(in_0_auto_reg__in),
+    .out(in_0_auto_reg__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_r__out;
+  coreir_add #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$add_r(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$add_w__out;
+  coreir_add #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$add_w(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$c1' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$c1(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$max_const(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$mem' (Module mem)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$mem__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$mem__raddr;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$mem_1$mem__rdata;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$mem__waddr;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$mem_1$mem__wdata;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_xx_2_stencil_update_stream$mem_1$mem(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_1$mem__clk),
+    .raddr(lb_grad_xx_2_stencil_update_stream$mem_1$mem__raddr),
+    .rdata(lb_grad_xx_2_stencil_update_stream$mem_1$mem__rdata),
+    .waddr(lb_grad_xx_2_stencil_update_stream$mem_1$mem__waddr),
+    .wdata(lb_grad_xx_2_stencil_update_stream$mem_1$mem__wdata),
+    .wen(lb_grad_xx_2_stencil_update_stream$mem_1$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__in;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__in),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$veq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$veq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$veq__out;
+  coreir_neq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$veq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$veq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$veq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__in;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__in),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_1$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_1$zero_const(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_1$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_1_valid_term' (Module corebit_term)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_1_valid_term__in;
+  corebit_term lb_grad_xx_2_stencil_update_stream$mem_1_valid_term(
+    .in(lb_grad_xx_2_stencil_update_stream$mem_1_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_r__out;
+  coreir_add #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$add_r(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$add_w__out;
+  coreir_add #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$add_w(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$c1' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$c1(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$max_const(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$mem' (Module mem)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$mem__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$mem__raddr;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$mem_2$mem__rdata;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$mem__waddr;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$mem_2$mem__wdata;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_xx_2_stencil_update_stream$mem_2$mem(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_2$mem__clk),
+    .raddr(lb_grad_xx_2_stencil_update_stream$mem_2$mem__raddr),
+    .rdata(lb_grad_xx_2_stencil_update_stream$mem_2$mem__rdata),
+    .waddr(lb_grad_xx_2_stencil_update_stream$mem_2$mem__waddr),
+    .wdata(lb_grad_xx_2_stencil_update_stream$mem_2$mem__wdata),
+    .wen(lb_grad_xx_2_stencil_update_stream$mem_2$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__in;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__in),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$veq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$veq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$veq__out;
+  coreir_neq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$veq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$veq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$veq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__clk;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__in;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0(
+    .clk(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__in),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in1;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in0;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in1;
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__out;
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux(
+    .in0(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in0),
+    .in1(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in1),
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__out),
+    .sel(lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_xx_2_stencil_update_stream$mem_2$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_xx_2_stencil_update_stream$mem_2$zero_const(
+    .out(lb_grad_xx_2_stencil_update_stream$mem_2$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$mem_2_valid_term' (Module corebit_term)
+  wire  lb_grad_xx_2_stencil_update_stream$mem_2_valid_term__in;
+  corebit_term lb_grad_xx_2_stencil_update_stream$mem_2_valid_term(
+    .in(lb_grad_xx_2_stencil_update_stream$mem_2_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_0_1' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_0_1__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_0_1__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_0_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_0_1(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_0_1__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_0_1__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_0_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_0_2' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_0_2__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_0_2__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_0_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_0_2(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_0_2__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_0_2__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_0_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_1_1' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_1_1__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_1_1__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_1_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_1_1(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_1_1__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_1_1__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_1_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_1_2' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_1_2__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_1_2__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_1_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_1_2(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_1_2__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_1_2__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_1_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_2_1' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_2_1__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_2_1__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_2_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_2_1(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_2_1__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_2_1__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_2_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream$reg_2_2' (Module coreir_reg)
+  wire  lb_grad_xx_2_stencil_update_stream$reg_2_2__clk;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_2_2__in;
+  wire [15:0] lb_grad_xx_2_stencil_update_stream$reg_2_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xx_2_stencil_update_stream$reg_2_2(
+    .clk(lb_grad_xx_2_stencil_update_stream$reg_2_2__clk),
+    .in(lb_grad_xx_2_stencil_update_stream$reg_2_2__in),
+    .out(lb_grad_xx_2_stencil_update_stream$reg_2_2__out)
   );
 
   //Wire declarations for instance 'lb_grad_xx_2_stencil_update_stream_wen' (Module corebit_const)
@@ -2039,32 +1004,380 @@ module DesignTop (
     .out(lb_grad_xx_2_stencil_update_stream_wen__out)
   );
 
-  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream' (Module Linebuffer_U4)
-  wire  lb_grad_xy_2_stencil_update_stream__clk;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__in;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_0_0;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_0_1;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_0_2;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_1_0;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_1_1;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_1_2;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_2_0;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_2_1;
-  wire [15:0] lb_grad_xy_2_stencil_update_stream__out_2_2;
-  wire  lb_grad_xy_2_stencil_update_stream__wen;
-  Linebuffer_U4 lb_grad_xy_2_stencil_update_stream(
-    .clk(lb_grad_xy_2_stencil_update_stream__clk),
-    .in(lb_grad_xy_2_stencil_update_stream__in),
-    .out_0_0(lb_grad_xy_2_stencil_update_stream__out_0_0),
-    .out_0_1(lb_grad_xy_2_stencil_update_stream__out_0_1),
-    .out_0_2(lb_grad_xy_2_stencil_update_stream__out_0_2),
-    .out_1_0(lb_grad_xy_2_stencil_update_stream__out_1_0),
-    .out_1_1(lb_grad_xy_2_stencil_update_stream__out_1_1),
-    .out_1_2(lb_grad_xy_2_stencil_update_stream__out_1_2),
-    .out_2_0(lb_grad_xy_2_stencil_update_stream__out_2_0),
-    .out_2_1(lb_grad_xy_2_stencil_update_stream__out_2_1),
-    .out_2_2(lb_grad_xy_2_stencil_update_stream__out_2_2),
-    .wen(lb_grad_xy_2_stencil_update_stream__wen)
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_r__out;
+  coreir_add #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$add_r(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$add_w__out;
+  coreir_add #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$add_w(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$c1' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$c1(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$max_const(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$mem' (Module mem)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$mem__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$mem__raddr;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$mem_1$mem__rdata;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$mem__waddr;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$mem_1$mem__wdata;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_xy_2_stencil_update_stream$mem_1$mem(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_1$mem__clk),
+    .raddr(lb_grad_xy_2_stencil_update_stream$mem_1$mem__raddr),
+    .rdata(lb_grad_xy_2_stencil_update_stream$mem_1$mem__rdata),
+    .waddr(lb_grad_xy_2_stencil_update_stream$mem_1$mem__waddr),
+    .wdata(lb_grad_xy_2_stencil_update_stream$mem_1$mem__wdata),
+    .wen(lb_grad_xy_2_stencil_update_stream$mem_1$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__in;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__in),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$veq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$veq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$veq__out;
+  coreir_neq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$veq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$veq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$veq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__in;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__in),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_1$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_1$zero_const(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_1$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_1_valid_term' (Module corebit_term)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_1_valid_term__in;
+  corebit_term lb_grad_xy_2_stencil_update_stream$mem_1_valid_term(
+    .in(lb_grad_xy_2_stencil_update_stream$mem_1_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_r__out;
+  coreir_add #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$add_r(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$add_w__out;
+  coreir_add #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$add_w(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$c1' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$c1(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$max_const(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$mem' (Module mem)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$mem__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$mem__raddr;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$mem_2$mem__rdata;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$mem__waddr;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$mem_2$mem__wdata;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_xy_2_stencil_update_stream$mem_2$mem(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_2$mem__clk),
+    .raddr(lb_grad_xy_2_stencil_update_stream$mem_2$mem__raddr),
+    .rdata(lb_grad_xy_2_stencil_update_stream$mem_2$mem__rdata),
+    .waddr(lb_grad_xy_2_stencil_update_stream$mem_2$mem__waddr),
+    .wdata(lb_grad_xy_2_stencil_update_stream$mem_2$mem__wdata),
+    .wen(lb_grad_xy_2_stencil_update_stream$mem_2$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__in;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__in),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$veq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$veq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$veq__out;
+  coreir_neq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$veq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$veq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$veq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__clk;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__in;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0(
+    .clk(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__in),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in1;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in0;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in1;
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__out;
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux(
+    .in0(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in0),
+    .in1(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in1),
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__out),
+    .sel(lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_xy_2_stencil_update_stream$mem_2$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_xy_2_stencil_update_stream$mem_2$zero_const(
+    .out(lb_grad_xy_2_stencil_update_stream$mem_2$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$mem_2_valid_term' (Module corebit_term)
+  wire  lb_grad_xy_2_stencil_update_stream$mem_2_valid_term__in;
+  corebit_term lb_grad_xy_2_stencil_update_stream$mem_2_valid_term(
+    .in(lb_grad_xy_2_stencil_update_stream$mem_2_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_0_1' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_0_1__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_0_1__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_0_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_0_1(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_0_1__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_0_1__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_0_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_0_2' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_0_2__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_0_2__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_0_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_0_2(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_0_2__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_0_2__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_0_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_1_1' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_1_1__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_1_1__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_1_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_1_1(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_1_1__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_1_1__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_1_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_1_2' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_1_2__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_1_2__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_1_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_1_2(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_1_2__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_1_2__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_1_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_2_1' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_2_1__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_2_1__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_2_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_2_1(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_2_1__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_2_1__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_2_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream$reg_2_2' (Module coreir_reg)
+  wire  lb_grad_xy_2_stencil_update_stream$reg_2_2__clk;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_2_2__in;
+  wire [15:0] lb_grad_xy_2_stencil_update_stream$reg_2_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_xy_2_stencil_update_stream$reg_2_2(
+    .clk(lb_grad_xy_2_stencil_update_stream$reg_2_2__clk),
+    .in(lb_grad_xy_2_stencil_update_stream$reg_2_2__in),
+    .out(lb_grad_xy_2_stencil_update_stream$reg_2_2__out)
   );
 
   //Wire declarations for instance 'lb_grad_xy_2_stencil_update_stream_wen' (Module corebit_const)
@@ -2073,32 +1386,380 @@ module DesignTop (
     .out(lb_grad_xy_2_stencil_update_stream_wen__out)
   );
 
-  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream' (Module Linebuffer_U4)
-  wire  lb_grad_yy_2_stencil_update_stream__clk;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__in;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_0_0;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_0_1;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_0_2;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_1_0;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_1_1;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_1_2;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_2_0;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_2_1;
-  wire [15:0] lb_grad_yy_2_stencil_update_stream__out_2_2;
-  wire  lb_grad_yy_2_stencil_update_stream__wen;
-  Linebuffer_U4 lb_grad_yy_2_stencil_update_stream(
-    .clk(lb_grad_yy_2_stencil_update_stream__clk),
-    .in(lb_grad_yy_2_stencil_update_stream__in),
-    .out_0_0(lb_grad_yy_2_stencil_update_stream__out_0_0),
-    .out_0_1(lb_grad_yy_2_stencil_update_stream__out_0_1),
-    .out_0_2(lb_grad_yy_2_stencil_update_stream__out_0_2),
-    .out_1_0(lb_grad_yy_2_stencil_update_stream__out_1_0),
-    .out_1_1(lb_grad_yy_2_stencil_update_stream__out_1_1),
-    .out_1_2(lb_grad_yy_2_stencil_update_stream__out_1_2),
-    .out_2_0(lb_grad_yy_2_stencil_update_stream__out_2_0),
-    .out_2_1(lb_grad_yy_2_stencil_update_stream__out_2_1),
-    .out_2_2(lb_grad_yy_2_stencil_update_stream__out_2_2),
-    .wen(lb_grad_yy_2_stencil_update_stream__wen)
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_r__out;
+  coreir_add #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$add_r(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$add_w__out;
+  coreir_add #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$add_w(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$c1' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$c1(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$max_const(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$mem' (Module mem)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$mem__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$mem__raddr;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$mem_1$mem__rdata;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$mem__waddr;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$mem_1$mem__wdata;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_yy_2_stencil_update_stream$mem_1$mem(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_1$mem__clk),
+    .raddr(lb_grad_yy_2_stencil_update_stream$mem_1$mem__raddr),
+    .rdata(lb_grad_yy_2_stencil_update_stream$mem_1$mem__rdata),
+    .waddr(lb_grad_yy_2_stencil_update_stream$mem_1$mem__waddr),
+    .wdata(lb_grad_yy_2_stencil_update_stream$mem_1$mem__wdata),
+    .wen(lb_grad_yy_2_stencil_update_stream$mem_1$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__in;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__in),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$veq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$veq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$veq__out;
+  coreir_neq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$veq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$veq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$veq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__in;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__in),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_1$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_1$zero_const(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_1$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_1_valid_term' (Module corebit_term)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_1_valid_term__in;
+  corebit_term lb_grad_yy_2_stencil_update_stream$mem_1_valid_term(
+    .in(lb_grad_yy_2_stencil_update_stream$mem_1_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$add_r' (Module coreir_add)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_r__out;
+  coreir_add #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$add_r(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$add_w' (Module coreir_add)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$add_w__out;
+  coreir_add #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$add_w(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$c1' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$c1(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$max_const' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$max_const__out;
+  coreir_const #(.value(9'd484),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$max_const(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$mem' (Module mem)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$mem__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$mem__raddr;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$mem_2$mem__rdata;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$mem__waddr;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$mem_2$mem__wdata;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$mem__wen;
+  mem #(.depth(484),.width(16)) lb_grad_yy_2_stencil_update_stream$mem_2$mem(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_2$mem__clk),
+    .raddr(lb_grad_yy_2_stencil_update_stream$mem_2$mem__raddr),
+    .rdata(lb_grad_yy_2_stencil_update_stream$mem_2$mem__rdata),
+    .waddr(lb_grad_yy_2_stencil_update_stream$mem_2$mem__waddr),
+    .wdata(lb_grad_yy_2_stencil_update_stream$mem_2$mem__wdata),
+    .wen(lb_grad_yy_2_stencil_update_stream$mem_2$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__in;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__in),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$veq' (Module coreir_neq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$veq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$veq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$veq__out;
+  coreir_neq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$veq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$veq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$veq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__clk;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__in;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0(
+    .clk(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__in),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in1;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in0;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in1;
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__out;
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux(
+    .in0(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in0),
+    .in1(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in1),
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__out),
+    .sel(lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2$zero_const' (Module coreir_const)
+  wire [8:0] lb_grad_yy_2_stencil_update_stream$mem_2$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_grad_yy_2_stencil_update_stream$mem_2$zero_const(
+    .out(lb_grad_yy_2_stencil_update_stream$mem_2$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$mem_2_valid_term' (Module corebit_term)
+  wire  lb_grad_yy_2_stencil_update_stream$mem_2_valid_term__in;
+  corebit_term lb_grad_yy_2_stencil_update_stream$mem_2_valid_term(
+    .in(lb_grad_yy_2_stencil_update_stream$mem_2_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_0_1' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_0_1__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_0_1__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_0_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_0_1(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_0_1__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_0_1__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_0_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_0_2' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_0_2__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_0_2__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_0_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_0_2(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_0_2__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_0_2__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_0_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_1_1' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_1_1__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_1_1__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_1_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_1_1(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_1_1__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_1_1__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_1_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_1_2' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_1_2__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_1_2__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_1_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_1_2(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_1_2__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_1_2__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_1_2__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_2_1' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_2_1__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_2_1__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_2_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_2_1(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_2_1__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_2_1__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_2_1__out)
+  );
+
+  //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream$reg_2_2' (Module coreir_reg)
+  wire  lb_grad_yy_2_stencil_update_stream$reg_2_2__clk;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_2_2__in;
+  wire [15:0] lb_grad_yy_2_stencil_update_stream$reg_2_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_grad_yy_2_stencil_update_stream$reg_2_2(
+    .clk(lb_grad_yy_2_stencil_update_stream$reg_2_2__clk),
+    .in(lb_grad_yy_2_stencil_update_stream$reg_2_2__in),
+    .out(lb_grad_yy_2_stencil_update_stream$reg_2_2__out)
   );
 
   //Wire declarations for instance 'lb_grad_yy_2_stencil_update_stream_wen' (Module corebit_const)
@@ -2107,32 +1768,380 @@ module DesignTop (
     .out(lb_grad_yy_2_stencil_update_stream_wen__out)
   );
 
-  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream' (Module Linebuffer_U5)
-  wire  lb_p3_cim_stencil_update_stream__clk;
-  wire [15:0] lb_p3_cim_stencil_update_stream__in;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_0_0;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_0_1;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_0_2;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_1_0;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_1_1;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_1_2;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_2_0;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_2_1;
-  wire [15:0] lb_p3_cim_stencil_update_stream__out_2_2;
-  wire  lb_p3_cim_stencil_update_stream__wen;
-  Linebuffer_U5 lb_p3_cim_stencil_update_stream(
-    .clk(lb_p3_cim_stencil_update_stream__clk),
-    .in(lb_p3_cim_stencil_update_stream__in),
-    .out_0_0(lb_p3_cim_stencil_update_stream__out_0_0),
-    .out_0_1(lb_p3_cim_stencil_update_stream__out_0_1),
-    .out_0_2(lb_p3_cim_stencil_update_stream__out_0_2),
-    .out_1_0(lb_p3_cim_stencil_update_stream__out_1_0),
-    .out_1_1(lb_p3_cim_stencil_update_stream__out_1_1),
-    .out_1_2(lb_p3_cim_stencil_update_stream__out_1_2),
-    .out_2_0(lb_p3_cim_stencil_update_stream__out_2_0),
-    .out_2_1(lb_p3_cim_stencil_update_stream__out_2_1),
-    .out_2_2(lb_p3_cim_stencil_update_stream__out_2_2),
-    .wen(lb_p3_cim_stencil_update_stream__wen)
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$add_r' (Module coreir_add)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_r__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_r__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_r__out;
+  coreir_add #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$add_r(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$add_r__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$add_r__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$add_w' (Module coreir_add)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_w__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_w__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$add_w__out;
+  coreir_add #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$add_w(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$add_w__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$add_w__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$c1' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_p3_cim_stencil_update_stream$mem_1$c1(
+    .out(lb_p3_cim_stencil_update_stream$mem_1$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$max_const' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$max_const__out;
+  coreir_const #(.value(9'd482),.width(9)) lb_p3_cim_stencil_update_stream$mem_1$max_const(
+    .out(lb_p3_cim_stencil_update_stream$mem_1$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$mem' (Module mem)
+  wire  lb_p3_cim_stencil_update_stream$mem_1$mem__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$mem__raddr;
+  wire [15:0] lb_p3_cim_stencil_update_stream$mem_1$mem__rdata;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$mem__waddr;
+  wire [15:0] lb_p3_cim_stencil_update_stream$mem_1$mem__wdata;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$mem__wen;
+  mem #(.depth(482),.width(16)) lb_p3_cim_stencil_update_stream$mem_1$mem(
+    .clk(lb_p3_cim_stencil_update_stream$mem_1$mem__clk),
+    .raddr(lb_p3_cim_stencil_update_stream$mem_1$mem__raddr),
+    .rdata(lb_p3_cim_stencil_update_stream$mem_1$mem__rdata),
+    .waddr(lb_p3_cim_stencil_update_stream$mem_1$mem__waddr),
+    .wdata(lb_p3_cim_stencil_update_stream$mem_1$mem__wdata),
+    .wen(lb_p3_cim_stencil_update_stream$mem_1$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__in;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0(
+    .clk(lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__clk),
+    .in(lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__in),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$raddr_eq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$raddr_mux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$veq' (Module coreir_neq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$veq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$veq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$veq__out;
+  coreir_neq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$veq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$veq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$veq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__in;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0(
+    .clk(lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__clk),
+    .in(lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__in),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$waddr_eq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_1$waddr_mux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1$zero_const' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_1$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_1$zero_const(
+    .out(lb_p3_cim_stencil_update_stream$mem_1$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_1_valid_term' (Module corebit_term)
+  wire  lb_p3_cim_stencil_update_stream$mem_1_valid_term__in;
+  corebit_term lb_p3_cim_stencil_update_stream$mem_1_valid_term(
+    .in(lb_p3_cim_stencil_update_stream$mem_1_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$add_r' (Module coreir_add)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_r__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_r__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_r__out;
+  coreir_add #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$add_r(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$add_r__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$add_r__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$add_w' (Module coreir_add)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_w__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_w__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$add_w__out;
+  coreir_add #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$add_w(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$add_w__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$add_w__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$c1' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_p3_cim_stencil_update_stream$mem_2$c1(
+    .out(lb_p3_cim_stencil_update_stream$mem_2$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$max_const' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$max_const__out;
+  coreir_const #(.value(9'd482),.width(9)) lb_p3_cim_stencil_update_stream$mem_2$max_const(
+    .out(lb_p3_cim_stencil_update_stream$mem_2$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$mem' (Module mem)
+  wire  lb_p3_cim_stencil_update_stream$mem_2$mem__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$mem__raddr;
+  wire [15:0] lb_p3_cim_stencil_update_stream$mem_2$mem__rdata;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$mem__waddr;
+  wire [15:0] lb_p3_cim_stencil_update_stream$mem_2$mem__wdata;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$mem__wen;
+  mem #(.depth(482),.width(16)) lb_p3_cim_stencil_update_stream$mem_2$mem(
+    .clk(lb_p3_cim_stencil_update_stream$mem_2$mem__clk),
+    .raddr(lb_p3_cim_stencil_update_stream$mem_2$mem__raddr),
+    .rdata(lb_p3_cim_stencil_update_stream$mem_2$mem__rdata),
+    .waddr(lb_p3_cim_stencil_update_stream$mem_2$mem__waddr),
+    .wdata(lb_p3_cim_stencil_update_stream$mem_2$mem__wdata),
+    .wen(lb_p3_cim_stencil_update_stream$mem_2$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__in;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0(
+    .clk(lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__clk),
+    .in(lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__in),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$raddr_eq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$raddr_mux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$veq' (Module coreir_neq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$veq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$veq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$veq__out;
+  coreir_neq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$veq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$veq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$veq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__clk;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__in;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0(
+    .clk(lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__clk),
+    .in(lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__in),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in1;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$waddr_eq(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in0;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in1;
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__out;
+  wire  lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_p3_cim_stencil_update_stream$mem_2$waddr_mux(
+    .in0(lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in0),
+    .in1(lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in1),
+    .out(lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__out),
+    .sel(lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2$zero_const' (Module coreir_const)
+  wire [8:0] lb_p3_cim_stencil_update_stream$mem_2$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_p3_cim_stencil_update_stream$mem_2$zero_const(
+    .out(lb_p3_cim_stencil_update_stream$mem_2$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$mem_2_valid_term' (Module corebit_term)
+  wire  lb_p3_cim_stencil_update_stream$mem_2_valid_term__in;
+  corebit_term lb_p3_cim_stencil_update_stream$mem_2_valid_term(
+    .in(lb_p3_cim_stencil_update_stream$mem_2_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_0_1' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_0_1__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_0_1__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_0_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_0_1(
+    .clk(lb_p3_cim_stencil_update_stream$reg_0_1__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_0_1__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_0_1__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_0_2' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_0_2__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_0_2__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_0_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_0_2(
+    .clk(lb_p3_cim_stencil_update_stream$reg_0_2__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_0_2__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_0_2__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_1_1' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_1_1__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_1_1__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_1_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_1_1(
+    .clk(lb_p3_cim_stencil_update_stream$reg_1_1__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_1_1__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_1_1__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_1_2' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_1_2__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_1_2__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_1_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_1_2(
+    .clk(lb_p3_cim_stencil_update_stream$reg_1_2__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_1_2__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_1_2__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_2_1' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_2_1__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_2_1__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_2_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_2_1(
+    .clk(lb_p3_cim_stencil_update_stream$reg_2_1__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_2_1__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_2_1__out)
+  );
+
+  //Wire declarations for instance 'lb_p3_cim_stencil_update_stream$reg_2_2' (Module coreir_reg)
+  wire  lb_p3_cim_stencil_update_stream$reg_2_2__clk;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_2_2__in;
+  wire [15:0] lb_p3_cim_stencil_update_stream$reg_2_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_p3_cim_stencil_update_stream$reg_2_2(
+    .clk(lb_p3_cim_stencil_update_stream$reg_2_2__clk),
+    .in(lb_p3_cim_stencil_update_stream$reg_2_2__in),
+    .out(lb_p3_cim_stencil_update_stream$reg_2_2__out)
   );
 
   //Wire declarations for instance 'lb_p3_cim_stencil_update_stream_wen' (Module corebit_const)
@@ -2141,32 +2150,380 @@ module DesignTop (
     .out(lb_p3_cim_stencil_update_stream_wen__out)
   );
 
-  //Wire declarations for instance 'lb_padded_2_stencil_update_stream' (Module Linebuffer_U6)
-  wire  lb_padded_2_stencil_update_stream__clk;
-  wire [15:0] lb_padded_2_stencil_update_stream__in;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_0_0;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_0_1;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_0_2;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_1_0;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_1_1;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_1_2;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_2_0;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_2_1;
-  wire [15:0] lb_padded_2_stencil_update_stream__out_2_2;
-  wire  lb_padded_2_stencil_update_stream__wen;
-  Linebuffer_U6 lb_padded_2_stencil_update_stream(
-    .clk(lb_padded_2_stencil_update_stream__clk),
-    .in(lb_padded_2_stencil_update_stream__in),
-    .out_0_0(lb_padded_2_stencil_update_stream__out_0_0),
-    .out_0_1(lb_padded_2_stencil_update_stream__out_0_1),
-    .out_0_2(lb_padded_2_stencil_update_stream__out_0_2),
-    .out_1_0(lb_padded_2_stencil_update_stream__out_1_0),
-    .out_1_1(lb_padded_2_stencil_update_stream__out_1_1),
-    .out_1_2(lb_padded_2_stencil_update_stream__out_1_2),
-    .out_2_0(lb_padded_2_stencil_update_stream__out_2_0),
-    .out_2_1(lb_padded_2_stencil_update_stream__out_2_1),
-    .out_2_2(lb_padded_2_stencil_update_stream__out_2_2),
-    .wen(lb_padded_2_stencil_update_stream__wen)
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$add_r' (Module coreir_add)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_r__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_r__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_r__out;
+  coreir_add #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$add_r(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$add_r__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$add_r__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$add_w' (Module coreir_add)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_w__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_w__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$add_w__out;
+  coreir_add #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$add_w(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$add_w__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$add_w__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$c1' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_padded_2_stencil_update_stream$mem_1$c1(
+    .out(lb_padded_2_stencil_update_stream$mem_1$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$max_const' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$max_const__out;
+  coreir_const #(.value(9'd486),.width(9)) lb_padded_2_stencil_update_stream$mem_1$max_const(
+    .out(lb_padded_2_stencil_update_stream$mem_1$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$mem' (Module mem)
+  wire  lb_padded_2_stencil_update_stream$mem_1$mem__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$mem__raddr;
+  wire [15:0] lb_padded_2_stencil_update_stream$mem_1$mem__rdata;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$mem__waddr;
+  wire [15:0] lb_padded_2_stencil_update_stream$mem_1$mem__wdata;
+  wire  lb_padded_2_stencil_update_stream$mem_1$mem__wen;
+  mem #(.depth(486),.width(16)) lb_padded_2_stencil_update_stream$mem_1$mem(
+    .clk(lb_padded_2_stencil_update_stream$mem_1$mem__clk),
+    .raddr(lb_padded_2_stencil_update_stream$mem_1$mem__raddr),
+    .rdata(lb_padded_2_stencil_update_stream$mem_1$mem__rdata),
+    .waddr(lb_padded_2_stencil_update_stream$mem_1$mem__waddr),
+    .wdata(lb_padded_2_stencil_update_stream$mem_1$mem__wdata),
+    .wen(lb_padded_2_stencil_update_stream$mem_1$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$raddr$enMux(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$raddr$reg0' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__in;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_1$raddr$reg0(
+    .clk(lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__clk),
+    .in(lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__in),
+    .out(lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_1$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$raddr_eq(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$raddr_mux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_1$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$raddr_mux(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$raddr_mux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_1$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$veq' (Module coreir_neq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$veq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$veq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_1$veq__out;
+  coreir_neq #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$veq(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$veq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$veq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$waddr$enMux(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$waddr$reg0' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__in;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_1$waddr$reg0(
+    .clk(lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__clk),
+    .in(lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__in),
+    .out(lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_1$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$waddr_eq(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$waddr_mux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_1$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_1$waddr_mux(
+    .in0(lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_1$waddr_mux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_1$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1$zero_const' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_1$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_1$zero_const(
+    .out(lb_padded_2_stencil_update_stream$mem_1$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_1_valid_term' (Module corebit_term)
+  wire  lb_padded_2_stencil_update_stream$mem_1_valid_term__in;
+  corebit_term lb_padded_2_stencil_update_stream$mem_1_valid_term(
+    .in(lb_padded_2_stencil_update_stream$mem_1_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$add_r' (Module coreir_add)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_r__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_r__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_r__out;
+  coreir_add #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$add_r(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$add_r__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$add_r__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$add_r__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$add_w' (Module coreir_add)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_w__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_w__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$add_w__out;
+  coreir_add #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$add_w(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$add_w__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$add_w__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$add_w__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$c1' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$c1__out;
+  coreir_const #(.value(9'd1),.width(9)) lb_padded_2_stencil_update_stream$mem_2$c1(
+    .out(lb_padded_2_stencil_update_stream$mem_2$c1__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$max_const' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$max_const__out;
+  coreir_const #(.value(9'd486),.width(9)) lb_padded_2_stencil_update_stream$mem_2$max_const(
+    .out(lb_padded_2_stencil_update_stream$mem_2$max_const__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$mem' (Module mem)
+  wire  lb_padded_2_stencil_update_stream$mem_2$mem__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$mem__raddr;
+  wire [15:0] lb_padded_2_stencil_update_stream$mem_2$mem__rdata;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$mem__waddr;
+  wire [15:0] lb_padded_2_stencil_update_stream$mem_2$mem__wdata;
+  wire  lb_padded_2_stencil_update_stream$mem_2$mem__wen;
+  mem #(.depth(486),.width(16)) lb_padded_2_stencil_update_stream$mem_2$mem(
+    .clk(lb_padded_2_stencil_update_stream$mem_2$mem__clk),
+    .raddr(lb_padded_2_stencil_update_stream$mem_2$mem__raddr),
+    .rdata(lb_padded_2_stencil_update_stream$mem_2$mem__rdata),
+    .waddr(lb_padded_2_stencil_update_stream$mem_2$mem__waddr),
+    .wdata(lb_padded_2_stencil_update_stream$mem_2$mem__wdata),
+    .wen(lb_padded_2_stencil_update_stream$mem_2$mem__wen)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$raddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$raddr$enMux(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$raddr$reg0' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__in;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_2$raddr$reg0(
+    .clk(lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__clk),
+    .in(lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__in),
+    .out(lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$raddr_eq' (Module coreir_eq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_2$raddr_eq__out;
+  coreir_eq #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$raddr_eq(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$raddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$raddr_mux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$raddr_mux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_2$raddr_mux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$raddr_mux(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$raddr_mux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_2$raddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$veq' (Module coreir_neq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$veq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$veq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_2$veq__out;
+  coreir_neq #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$veq(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$veq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$veq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$veq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$waddr$enMux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$waddr$enMux(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$waddr$reg0' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__clk;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__in;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out;
+  coreir_reg #(.init(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_2$waddr$reg0(
+    .clk(lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__clk),
+    .in(lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__in),
+    .out(lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$waddr_eq' (Module coreir_eq)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in1;
+  wire  lb_padded_2_stencil_update_stream$mem_2$waddr_eq__out;
+  coreir_eq #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$waddr_eq(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$waddr_eq__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$waddr_mux' (Module coreir_mux)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in0;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in1;
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$waddr_mux__out;
+  wire  lb_padded_2_stencil_update_stream$mem_2$waddr_mux__sel;
+  coreir_mux #(.width(9)) lb_padded_2_stencil_update_stream$mem_2$waddr_mux(
+    .in0(lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in0),
+    .in1(lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in1),
+    .out(lb_padded_2_stencil_update_stream$mem_2$waddr_mux__out),
+    .sel(lb_padded_2_stencil_update_stream$mem_2$waddr_mux__sel)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2$zero_const' (Module coreir_const)
+  wire [8:0] lb_padded_2_stencil_update_stream$mem_2$zero_const__out;
+  coreir_const #(.value(9'd0),.width(9)) lb_padded_2_stencil_update_stream$mem_2$zero_const(
+    .out(lb_padded_2_stencil_update_stream$mem_2$zero_const__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$mem_2_valid_term' (Module corebit_term)
+  wire  lb_padded_2_stencil_update_stream$mem_2_valid_term__in;
+  corebit_term lb_padded_2_stencil_update_stream$mem_2_valid_term(
+    .in(lb_padded_2_stencil_update_stream$mem_2_valid_term__in)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_0_1' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_0_1__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_0_1__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_0_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_0_1(
+    .clk(lb_padded_2_stencil_update_stream$reg_0_1__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_0_1__in),
+    .out(lb_padded_2_stencil_update_stream$reg_0_1__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_0_2' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_0_2__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_0_2__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_0_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_0_2(
+    .clk(lb_padded_2_stencil_update_stream$reg_0_2__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_0_2__in),
+    .out(lb_padded_2_stencil_update_stream$reg_0_2__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_1_1' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_1_1__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_1_1__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_1_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_1_1(
+    .clk(lb_padded_2_stencil_update_stream$reg_1_1__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_1_1__in),
+    .out(lb_padded_2_stencil_update_stream$reg_1_1__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_1_2' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_1_2__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_1_2__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_1_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_1_2(
+    .clk(lb_padded_2_stencil_update_stream$reg_1_2__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_1_2__in),
+    .out(lb_padded_2_stencil_update_stream$reg_1_2__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_2_1' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_2_1__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_2_1__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_2_1__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_2_1(
+    .clk(lb_padded_2_stencil_update_stream$reg_2_1__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_2_1__in),
+    .out(lb_padded_2_stencil_update_stream$reg_2_1__out)
+  );
+
+  //Wire declarations for instance 'lb_padded_2_stencil_update_stream$reg_2_2' (Module coreir_reg)
+  wire  lb_padded_2_stencil_update_stream$reg_2_2__clk;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_2_2__in;
+  wire [15:0] lb_padded_2_stencil_update_stream$reg_2_2__out;
+  coreir_reg #(.init(16'd0),.width(16)) lb_padded_2_stencil_update_stream$reg_2_2(
+    .clk(lb_padded_2_stencil_update_stream$reg_2_2__clk),
+    .in(lb_padded_2_stencil_update_stream$reg_2_2__in),
+    .out(lb_padded_2_stencil_update_stream$reg_2_2__out)
   );
 
   //Wire declarations for instance 'lb_padded_2_stencil_update_stream_wen' (Module corebit_const)
@@ -2287,74 +2644,158 @@ module DesignTop (
     .sel(mux_769_770_771__sel)
   );
 
-  //Wire declarations for instance 'smax_752_753_754' (Module smax_U9)
-  wire [15:0] smax_752_753_754__in0;
-  wire [15:0] smax_752_753_754__in1;
-  wire [15:0] smax_752_753_754__out;
-  smax_U9 smax_752_753_754(
-    .in0(smax_752_753_754__in0),
-    .in1(smax_752_753_754__in1),
-    .out(smax_752_753_754__out)
+  //Wire declarations for instance 'smax_752_753_754$max_mux' (Module coreir_mux)
+  wire [15:0] smax_752_753_754$max_mux__in0;
+  wire [15:0] smax_752_753_754$max_mux__in1;
+  wire [15:0] smax_752_753_754$max_mux__out;
+  wire  smax_752_753_754$max_mux__sel;
+  coreir_mux #(.width(16)) smax_752_753_754$max_mux(
+    .in0(smax_752_753_754$max_mux__in0),
+    .in1(smax_752_753_754$max_mux__in1),
+    .out(smax_752_753_754$max_mux__out),
+    .sel(smax_752_753_754$max_mux__sel)
   );
 
-  //Wire declarations for instance 'smax_754_755_756' (Module smax_U9)
-  wire [15:0] smax_754_755_756__in0;
-  wire [15:0] smax_754_755_756__in1;
-  wire [15:0] smax_754_755_756__out;
-  smax_U9 smax_754_755_756(
-    .in0(smax_754_755_756__in0),
-    .in1(smax_754_755_756__in1),
-    .out(smax_754_755_756__out)
+  //Wire declarations for instance 'smax_752_753_754$scomp' (Module coreir_sge)
+  wire [15:0] smax_752_753_754$scomp__in0;
+  wire [15:0] smax_752_753_754$scomp__in1;
+  wire  smax_752_753_754$scomp__out;
+  coreir_sge #(.width(16)) smax_752_753_754$scomp(
+    .in0(smax_752_753_754$scomp__in0),
+    .in1(smax_752_753_754$scomp__in1),
+    .out(smax_752_753_754$scomp__out)
   );
 
-  //Wire declarations for instance 'smax_756_757_758' (Module smax_U9)
-  wire [15:0] smax_756_757_758__in0;
-  wire [15:0] smax_756_757_758__in1;
-  wire [15:0] smax_756_757_758__out;
-  smax_U9 smax_756_757_758(
-    .in0(smax_756_757_758__in0),
-    .in1(smax_756_757_758__in1),
-    .out(smax_756_757_758__out)
+  //Wire declarations for instance 'smax_754_755_756$max_mux' (Module coreir_mux)
+  wire [15:0] smax_754_755_756$max_mux__in0;
+  wire [15:0] smax_754_755_756$max_mux__in1;
+  wire [15:0] smax_754_755_756$max_mux__out;
+  wire  smax_754_755_756$max_mux__sel;
+  coreir_mux #(.width(16)) smax_754_755_756$max_mux(
+    .in0(smax_754_755_756$max_mux__in0),
+    .in1(smax_754_755_756$max_mux__in1),
+    .out(smax_754_755_756$max_mux__out),
+    .sel(smax_754_755_756$max_mux__sel)
   );
 
-  //Wire declarations for instance 'smax_758_759_760' (Module smax_U9)
-  wire [15:0] smax_758_759_760__in0;
-  wire [15:0] smax_758_759_760__in1;
-  wire [15:0] smax_758_759_760__out;
-  smax_U9 smax_758_759_760(
-    .in0(smax_758_759_760__in0),
-    .in1(smax_758_759_760__in1),
-    .out(smax_758_759_760__out)
+  //Wire declarations for instance 'smax_754_755_756$scomp' (Module coreir_sge)
+  wire [15:0] smax_754_755_756$scomp__in0;
+  wire [15:0] smax_754_755_756$scomp__in1;
+  wire  smax_754_755_756$scomp__out;
+  coreir_sge #(.width(16)) smax_754_755_756$scomp(
+    .in0(smax_754_755_756$scomp__in0),
+    .in1(smax_754_755_756$scomp__in1),
+    .out(smax_754_755_756$scomp__out)
   );
 
-  //Wire declarations for instance 'smax_760_761_762' (Module smax_U9)
-  wire [15:0] smax_760_761_762__in0;
-  wire [15:0] smax_760_761_762__in1;
-  wire [15:0] smax_760_761_762__out;
-  smax_U9 smax_760_761_762(
-    .in0(smax_760_761_762__in0),
-    .in1(smax_760_761_762__in1),
-    .out(smax_760_761_762__out)
+  //Wire declarations for instance 'smax_756_757_758$max_mux' (Module coreir_mux)
+  wire [15:0] smax_756_757_758$max_mux__in0;
+  wire [15:0] smax_756_757_758$max_mux__in1;
+  wire [15:0] smax_756_757_758$max_mux__out;
+  wire  smax_756_757_758$max_mux__sel;
+  coreir_mux #(.width(16)) smax_756_757_758$max_mux(
+    .in0(smax_756_757_758$max_mux__in0),
+    .in1(smax_756_757_758$max_mux__in1),
+    .out(smax_756_757_758$max_mux__out),
+    .sel(smax_756_757_758$max_mux__sel)
   );
 
-  //Wire declarations for instance 'smax_762_763_764' (Module smax_U9)
-  wire [15:0] smax_762_763_764__in0;
-  wire [15:0] smax_762_763_764__in1;
-  wire [15:0] smax_762_763_764__out;
-  smax_U9 smax_762_763_764(
-    .in0(smax_762_763_764__in0),
-    .in1(smax_762_763_764__in1),
-    .out(smax_762_763_764__out)
+  //Wire declarations for instance 'smax_756_757_758$scomp' (Module coreir_sge)
+  wire [15:0] smax_756_757_758$scomp__in0;
+  wire [15:0] smax_756_757_758$scomp__in1;
+  wire  smax_756_757_758$scomp__out;
+  coreir_sge #(.width(16)) smax_756_757_758$scomp(
+    .in0(smax_756_757_758$scomp__in0),
+    .in1(smax_756_757_758$scomp__in1),
+    .out(smax_756_757_758$scomp__out)
   );
 
-  //Wire declarations for instance 'smax_764_765_766' (Module smax_U9)
-  wire [15:0] smax_764_765_766__in0;
-  wire [15:0] smax_764_765_766__in1;
-  wire [15:0] smax_764_765_766__out;
-  smax_U9 smax_764_765_766(
-    .in0(smax_764_765_766__in0),
-    .in1(smax_764_765_766__in1),
-    .out(smax_764_765_766__out)
+  //Wire declarations for instance 'smax_758_759_760$max_mux' (Module coreir_mux)
+  wire [15:0] smax_758_759_760$max_mux__in0;
+  wire [15:0] smax_758_759_760$max_mux__in1;
+  wire [15:0] smax_758_759_760$max_mux__out;
+  wire  smax_758_759_760$max_mux__sel;
+  coreir_mux #(.width(16)) smax_758_759_760$max_mux(
+    .in0(smax_758_759_760$max_mux__in0),
+    .in1(smax_758_759_760$max_mux__in1),
+    .out(smax_758_759_760$max_mux__out),
+    .sel(smax_758_759_760$max_mux__sel)
+  );
+
+  //Wire declarations for instance 'smax_758_759_760$scomp' (Module coreir_sge)
+  wire [15:0] smax_758_759_760$scomp__in0;
+  wire [15:0] smax_758_759_760$scomp__in1;
+  wire  smax_758_759_760$scomp__out;
+  coreir_sge #(.width(16)) smax_758_759_760$scomp(
+    .in0(smax_758_759_760$scomp__in0),
+    .in1(smax_758_759_760$scomp__in1),
+    .out(smax_758_759_760$scomp__out)
+  );
+
+  //Wire declarations for instance 'smax_760_761_762$max_mux' (Module coreir_mux)
+  wire [15:0] smax_760_761_762$max_mux__in0;
+  wire [15:0] smax_760_761_762$max_mux__in1;
+  wire [15:0] smax_760_761_762$max_mux__out;
+  wire  smax_760_761_762$max_mux__sel;
+  coreir_mux #(.width(16)) smax_760_761_762$max_mux(
+    .in0(smax_760_761_762$max_mux__in0),
+    .in1(smax_760_761_762$max_mux__in1),
+    .out(smax_760_761_762$max_mux__out),
+    .sel(smax_760_761_762$max_mux__sel)
+  );
+
+  //Wire declarations for instance 'smax_760_761_762$scomp' (Module coreir_sge)
+  wire [15:0] smax_760_761_762$scomp__in0;
+  wire [15:0] smax_760_761_762$scomp__in1;
+  wire  smax_760_761_762$scomp__out;
+  coreir_sge #(.width(16)) smax_760_761_762$scomp(
+    .in0(smax_760_761_762$scomp__in0),
+    .in1(smax_760_761_762$scomp__in1),
+    .out(smax_760_761_762$scomp__out)
+  );
+
+  //Wire declarations for instance 'smax_762_763_764$max_mux' (Module coreir_mux)
+  wire [15:0] smax_762_763_764$max_mux__in0;
+  wire [15:0] smax_762_763_764$max_mux__in1;
+  wire [15:0] smax_762_763_764$max_mux__out;
+  wire  smax_762_763_764$max_mux__sel;
+  coreir_mux #(.width(16)) smax_762_763_764$max_mux(
+    .in0(smax_762_763_764$max_mux__in0),
+    .in1(smax_762_763_764$max_mux__in1),
+    .out(smax_762_763_764$max_mux__out),
+    .sel(smax_762_763_764$max_mux__sel)
+  );
+
+  //Wire declarations for instance 'smax_762_763_764$scomp' (Module coreir_sge)
+  wire [15:0] smax_762_763_764$scomp__in0;
+  wire [15:0] smax_762_763_764$scomp__in1;
+  wire  smax_762_763_764$scomp__out;
+  coreir_sge #(.width(16)) smax_762_763_764$scomp(
+    .in0(smax_762_763_764$scomp__in0),
+    .in1(smax_762_763_764$scomp__in1),
+    .out(smax_762_763_764$scomp__out)
+  );
+
+  //Wire declarations for instance 'smax_764_765_766$max_mux' (Module coreir_mux)
+  wire [15:0] smax_764_765_766$max_mux__in0;
+  wire [15:0] smax_764_765_766$max_mux__in1;
+  wire [15:0] smax_764_765_766$max_mux__out;
+  wire  smax_764_765_766$max_mux__sel;
+  coreir_mux #(.width(16)) smax_764_765_766$max_mux(
+    .in0(smax_764_765_766$max_mux__in0),
+    .in1(smax_764_765_766$max_mux__in1),
+    .out(smax_764_765_766$max_mux__out),
+    .sel(smax_764_765_766$max_mux__sel)
+  );
+
+  //Wire declarations for instance 'smax_764_765_766$scomp' (Module coreir_sge)
+  wire [15:0] smax_764_765_766$scomp__in0;
+  wire [15:0] smax_764_765_766$scomp__in1;
+  wire  smax_764_765_766$scomp__out;
+  coreir_sge #(.width(16)) smax_764_765_766$scomp(
+    .in0(smax_764_765_766$scomp__in0),
+    .in1(smax_764_765_766$scomp__in1),
+    .out(smax_764_765_766$scomp__out)
   );
 
   //Wire declarations for instance 'sub_629_631_632' (Module coreir_sub)
@@ -2458,139 +2899,76 @@ module DesignTop (
   );
 
   //All the connections
-  assign _628_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_0_2[15:0];
-  assign sub_629_631_632__in0[15:0] = _628_pt__out[15:0];
-  assign _630_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_0_0[15:0];
-  assign sub_629_631_632__in1[15:0] = _630_pt__out[15:0];
-  assign _633_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_1_0[15:0];
-  assign mul_634_635_636__in0[15:0] = _633_pt__out[15:0];
-  assign _638_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_1_2[15:0];
-  assign mul_639_635_640__in0[15:0] = _638_pt__out[15:0];
-  assign _642_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_2_0[15:0];
-  assign sub_641_643_644__in1[15:0] = _642_pt__out[15:0];
-  assign _645_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_2_2[15:0];
-  assign add_644_646_647__in1[15:0] = _645_pt__out[15:0];
-  assign _654_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_0_1[15:0];
-  assign add_651_654_655__in1[15:0] = _654_pt__out[15:0];
-  assign _656_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_0_2[15:0];
-  assign add_651_656_657__in1[15:0] = _656_pt__out[15:0];
-  assign _658_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_1_0[15:0];
-  assign add_651_658_659__in1[15:0] = _658_pt__out[15:0];
-  assign _660_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_1_1[15:0];
-  assign add_651_660_661__in1[15:0] = _660_pt__out[15:0];
-  assign _662_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_1_2[15:0];
-  assign add_651_662_663__in1[15:0] = _662_pt__out[15:0];
-  assign _664_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_2_0[15:0];
-  assign add_651_664_665__in1[15:0] = _664_pt__out[15:0];
-  assign _666_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_2_1[15:0];
-  assign add_651_666_667__in1[15:0] = _666_pt__out[15:0];
-  assign _668_pt__in[15:0] = lb_grad_xx_2_stencil_update_stream__out_2_2[15:0];
-  assign add_651_668_669__in1[15:0] = _668_pt__out[15:0];
-  assign _670_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_2_0[15:0];
-  assign sub_671_673_674__in0[15:0] = _670_pt__out[15:0];
-  assign _672_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_0_0[15:0];
-  assign sub_671_673_674__in1[15:0] = _672_pt__out[15:0];
-  assign _675_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_2_1[15:0];
-  assign mul_676_677_678__in0[15:0] = _675_pt__out[15:0];
-  assign _680_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_0_1[15:0];
-  assign mul_681_677_682__in0[15:0] = _680_pt__out[15:0];
-  assign _684_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_2_2[15:0];
-  assign add_683_685_686__in1[15:0] = _684_pt__out[15:0];
-  assign _687_pt__in[15:0] = lb_padded_2_stencil_update_stream__out_0_2[15:0];
-  assign sub_686_688_689__in1[15:0] = _687_pt__out[15:0];
-  assign _698_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_0_1[15:0];
-  assign add_695_698_699__in1[15:0] = _698_pt__out[15:0];
-  assign _700_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_0_2[15:0];
-  assign add_695_700_701__in1[15:0] = _700_pt__out[15:0];
-  assign _702_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_1_0[15:0];
-  assign add_695_702_703__in1[15:0] = _702_pt__out[15:0];
-  assign _704_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_1_1[15:0];
-  assign add_695_704_705__in1[15:0] = _704_pt__out[15:0];
-  assign _706_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_1_2[15:0];
-  assign add_695_706_707__in1[15:0] = _706_pt__out[15:0];
-  assign _708_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_2_0[15:0];
-  assign add_695_708_709__in1[15:0] = _708_pt__out[15:0];
-  assign _710_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_2_1[15:0];
-  assign add_695_710_711__in1[15:0] = _710_pt__out[15:0];
-  assign _712_pt__in[15:0] = lb_grad_xy_2_stencil_update_stream__out_2_2[15:0];
-  assign add_695_712_713__in1[15:0] = _712_pt__out[15:0];
-  assign _720_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_0_1[15:0];
-  assign add_717_720_721__in1[15:0] = _720_pt__out[15:0];
-  assign _722_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_0_2[15:0];
-  assign add_717_722_723__in1[15:0] = _722_pt__out[15:0];
-  assign _724_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_1_0[15:0];
-  assign add_717_724_725__in1[15:0] = _724_pt__out[15:0];
-  assign _726_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_1_1[15:0];
-  assign add_717_726_727__in1[15:0] = _726_pt__out[15:0];
-  assign _728_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_1_2[15:0];
-  assign add_717_728_729__in1[15:0] = _728_pt__out[15:0];
-  assign _730_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_2_0[15:0];
-  assign add_717_730_731__in1[15:0] = _730_pt__out[15:0];
-  assign _732_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_2_1[15:0];
-  assign add_717_732_733__in1[15:0] = _732_pt__out[15:0];
-  assign _734_pt__in[15:0] = lb_grad_yy_2_stencil_update_stream__out_2_2[15:0];
-  assign add_717_734_735__in1[15:0] = _734_pt__out[15:0];
-  assign _751_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_1_1[15:0];
-  assign ule100_751_768__in1[15:0] = _751_pt__out[15:0];
-  assign ult_766_751_767__in1[15:0] = _751_pt__out[15:0];
-  assign _753_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_0_1[15:0];
-  assign smax_752_753_754__in1[15:0] = _753_pt__out[15:0];
-  assign _755_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_0_2[15:0];
-  assign smax_754_755_756__in1[15:0] = _755_pt__out[15:0];
-  assign _757_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_1_0[15:0];
-  assign smax_756_757_758__in1[15:0] = _757_pt__out[15:0];
-  assign _759_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_1_2[15:0];
-  assign smax_758_759_760__in1[15:0] = _759_pt__out[15:0];
-  assign _761_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_2_0[15:0];
-  assign smax_760_761_762__in1[15:0] = _761_pt__out[15:0];
-  assign _763_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_2_1[15:0];
-  assign smax_762_763_764__in1[15:0] = _763_pt__out[15:0];
-  assign _765_pt__in[15:0] = lb_p3_cim_stencil_update_stream__out_2_2[15:0];
-  assign smax_764_765_766__in1[15:0] = _765_pt__out[15:0];
   assign add_637_640_641__in0[15:0] = sub_632_636_637__out[15:0];
   assign add_637_640_641__in1[15:0] = mul_639_635_640__out[15:0];
   assign sub_641_643_644__in0[15:0] = add_637_640_641__out[15:0];
   assign add_644_646_647__in0[15:0] = sub_641_643_644__out[15:0];
+  assign add_644_646_647__in1[15:0] = in_0_auto_reg__out[15:0];
   assign mul_649_649_650__in0[15:0] = add_644_646_647__out[15:0];
   assign mul_649_649_650__in1[15:0] = add_644_646_647__out[15:0];
   assign mul_691_693_694__in0[15:0] = add_644_646_647__out[15:0];
   assign add_651_652_653__in0[15:0] = const0_0__out[15:0];
   assign add_651_652_653__in1[15:0] = mul_649_649_650__out[15:0];
   assign add_651_654_655__in0[15:0] = add_651_652_653__out[15:0];
+  assign add_651_654_655__in1[15:0] = lb_grad_xx_2_stencil_update_stream$reg_2_1__out[15:0];
   assign add_651_656_657__in0[15:0] = add_651_654_655__out[15:0];
+  assign add_651_656_657__in1[15:0] = lb_grad_xx_2_stencil_update_stream$mem_2$mem__rdata[15:0];
   assign add_651_658_659__in0[15:0] = add_651_656_657__out[15:0];
+  assign add_651_658_659__in1[15:0] = lb_grad_xx_2_stencil_update_stream$reg_1_2__out[15:0];
   assign add_651_660_661__in0[15:0] = add_651_658_659__out[15:0];
+  assign add_651_660_661__in1[15:0] = lb_grad_xx_2_stencil_update_stream$reg_1_1__out[15:0];
   assign add_651_662_663__in0[15:0] = add_651_660_661__out[15:0];
+  assign add_651_662_663__in1[15:0] = lb_grad_xx_2_stencil_update_stream$mem_1$mem__rdata[15:0];
   assign add_651_664_665__in0[15:0] = add_651_662_663__out[15:0];
+  assign add_651_664_665__in1[15:0] = lb_grad_xx_2_stencil_update_stream$reg_0_2__out[15:0];
   assign add_651_666_667__in0[15:0] = add_651_664_665__out[15:0];
+  assign add_651_666_667__in1[15:0] = lb_grad_xx_2_stencil_update_stream$reg_0_1__out[15:0];
   assign add_651_668_669__in0[15:0] = add_651_666_667__out[15:0];
+  assign add_651_668_669__in1[15:0] = mul_649_649_650__out[15:0];
   assign ashr_736_739_740__in0[15:0] = add_651_668_669__out[15:0];
   assign add_674_678_679__in0[15:0] = sub_671_673_674__out[15:0];
   assign add_674_678_679__in1[15:0] = mul_676_677_678__out[15:0];
   assign sub_679_682_683__in0[15:0] = add_674_678_679__out[15:0];
   assign add_683_685_686__in0[15:0] = sub_679_682_683__out[15:0];
+  assign add_683_685_686__in1[15:0] = in_0_auto_reg__out[15:0];
   assign sub_686_688_689__in0[15:0] = add_683_685_686__out[15:0];
   assign add_695_696_697__in0[15:0] = const0_0$1__out[15:0];
   assign add_695_696_697__in1[15:0] = mul_691_693_694__out[15:0];
   assign add_695_698_699__in0[15:0] = add_695_696_697__out[15:0];
+  assign add_695_698_699__in1[15:0] = lb_grad_xy_2_stencil_update_stream$reg_2_1__out[15:0];
   assign add_695_700_701__in0[15:0] = add_695_698_699__out[15:0];
+  assign add_695_700_701__in1[15:0] = lb_grad_xy_2_stencil_update_stream$mem_2$mem__rdata[15:0];
   assign add_695_702_703__in0[15:0] = add_695_700_701__out[15:0];
+  assign add_695_702_703__in1[15:0] = lb_grad_xy_2_stencil_update_stream$reg_1_2__out[15:0];
   assign add_695_704_705__in0[15:0] = add_695_702_703__out[15:0];
+  assign add_695_704_705__in1[15:0] = lb_grad_xy_2_stencil_update_stream$reg_1_1__out[15:0];
   assign add_695_706_707__in0[15:0] = add_695_704_705__out[15:0];
+  assign add_695_706_707__in1[15:0] = lb_grad_xy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
   assign add_695_708_709__in0[15:0] = add_695_706_707__out[15:0];
+  assign add_695_708_709__in1[15:0] = lb_grad_xy_2_stencil_update_stream$reg_0_2__out[15:0];
   assign add_695_710_711__in0[15:0] = add_695_708_709__out[15:0];
+  assign add_695_710_711__in1[15:0] = lb_grad_xy_2_stencil_update_stream$reg_0_1__out[15:0];
   assign add_695_712_713__in0[15:0] = add_695_710_711__out[15:0];
+  assign add_695_712_713__in1[15:0] = mul_691_693_694__out[15:0];
   assign ashr_738_739_744__in0[15:0] = add_695_712_713__out[15:0];
   assign add_717_718_719__in0[15:0] = const0_0$2__out[15:0];
   assign add_717_718_719__in1[15:0] = mul_715_715_716__out[15:0];
   assign add_717_720_721__in0[15:0] = add_717_718_719__out[15:0];
+  assign add_717_720_721__in1[15:0] = lb_grad_yy_2_stencil_update_stream$reg_2_1__out[15:0];
   assign add_717_722_723__in0[15:0] = add_717_720_721__out[15:0];
+  assign add_717_722_723__in1[15:0] = lb_grad_yy_2_stencil_update_stream$mem_2$mem__rdata[15:0];
   assign add_717_724_725__in0[15:0] = add_717_722_723__out[15:0];
+  assign add_717_724_725__in1[15:0] = lb_grad_yy_2_stencil_update_stream$reg_1_2__out[15:0];
   assign add_717_726_727__in0[15:0] = add_717_724_725__out[15:0];
+  assign add_717_726_727__in1[15:0] = lb_grad_yy_2_stencil_update_stream$reg_1_1__out[15:0];
   assign add_717_728_729__in0[15:0] = add_717_726_727__out[15:0];
+  assign add_717_728_729__in1[15:0] = lb_grad_yy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
   assign add_717_730_731__in0[15:0] = add_717_728_729__out[15:0];
+  assign add_717_730_731__in1[15:0] = lb_grad_yy_2_stencil_update_stream$reg_0_2__out[15:0];
   assign add_717_732_733__in0[15:0] = add_717_730_731__out[15:0];
+  assign add_717_732_733__in1[15:0] = lb_grad_yy_2_stencil_update_stream$reg_0_1__out[15:0];
   assign add_717_734_735__in0[15:0] = add_717_732_733__out[15:0];
+  assign add_717_734_735__in1[15:0] = mul_715_715_716__out[15:0];
   assign ashr_737_739_741__in0[15:0] = add_717_734_735__out[15:0];
   assign add_740_741_742__in0[15:0] = ashr_736_739_740__out[15:0];
   assign add_740_741_742__in1[15:0] = ashr_737_739_741__out[15:0];
@@ -2616,21 +2994,412 @@ module DesignTop (
   assign mul_639_635_640__in1[15:0] = const2__635$1__out[15:0];
   assign mul_676_677_678__in1[15:0] = const2__677__out[15:0];
   assign mul_681_677_682__in1[15:0] = const2__677$1__out[15:0];
-  assign lb_grad_xx_2_stencil_update_stream__clk = clk;
-  assign lb_grad_xx_2_stencil_update_stream__in[15:0] = mul_649_649_650__out[15:0];
-  assign lb_grad_xx_2_stencil_update_stream__wen = lb_grad_xx_2_stencil_update_stream_wen__out;
-  assign lb_grad_xy_2_stencil_update_stream__clk = clk;
-  assign lb_grad_xy_2_stencil_update_stream__in[15:0] = mul_691_693_694__out[15:0];
-  assign lb_grad_xy_2_stencil_update_stream__wen = lb_grad_xy_2_stencil_update_stream_wen__out;
-  assign lb_grad_yy_2_stencil_update_stream__clk = clk;
-  assign lb_grad_yy_2_stencil_update_stream__in[15:0] = mul_715_715_716__out[15:0];
-  assign lb_grad_yy_2_stencil_update_stream__wen = lb_grad_yy_2_stencil_update_stream_wen__out;
-  assign lb_p3_cim_stencil_update_stream__clk = clk;
-  assign lb_p3_cim_stencil_update_stream__in[15:0] = sub_746_749_750__out[15:0];
-  assign lb_p3_cim_stencil_update_stream__wen = lb_p3_cim_stencil_update_stream_wen__out;
-  assign lb_padded_2_stencil_update_stream__clk = clk;
-  assign lb_padded_2_stencil_update_stream__in[15:0] = in_0[15:0];
-  assign lb_padded_2_stencil_update_stream__wen = lb_padded_2_stencil_update_stream_wen__out;
+  assign in_0_auto_reg__clk = clk;
+  assign in_0_auto_reg__in[15:0] = in_0[15:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$mem__wdata[15:0] = in_0_auto_reg__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_0_1__in[15:0] = in_0_auto_reg__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$add_r__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$add_w__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$mem__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$mem__raddr[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$mem__wdata[15:0] = lb_grad_xx_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_1_1__in[15:0] = lb_grad_xx_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$mem__waddr[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$mem__wdata[15:0] = mul_649_649_650__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$mem__wen = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__in[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr$enMux__sel = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$veq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__sel = lb_grad_xx_2_stencil_update_stream$mem_1$raddr_eq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$raddr_mux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$veq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1_valid_term__in = lb_grad_xx_2_stencil_update_stream$mem_1$veq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__in[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr$enMux__sel = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__sel = lb_grad_xx_2_stencil_update_stream$mem_1$waddr_eq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_1$waddr_mux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$add_r__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$add_w__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$mem__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$mem__raddr[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_2_1__in[15:0] = lb_grad_xx_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$mem__waddr[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$mem__wen = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__in[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr$enMux__sel = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$veq__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__sel = lb_grad_xx_2_stencil_update_stream$mem_2$raddr_eq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$raddr_mux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$veq__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2_valid_term__in = lb_grad_xx_2_stencil_update_stream$mem_2$veq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in0[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__in[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr$enMux__sel = lb_grad_xx_2_stencil_update_stream_wen__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__sel = lb_grad_xx_2_stencil_update_stream$mem_2$waddr_eq__out;
+  assign lb_grad_xx_2_stencil_update_stream$mem_2$waddr_mux__in1[8:0] = lb_grad_xx_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_0_1__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$reg_0_1__in[15:0] = mul_649_649_650__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_0_2__in[15:0] = lb_grad_xx_2_stencil_update_stream$reg_0_1__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_0_2__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$reg_1_1__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$reg_1_2__in[15:0] = lb_grad_xx_2_stencil_update_stream$reg_1_1__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_1_2__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$reg_2_1__clk = clk;
+  assign lb_grad_xx_2_stencil_update_stream$reg_2_2__in[15:0] = lb_grad_xx_2_stencil_update_stream$reg_2_1__out[15:0];
+  assign lb_grad_xx_2_stencil_update_stream$reg_2_2__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$add_r__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$add_w__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$mem__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$mem__raddr[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$mem__wdata[15:0] = lb_grad_xy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_1_1__in[15:0] = lb_grad_xy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$mem__waddr[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$mem__wdata[15:0] = mul_691_693_694__out[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$mem__wen = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__in[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr$enMux__sel = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$veq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__sel = lb_grad_xy_2_stencil_update_stream$mem_1$raddr_eq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$raddr_mux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$veq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1_valid_term__in = lb_grad_xy_2_stencil_update_stream$mem_1$veq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__in[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr$enMux__sel = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__sel = lb_grad_xy_2_stencil_update_stream$mem_1$waddr_eq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_1$waddr_mux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$add_r__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$add_w__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$mem__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$mem__raddr[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_2_1__in[15:0] = lb_grad_xy_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$mem__waddr[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$mem__wen = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__in[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr$enMux__sel = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$veq__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__sel = lb_grad_xy_2_stencil_update_stream$mem_2$raddr_eq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$raddr_mux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$veq__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2_valid_term__in = lb_grad_xy_2_stencil_update_stream$mem_2$veq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in0[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__in[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr$enMux__sel = lb_grad_xy_2_stencil_update_stream_wen__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__sel = lb_grad_xy_2_stencil_update_stream$mem_2$waddr_eq__out;
+  assign lb_grad_xy_2_stencil_update_stream$mem_2$waddr_mux__in1[8:0] = lb_grad_xy_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_0_1__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$reg_0_1__in[15:0] = mul_691_693_694__out[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_0_2__in[15:0] = lb_grad_xy_2_stencil_update_stream$reg_0_1__out[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_0_2__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$reg_1_1__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$reg_1_2__in[15:0] = lb_grad_xy_2_stencil_update_stream$reg_1_1__out[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_1_2__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$reg_2_1__clk = clk;
+  assign lb_grad_xy_2_stencil_update_stream$reg_2_2__in[15:0] = lb_grad_xy_2_stencil_update_stream$reg_2_1__out[15:0];
+  assign lb_grad_xy_2_stencil_update_stream$reg_2_2__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$add_r__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$add_w__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$mem__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$mem__raddr[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$mem__wdata[15:0] = lb_grad_yy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_1_1__in[15:0] = lb_grad_yy_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$mem__waddr[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$mem__wdata[15:0] = mul_715_715_716__out[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$mem__wen = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__in[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr$enMux__sel = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$veq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__sel = lb_grad_yy_2_stencil_update_stream$mem_1$raddr_eq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$raddr_mux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$veq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1_valid_term__in = lb_grad_yy_2_stencil_update_stream$mem_1$veq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__in[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr$enMux__sel = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__sel = lb_grad_yy_2_stencil_update_stream$mem_1$waddr_eq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_1$waddr_mux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$add_r__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$add_w__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$mem__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$mem__raddr[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_2_1__in[15:0] = lb_grad_yy_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$mem__waddr[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$mem__wen = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__in[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr$enMux__sel = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$veq__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__sel = lb_grad_yy_2_stencil_update_stream$mem_2$raddr_eq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$raddr_mux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$veq__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2_valid_term__in = lb_grad_yy_2_stencil_update_stream$mem_2$veq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in0[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__in[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr$enMux__sel = lb_grad_yy_2_stencil_update_stream_wen__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__sel = lb_grad_yy_2_stencil_update_stream$mem_2$waddr_eq__out;
+  assign lb_grad_yy_2_stencil_update_stream$mem_2$waddr_mux__in1[8:0] = lb_grad_yy_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_0_1__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$reg_0_1__in[15:0] = mul_715_715_716__out[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_0_2__in[15:0] = lb_grad_yy_2_stencil_update_stream$reg_0_1__out[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_0_2__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$reg_1_1__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$reg_1_2__in[15:0] = lb_grad_yy_2_stencil_update_stream$reg_1_1__out[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_1_2__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$reg_2_1__clk = clk;
+  assign lb_grad_yy_2_stencil_update_stream$reg_2_2__in[15:0] = lb_grad_yy_2_stencil_update_stream$reg_2_1__out[15:0];
+  assign lb_grad_yy_2_stencil_update_stream$reg_2_2__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_1$add_r__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$add_r__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$add_w__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$add_w__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$mem__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_1$mem__raddr[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$mem__wdata[15:0] = lb_p3_cim_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_1_1__in[15:0] = lb_p3_cim_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign smax_758_759_760$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign smax_758_759_760$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$mem__waddr[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$mem__wdata[15:0] = sub_746_749_750__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$mem__wen = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__in[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr$enMux__sel = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_1$veq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__sel = lb_p3_cim_stencil_update_stream$mem_1$raddr_eq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$raddr_mux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$veq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1_valid_term__in = lb_p3_cim_stencil_update_stream$mem_1$veq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__in[8:0] = lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr$enMux__sel = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__sel = lb_p3_cim_stencil_update_stream$mem_1$waddr_eq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_1$waddr_mux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$add_r__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$add_r__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$add_w__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$add_w__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$mem__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_2$mem__raddr[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$reg_2_1__in[15:0] = lb_p3_cim_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign smax_754_755_756$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign smax_754_755_756$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$mem__waddr[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$mem__wen = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__in[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr$enMux__sel = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_2$veq__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__sel = lb_p3_cim_stencil_update_stream$mem_2$raddr_eq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$raddr_mux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$veq__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2_valid_term__in = lb_p3_cim_stencil_update_stream$mem_2$veq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in0[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__in[8:0] = lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr$enMux__sel = lb_p3_cim_stencil_update_stream_wen__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__sel = lb_p3_cim_stencil_update_stream$mem_2$waddr_eq__out;
+  assign lb_p3_cim_stencil_update_stream$mem_2$waddr_mux__in1[8:0] = lb_p3_cim_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_p3_cim_stencil_update_stream$reg_0_1__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$reg_0_1__in[15:0] = sub_746_749_750__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_0_2__in[15:0] = lb_p3_cim_stencil_update_stream$reg_0_1__out[15:0];
+  assign smax_762_763_764$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$reg_0_1__out[15:0];
+  assign smax_762_763_764$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_0_1__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_0_2__clk = clk;
+  assign smax_760_761_762$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$reg_0_2__out[15:0];
+  assign smax_760_761_762$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_0_2__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_1_1__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$reg_1_2__in[15:0] = lb_p3_cim_stencil_update_stream$reg_1_1__out[15:0];
+  assign ule100_751_768__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_1_1__out[15:0];
+  assign ult_766_751_767__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_1_1__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_1_2__clk = clk;
+  assign smax_756_757_758$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$reg_1_2__out[15:0];
+  assign smax_756_757_758$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_1_2__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_2_1__clk = clk;
+  assign lb_p3_cim_stencil_update_stream$reg_2_2__in[15:0] = lb_p3_cim_stencil_update_stream$reg_2_1__out[15:0];
+  assign smax_752_753_754$max_mux__in0[15:0] = lb_p3_cim_stencil_update_stream$reg_2_1__out[15:0];
+  assign smax_752_753_754$scomp__in1[15:0] = lb_p3_cim_stencil_update_stream$reg_2_1__out[15:0];
+  assign lb_p3_cim_stencil_update_stream$reg_2_2__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_1$add_r__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$add_r__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$add_r__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$add_w__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$add_w__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$c1__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$add_w__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr_eq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr_eq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$max_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$mem__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_1$mem__raddr[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$mem__wdata[15:0] = lb_padded_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_1_1__in[15:0] = lb_padded_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign mul_639_635_640__in0[15:0] = lb_padded_2_stencil_update_stream$mem_1$mem__rdata[15:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$mem__waddr[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$mem__wen = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr_mux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__in[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr$enMux__sel = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_1$veq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr_mux__sel = lb_padded_2_stencil_update_stream$mem_1$raddr_eq__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$raddr_mux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$veq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1_valid_term__in = lb_padded_2_stencil_update_stream$mem_1$veq__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr_mux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__in[8:0] = lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr$enMux__sel = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr$reg0__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr_mux__sel = lb_padded_2_stencil_update_stream$mem_1$waddr_eq__out;
+  assign lb_padded_2_stencil_update_stream$mem_1$waddr_mux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_1$zero_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$add_r__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$add_r__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$add_r__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$add_w__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$add_w__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$c1__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$add_w__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr_eq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr_eq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$max_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$mem__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_2$mem__raddr[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$reg_2_1__in[15:0] = lb_padded_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign sub_629_631_632__in0[15:0] = lb_padded_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign sub_686_688_689__in1[15:0] = lb_padded_2_stencil_update_stream$mem_2$mem__rdata[15:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$mem__waddr[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$mem__wen = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr_mux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__in[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr$enMux__sel = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_2$veq__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$raddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr_mux__sel = lb_padded_2_stencil_update_stream$mem_2$raddr_eq__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$raddr_mux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$veq__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2_valid_term__in = lb_padded_2_stencil_update_stream$mem_2$veq__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in0[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr_mux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__in[8:0] = lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__out[8:0];
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr$enMux__sel = lb_padded_2_stencil_update_stream_wen__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr$reg0__clk = clk;
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr_mux__sel = lb_padded_2_stencil_update_stream$mem_2$waddr_eq__out;
+  assign lb_padded_2_stencil_update_stream$mem_2$waddr_mux__in1[8:0] = lb_padded_2_stencil_update_stream$mem_2$zero_const__out[8:0];
+  assign lb_padded_2_stencil_update_stream$reg_0_1__clk = clk;
+  assign lb_padded_2_stencil_update_stream$reg_0_2__in[15:0] = lb_padded_2_stencil_update_stream$reg_0_1__out[15:0];
+  assign mul_676_677_678__in0[15:0] = lb_padded_2_stencil_update_stream$reg_0_1__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_0_2__clk = clk;
+  assign sub_641_643_644__in1[15:0] = lb_padded_2_stencil_update_stream$reg_0_2__out[15:0];
+  assign sub_671_673_674__in0[15:0] = lb_padded_2_stencil_update_stream$reg_0_2__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_1_1__clk = clk;
+  assign lb_padded_2_stencil_update_stream$reg_1_2__in[15:0] = lb_padded_2_stencil_update_stream$reg_1_1__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_1_2__clk = clk;
+  assign mul_634_635_636__in0[15:0] = lb_padded_2_stencil_update_stream$reg_1_2__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_2_1__clk = clk;
+  assign lb_padded_2_stencil_update_stream$reg_2_2__in[15:0] = lb_padded_2_stencil_update_stream$reg_2_1__out[15:0];
+  assign mul_681_677_682__in0[15:0] = lb_padded_2_stencil_update_stream$reg_2_1__out[15:0];
+  assign lb_padded_2_stencil_update_stream$reg_2_2__clk = clk;
+  assign sub_629_631_632__in1[15:0] = lb_padded_2_stencil_update_stream$reg_2_2__out[15:0];
+  assign sub_671_673_674__in1[15:0] = lb_padded_2_stencil_update_stream$reg_2_2__out[15:0];
   assign sub_632_636_637__in1[15:0] = mul_634_635_636__out[15:0];
   assign sub_679_682_683__in1[15:0] = mul_681_677_682__out[15:0];
   assign mul_691_693_694__in1[15:0] = sub_686_688_689__out[15:0];
@@ -2639,14 +3408,30 @@ module DesignTop (
   assign sub_743_745_746__in0[15:0] = mul_740_741_743__out[15:0];
   assign sub_743_745_746__in1[15:0] = mul_744_744_745__out[15:0];
   assign out[15:0] = mux_769_770_771__out[15:0];
-  assign smax_752_753_754__in0[15:0] = sub_746_749_750__out[15:0];
-  assign smax_754_755_756__in0[15:0] = smax_752_753_754__out[15:0];
-  assign smax_756_757_758__in0[15:0] = smax_754_755_756__out[15:0];
-  assign smax_758_759_760__in0[15:0] = smax_756_757_758__out[15:0];
-  assign smax_760_761_762__in0[15:0] = smax_758_759_760__out[15:0];
-  assign smax_762_763_764__in0[15:0] = smax_760_761_762__out[15:0];
-  assign smax_764_765_766__in0[15:0] = smax_762_763_764__out[15:0];
-  assign ult_766_751_767__in0[15:0] = smax_764_765_766__out[15:0];
+  assign smax_752_753_754$max_mux__in1[15:0] = sub_746_749_750__out[15:0];
+  assign smax_754_755_756$max_mux__in1[15:0] = smax_752_753_754$max_mux__out[15:0];
+  assign smax_754_755_756$scomp__in0[15:0] = smax_752_753_754$max_mux__out[15:0];
+  assign smax_752_753_754$max_mux__sel = smax_752_753_754$scomp__out;
+  assign smax_752_753_754$scomp__in0[15:0] = sub_746_749_750__out[15:0];
+  assign smax_756_757_758$max_mux__in1[15:0] = smax_754_755_756$max_mux__out[15:0];
+  assign smax_756_757_758$scomp__in0[15:0] = smax_754_755_756$max_mux__out[15:0];
+  assign smax_754_755_756$max_mux__sel = smax_754_755_756$scomp__out;
+  assign smax_758_759_760$max_mux__in1[15:0] = smax_756_757_758$max_mux__out[15:0];
+  assign smax_758_759_760$scomp__in0[15:0] = smax_756_757_758$max_mux__out[15:0];
+  assign smax_756_757_758$max_mux__sel = smax_756_757_758$scomp__out;
+  assign smax_760_761_762$max_mux__in1[15:0] = smax_758_759_760$max_mux__out[15:0];
+  assign smax_760_761_762$scomp__in0[15:0] = smax_758_759_760$max_mux__out[15:0];
+  assign smax_758_759_760$max_mux__sel = smax_758_759_760$scomp__out;
+  assign smax_762_763_764$max_mux__in1[15:0] = smax_760_761_762$max_mux__out[15:0];
+  assign smax_762_763_764$scomp__in0[15:0] = smax_760_761_762$max_mux__out[15:0];
+  assign smax_760_761_762$max_mux__sel = smax_760_761_762$scomp__out;
+  assign smax_764_765_766$max_mux__in1[15:0] = smax_762_763_764$max_mux__out[15:0];
+  assign smax_764_765_766$scomp__in0[15:0] = smax_762_763_764$max_mux__out[15:0];
+  assign smax_762_763_764$max_mux__sel = smax_762_763_764$scomp__out;
+  assign smax_764_765_766$max_mux__in0[15:0] = sub_746_749_750__out[15:0];
+  assign ult_766_751_767__in0[15:0] = smax_764_765_766$max_mux__out[15:0];
+  assign smax_764_765_766$max_mux__sel = smax_764_765_766$scomp__out;
+  assign smax_764_765_766$scomp__in1[15:0] = sub_746_749_750__out[15:0];
   assign sub_632_636_637__in0[15:0] = sub_629_631_632__out[15:0];
   assign sub_746_749_750__in0[15:0] = sub_743_745_746__out[15:0];
 
