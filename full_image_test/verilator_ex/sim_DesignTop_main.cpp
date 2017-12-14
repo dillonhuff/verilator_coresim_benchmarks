@@ -19,7 +19,6 @@ int main(int argc, char** argv) {
   VDesignTop* top = new VDesignTop;
 
   VL_IN8(clk,0,1);
-  //char	__VpadToAlign1[1];
   VL_IN16(in_0, 16, 0);
   VL_OUT16(out, 16, 0);
 
@@ -34,9 +33,7 @@ int main(int argc, char** argv) {
   unsigned width, height;
 
   unsigned error = lodepng::decode(image, width, height, "../input_conv_bw.png");
-  //unsigned error = lodepng::decode(image, width, height, "./input.png");
 
-  //if there's an error, display it
   if(error) {
     std::cout << "decoder error " << error << ": " << lodepng_error_text(error) << std::endl;
   }

@@ -14,7 +14,7 @@ int main(const int argc, char** argv) {
   std::vector<unsigned char> image; //the raw pixels
   unsigned width, height;
 
-  unsigned error = lodepng::decode(image, width, height, "./input_conv_bw.png");
+  unsigned error = lodepng::decode(image, width, height, "../input_conv_bw.png");
   //unsigned error = lodepng::decode(image, width, height, "./input.png");
 
   //if there's an error, display it
