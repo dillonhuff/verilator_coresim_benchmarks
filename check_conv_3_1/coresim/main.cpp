@@ -28,6 +28,7 @@ int main(const int argc, char** argv) {
   cout << "Starting CoreSim" << endl;
   circuit_state state;
 
+  state.in_0_auto_reg = 0;
   // Set defaults
   for (int i = 0; i < 10; i++) {
     state.lb_p4_clamped_stencil_update_stream$mem_1$mem[ i ]= 0;
@@ -44,6 +45,7 @@ int main(const int argc, char** argv) {
   state.lb_p4_clamped_stencil_update_stream$mem_2$waddr$reg0 = 0;
 
   state.self_in_0 = 1;
+  state.self_out = 0;
   state.self_clk = 1;
   state.self_clk_last = 0;
 
