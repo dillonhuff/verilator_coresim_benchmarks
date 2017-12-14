@@ -8,3 +8,12 @@ parallel_ops/verilator/obj_dir/
 
 harris/coresim/a.out
 harris/verilator/obj_dir/
+
+parallel_ops/coresim/cachegrind*
+harris/coresim/cachegrind*
+
+full_image_test/verilator_ex/obj_dir/*
+full_image_test/a.out
+
+*DS_Store
+

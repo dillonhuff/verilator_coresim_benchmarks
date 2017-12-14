@@ -38,13 +38,19 @@ int main(int argc, char** argv) {
 
   cout << "Width  = " << width << endl;
   cout << "Height = " << height << endl;
+  cout << "Total pixels = " << width*height << endl;
+  cout << "Image size   = " << image.size() << endl;
 
+  clock_t start, end;
+
+  start = clock();
+  
   for (int i = 0; i < image.size(); i++) {
     top->clk = i % 2;
     top->eval();
 
     if (top->clk == 0) {
-    cout << "out " << i << " = " << top->out << endl;
+      cout << "out " << i << " = " << top->out << endl;
     }
 
     if (top->clk == 1) {
@@ -52,5 +58,13 @@ int main(int argc, char** argv) {
       top->in_0 = image[i];
     }
   }
-  
+
+  end = std::clock();
+
+  cout << "DONE." << endl;
+
+  double time_ms =
+    (end - start) / (double)(CLOCKS_PER_SEC / 1000);
+
+  cout << "Verilator time = " << time_ms << " ms" << endl;
 }

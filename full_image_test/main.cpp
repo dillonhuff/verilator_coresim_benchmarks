@@ -44,6 +44,11 @@ int main(const int argc, char** argv) {
   state.self_clk_last = 0;
 
   state.self_clk_last = 1;
+
+  clock_t start, end;
+
+  start = clock();
+
   for (int i = 0; i < image.size(); i++) {
     state.self_clk = i % 2;
 
@@ -62,4 +67,13 @@ int main(const int argc, char** argv) {
     }
   }
 
+  end = std::clock();
+
+  cout << "DONE." << endl;
+
+  double time_ms =
+    (end - start) / (double)(CLOCKS_PER_SEC / 1000);
+
+  cout << "CoreSIM time = " << time_ms << " ms" << endl;
+  
 }
