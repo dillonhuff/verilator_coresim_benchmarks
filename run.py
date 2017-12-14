@@ -62,11 +62,18 @@ os.system("cat scratch/conv_3_1_diff.txt")
 print 'End of diff.'
 
 # ------------------ Correctness testing harris
+
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/_harris.json ./check_harris/tmp_harris.json");
+os.system("cd ./check_harris/; coreir -i tmp_harris.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o harris.json");
+
 os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json; cd ../..");
 
 os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 
 ## run verilator
+### Create verilog
+os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib");
+
 os.system("cd ./check_harris/verilator/; make -j")
 
 ## Compare outputs

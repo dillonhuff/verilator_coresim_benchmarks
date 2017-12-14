@@ -7,33 +7,6 @@ module corebit_const #(parameter value=1) (
 
 endmodule //corebit_const
 
-module coreir_eq #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 == in1;
-
-endmodule //coreir_eq
-
-module coreir_mul #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output [width-1:0] out
-);
-  assign out = in0 * in1;
-
-endmodule //coreir_mul
-
-module coreir_neq #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 != in1;
-
-endmodule //coreir_neq
-
 module corebit_term (
   input in
 );
@@ -57,6 +30,15 @@ module coreir_const #(parameter value=1, parameter width=1) (
 
 endmodule //coreir_const
 
+module coreir_eq #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
+);
+  assign out = in0 == in1;
+
+endmodule //coreir_eq
+
 module mem #(parameter depth=1, parameter width=1) (
   input clk,
   input [width-1:0] wdata,
@@ -74,6 +56,24 @@ end
 assign rdata = data[raddr];
 
 endmodule //mem
+
+module coreir_mul #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output [width-1:0] out
+);
+  assign out = in0 * in1;
+
+endmodule //coreir_mul
+
+module coreir_neq #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
+);
+  assign out = in0 != in1;
+
+endmodule //coreir_neq
 
 module coreir_mux #(parameter width=1) (
   input [width-1:0] in0,
