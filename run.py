@@ -39,6 +39,8 @@ os.system("mkdir scratch");
 # Correctness testing conv_3_1
 
 ## run coresim
+os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json; cd ../..");
+
 os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
@@ -50,13 +52,23 @@ os.system("diff ./check_conv_3_1/verilator_ex/verilator_conv_output.txt ./check_
 os.system("cat scratch/conv_3_1_diff.txt")
 
 # Correctness testing harris
+os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json; cd ../..");
 
+os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 
-# conv_3_1
-benchmark_application("conv_3_1")
+## run verilator
+os.system("cd ./check_harris/verilator_ex/; make -j")
 
-# Harris
-benchmark_application("harris")
+## Compare outputs
+os.system("diff ./check_harris/verilator_ex/verilator_conv_output.txt ./check_harris/coresim/coresim_conv_output.txt > scratch/harris_diff.txt")
 
-# Parallel logic ops stress test
-benchmark_application("parallel_ops")
+os.system("cat scratch/harris_diff.txt")
+
+# # conv_3_1
+# benchmark_application("conv_3_1")
+
+# # Harris
+# benchmark_application("harris")
+
+# # Parallel logic ops stress test
+# benchmark_application("parallel_ops")
