@@ -1,3 +1,11 @@
+*.o
+*.v
+*.json
+*.out
+*.d
+*DesignTop_sim.cpp
+*DesignTop_sim.h
+*bit_vector.h
 *~
 scratch/
 conv_3_1/coresim/a.out
