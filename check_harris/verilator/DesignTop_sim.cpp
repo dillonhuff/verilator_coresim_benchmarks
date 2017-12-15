@@ -375,9 +375,8 @@ void simulate_0( circuit_state* __restrict state ) {
     ashr_736_739_740_out = ((((((((((0b0000000000000000  +  mul_649_649_650_out)  +  lb_grad_xx_2_stencil_update_stream$reg_2_1_out)  +  lb_grad_xx_2_stencil_update_stream$mem_2$mem_rdata)  +  lb_grad_xx_2_stencil_update_stream$reg_1_2_out)  +  lb_grad_xx_2_stencil_update_stream$reg_1_1_out)  +  lb_grad_xx_2_stencil_update_stream$mem_1$mem_rdata)  +  lb_grad_xx_2_stencil_update_stream$reg_0_2_out)  +  lb_grad_xx_2_stencil_update_stream$reg_0_1_out)  +  mul_649_649_650_out)  >>  0b0000000000000111);
     add_740_741_742_out = (ashr_736_739_740_out  +  ashr_737_739_741_out);
 
-    // (((ashr_736_739_740_out  *  ashr_737_739_741_out)  -  (ashr_738_739_744_out  *  ashr_738_739_744_out))  -  ((add_740_741_742_out  *  add_740_741_742_out)  >>  0b0000000000000100));
-
     sub_746_749_750_out = (((ashr_736_739_740_out  *  ashr_737_739_741_out)  -  (ashr_738_739_744_out  *  ashr_738_739_744_out))  -  ((add_740_741_742_out  *  add_740_741_742_out)  >>  0b0000000000000100));
+
     smax_752_753_754$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) sub_746_749_750_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$reg_2_1_out))) ? sub_746_749_750_out : lb_p3_cim_stencil_update_stream$reg_2_1_out);
     smax_754_755_756$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) smax_752_753_754$max_mux_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$mem_2$mem_rdata))) ? smax_752_753_754$max_mux_out : lb_p3_cim_stencil_update_stream$mem_2$mem_rdata);
     smax_756_757_758$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) smax_754_755_756$max_mux_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$reg_1_2_out))) ? smax_754_755_756$max_mux_out : lb_p3_cim_stencil_update_stream$reg_1_2_out);
@@ -432,8 +431,6 @@ void simulate_0( circuit_state* __restrict state ) {
     (state->lb_grad_xx_2_stencil_update_stream$reg_0_2) = lb_grad_xx_2_stencil_update_stream$reg_0_1_out;
     (state->lb_grad_xx_2_stencil_update_stream$reg_1_2) = lb_grad_xx_2_stencil_update_stream$reg_1_1_out;
 
-    //cout << "Setting state->lb_padded_2_stencil_update_stream$reg_0_1 to " << (int) in_0_auto_reg_out << endl;
-
     (state->lb_padded_2_stencil_update_stream$reg_0_1) = in_0_auto_reg_out;
     (state->lb_padded_2_stencil_update_stream$mem_1$mem)[ lb_padded_2_stencil_update_stream$mem_1$waddr$reg0_out ] = ((0b1) ? in_0_auto_reg_out : (state->lb_padded_2_stencil_update_stream$mem_1$mem)[ lb_padded_2_stencil_update_stream$mem_1$waddr$reg0_out ]);
     (state->lb_grad_yy_2_stencil_update_stream$reg_0_1) = mul_715_715_716_out;
@@ -444,7 +441,6 @@ void simulate_0( circuit_state* __restrict state ) {
     (state->lb_grad_xx_2_stencil_update_stream$mem_1$mem)[ lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0_out ] = ((0b1) ? mul_649_649_650_out : (state->lb_grad_xx_2_stencil_update_stream$mem_1$mem)[ lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0_out ]);
     (state->lb_p3_cim_stencil_update_stream$reg_0_1) = sub_746_749_750_out;
 
-    cout << "sub_746_749_750_out = " << (int) sub_746_749_750_out << endl;
     (state->lb_p3_cim_stencil_update_stream$mem_1$mem)[ lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0_out ] = ((0b1) ? sub_746_749_750_out : (state->lb_p3_cim_stencil_update_stream$mem_1$mem)[ lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0_out ]);
     (state->in_0_auto_reg) = (state->self_in_0);
     (state->lb_padded_2_stencil_update_stream$reg_1_2) = lb_padded_2_stencil_update_stream$reg_1_1_out;
@@ -533,7 +529,22 @@ void simulate_0( circuit_state* __restrict state ) {
     mul_649_649_650_out = (add_644_646_647_out  *  add_644_646_647_out);
     ashr_736_739_740_out = ((((((((((0b0000000000000000  +  mul_649_649_650_out)  +  lb_grad_xx_2_stencil_update_stream$reg_2_1_out)  +  lb_grad_xx_2_stencil_update_stream$mem_2$mem_rdata)  +  lb_grad_xx_2_stencil_update_stream$reg_1_2_out)  +  lb_grad_xx_2_stencil_update_stream$reg_1_1_out)  +  lb_grad_xx_2_stencil_update_stream$mem_1$mem_rdata)  +  lb_grad_xx_2_stencil_update_stream$reg_0_2_out)  +  lb_grad_xx_2_stencil_update_stream$reg_0_1_out)  +  mul_649_649_650_out)  >>  0b0000000000000111);
     add_740_741_742_out = (ashr_736_739_740_out  +  ashr_737_739_741_out);
+
+    cout << "computed sub_746_749_750 = " << (int) sub_746_749_750_out << endl;
+    cout << (int) ashr_736_739_740_out << endl;
+    cout << (int) ashr_737_739_741_out << endl;
+    cout << (int) ashr_738_739_744_out  << endl;
+    cout << (int) add_740_741_742_out << endl;
+    cout << (int) (add_740_741_742_out  *  add_740_741_742_out) << endl;
+    cout << bitset<16>(add_740_741_742_out  *  add_740_741_742_out) << endl;
+    cout << (int) ((add_740_741_742_out  *  add_740_741_742_out)  >>  0b0000000000000100) << endl;
+    cout << bitset<16>(((uint16_t) (add_740_741_742_out  *  add_740_741_742_out))  >>  0b0000000000000100) << endl;
+    cout << "Manual test: " << bitset<16>( 0b0100010000000000 >> 0b0000000000000100 ) << endl;
+    
     sub_746_749_750_out = (((ashr_736_739_740_out  *  ashr_737_739_741_out)  -  (ashr_738_739_744_out  *  ashr_738_739_744_out))  -  ((add_740_741_742_out  *  add_740_741_742_out)  >>  0b0000000000000100));
+
+    cout << "computed sub_746_749_750 after = " << (int) sub_746_749_750_out << endl;
+    
     smax_752_753_754$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) sub_746_749_750_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$reg_2_1_out))) ? sub_746_749_750_out : lb_p3_cim_stencil_update_stream$reg_2_1_out);
     smax_754_755_756$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) smax_752_753_754$max_mux_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$mem_2$mem_rdata))) ? smax_752_753_754$max_mux_out : lb_p3_cim_stencil_update_stream$mem_2$mem_rdata);
     smax_756_757_758$max_mux_out = (MASK(0b00000000000000000000000000000001, (((int16_t) smax_754_755_756$max_mux_out)  >=  ((int16_t) lb_p3_cim_stencil_update_stream$reg_1_2_out))) ? smax_754_755_756$max_mux_out : lb_p3_cim_stencil_update_stream$reg_1_2_out);

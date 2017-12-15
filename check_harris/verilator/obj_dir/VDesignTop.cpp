@@ -1052,6 +1052,8 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__7(VDesignTop__Syms* __restrict vlS
 									+ (IData)(vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_2__DOT__outReg)) 
 								       + (IData)(vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_1__DOT__outReg)) 
 								      + (IData)(vlTOPp->v__DOT__mul_649_649_650___05Fout))), 7U));
+
+    
     vlTOPp->v__DOT__add_695_712_713___05Fout = (0xffffU 
 						& (((((((((IData)(vlTOPp->v__DOT__mul_691_693_694___05Fout) 
 							  + (IData)(vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_2_1__DOT__outReg)) 
@@ -1110,17 +1112,37 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__9(VDesignTop__Syms* __restrict vlS
     // vlTOPp->v__DOT__sub_746_749_750___05Fout
     // vlTOPp->v__DOT__ashr_736_739_740___05Fout
     // vlTOPp->v__DOT__ashr_737_739_741___05Fout
-    //     					    - 
-    //     					    ((0xffffU 
-    //     					      & VL_SHIFTRS_III(16,16,16, (IData)(vlTOPp->v__DOT__add_695_712_713___05Fout), 7U)) 
-    //     					     * 
-    //     					     (0xffffU 
-    //     					      & VL_SHIFTRS_III(16,16,16, (IData)(vlTOPp->v__DOT__add_695_712_713___05Fout), 7U)))) 
-    //     					   - 
-    //     					   VL_SHIFTRS_III(16,16,16, 
-    //     							  (0xffffU 
-    //     							   & ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
-    //     							      * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout))), 4U)));
+    // vlTOPp->v__DOT__add_695_712_713___05Fout
+    // vlTOPp->v__DOT__add_695_712_713___05Fout
+    // vlTOPp->v__DOT__add_740_741_742___05Fout
+    // vlTOPp->v__DOT__add_740_741_742___05Fout
+
+    cout << "vlTOPp->v__DOT__sub_746_749_750___05Fout " << (int) vlTOPp->v__DOT__sub_746_749_750___05Fout << endl;
+    cout << (int) vlTOPp->v__DOT__ashr_736_739_740___05Fout << endl;
+    cout << (int) vlTOPp->v__DOT__ashr_737_739_741___05Fout << endl;
+    cout << (int) VL_SHIFTRS_III(16,16,16, (IData)(vlTOPp->v__DOT__add_695_712_713___05Fout), 7U) << endl;
+    //cout << (int) vlTOPp->v__DOT__add_695_712_713___05Fout << endl;
+    //cout << (int) vlTOPp->v__DOT__add_695_712_713___05Fout << endl;
+    //cout << (int) vlTOPp->v__DOT__add_740_741_742___05Fout << endl;
+    cout << (int) vlTOPp->v__DOT__add_740_741_742___05Fout << endl;
+
+    cout << (int) ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
+                   * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout)) << endl;
+
+    cout << bitset<16>((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
+                       * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout)) << endl;
+
+    cout << VL_SHIFTRS_III(16,16,16, 
+                           (0xffffU 
+                            & ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
+                               * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout))), 4U) << endl;
+
+    cout << bitset<16>(VL_SHIFTRS_III(16,16,16, 
+                                      (0xffffU 
+                                       & ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
+                                          * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout))), 4U)) << endl;
+
+    cout << "Done with sub inputs" << endl;
     
     vlTOPp->v__DOT__sub_746_749_750___05Fout = (0xffffU 
 						& ((((IData)(vlTOPp->v__DOT__ashr_736_739_740___05Fout) 
@@ -1136,6 +1158,9 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__9(VDesignTop__Syms* __restrict vlS
 								  (0xffffU 
 								   & ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
 								      * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout))), 4U)));
+
+    cout << "vlTOPp->v__DOT__sub_746_749_750___05Fout after = " << (int) vlTOPp->v__DOT__sub_746_749_750___05Fout << endl;
+    
     vlTOPp->v__DOT__smax_752_753_754__024max_mux___05Fout 
 	= (VL_GTES_III(1,16,16, (IData)(vlTOPp->v__DOT__sub_746_749_750___05Fout), (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_2_1__DOT__outReg))
 	    ? (IData)(vlTOPp->v__DOT__sub_746_749_750___05Fout)

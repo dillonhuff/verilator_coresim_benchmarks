@@ -310,9 +310,13 @@ int main(int argc, char** argv) {
 
     state.self_clk = i % 2;
 
+    cout << "####### Executing Top ########" << endl;
     top->eval();
+    cout << "####### Done Top ########" << endl;
 
+    cout << "####### Executing State ########" << endl;
     simulate(&state);
+    cout << "####### Done State ########" << endl;
 
     state.self_clk_last = state.self_clk;
 
@@ -346,15 +350,6 @@ int main(int argc, char** argv) {
     cout << "top.rv   = " << (int) eval_rv << endl;
 
     assert(rv == eval_rv);
-
-//     cout << (int) top->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;
-//     cout << (int) state.lb_grad_xx_2_stencil_update_stream$mem_2$rdata << endl;
-
-//     cout << (int) top->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;
-//     cout << (int) state.lb_grad_xy_2_stencil_update_stream$mem_2$rdata$reg0 << endl;
-
-// cout << (int) top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;    
-//     cout << (int) state.lb_grad_yy_2_stencil_update_stream$mem_2$rdata$reg0 << endl;
 
     cout << "top->out       = " << (int) top->out << endl;
     cout << "state.self_out = " << (int) state.self_out << endl;
