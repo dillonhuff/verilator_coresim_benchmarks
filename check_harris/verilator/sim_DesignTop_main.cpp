@@ -164,11 +164,19 @@ int main(int argc, char** argv) {
     assert(rv == eval_rv);
 
     cout << (int) top->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;
-    cout << (int) state.lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0 << endl;
+    cout << (int) state.lb_grad_xx_2_stencil_update_stream$mem_2$rdata << endl;
+
+    cout << (int) top->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;
+    cout << (int) state.lb_grad_xy_2_stencil_update_stream$mem_2$rdata$reg0 << endl;
+
+cout << (int) top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;    
+    cout << (int) state.lb_grad_yy_2_stencil_update_stream$mem_2$rdata$reg0 << endl;
+    
     cout << "top->out       = " << (int) top->out << endl;
     cout << "state.self_out = " << (int) state.self_out << endl;
 
-    
+    // Note: Addresses can probably be removed by more advanced logic duplication
+
     if (top->clk == 0) {
 
       output.push_back(top->out);

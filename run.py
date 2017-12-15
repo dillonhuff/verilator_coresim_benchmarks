@@ -36,6 +36,28 @@ def benchmark_application(app_name):
 #Setup
 os.system("mkdir scratch");
 
+# -------------------- Correctness testing cascade
+
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/cascade.json ./check_cascade/tmp_cascade.json");
+os.system("cd ./check_cascade/; coreir -i tmp_cascade.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o cascade.json");
+
+os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json; cd ../..");
+
+os.system("cd ./check_cascade/coresim/; make -j; ./a.out")
+
+## run verilator
+### Create verilog
+os.system("cd ./check_cascade/; coreir -i ./cascade.json -o ./verilator/cascade.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib");
+
+os.system("cd ./check_cascade/verilator/; make -j")
+
+## Compare outputs
+os.system("diff ./check_cascade/verilator/verilator_cascade_output.txt ./check_cascade/coresim/coresim_cascade_output.txt > scratch/cascade_diff.txt")
+
+print 'Difference between Cascade outputs:'
+os.system("cat scratch/cascade_diff.txt")
+print 'End of diff.'
+
 # ------------------- Correctness testing conv_3_1
 
 ## run coresim
