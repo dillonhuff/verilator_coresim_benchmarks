@@ -36,3 +36,4 @@ check_conv_3_1/coresim/a.out
 harris/coresim/a.out.dSYM/
 parallel_ops/coresim/a.out.dSYM/
 
+check_harris/verilator/obj_dir/
