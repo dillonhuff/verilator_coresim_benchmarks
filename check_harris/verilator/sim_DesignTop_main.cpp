@@ -186,7 +186,19 @@ void compare_memory(uint16_t* const state_mem,
                     uint16_t* const top_mem,
                     const int length) {
   for (int i = 0; i < length; i++) {
-    assert(state_mem[i] == top_mem[i]);
+    if (state_mem[i] != top_mem[i]) {
+      cout << "Memories do not match !" << endl;
+      cout << "state_mem[" << i << "] = " << state_mem[i] << endl;
+      cout << "top_mem[" << i << "]   = " << top_mem[i] << endl;
+
+      cout << "---- Whole memory contents" << endl;
+      for (int j = 0; j < length; j++) {
+        cout << "state_mem[" << j << "] = " << state_mem[j] << endl;
+        cout << "top_mem[" << j << "]   = " << top_mem[j] << endl;
+      }
+
+      assert(state_mem[i] == top_mem[i]);
+    }
   }
 }
 
@@ -217,10 +229,32 @@ void compare_memories(circuit_state* const state, VDesignTop* const top) {
   
     // VL_SIG16(v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data[484],15,0);
     // VL_SIG16(v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data[484],15,0);
-    // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data[482],15,0);
+
+  compare_memory(state->lb_grad_yy_2_stencil_update_stream$mem_1$mem,
+                 top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data,
+                 484);
+
+  compare_memory(state->lb_grad_yy_2_stencil_update_stream$mem_2$mem,
+                 top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data,
+                 484);
+
+  // sub_746_749_750_out is not correct?
+  // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data[482],15,0);
     // //char	__VpadToAlign6972[4];
     // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data[482],15,0);
-    // //char	__VpadToAlign7940[4];
+
+  cout << "top->v__DOT__sub_746_749_750___05Fout = " << (int) top->v__DOT__sub_746_749_750___05Fout << endl;
+
+  cout << "Comparing state->lb_p3_cim_stencil_update_stream$mem_1$mem to top->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data" << endl;
+  compare_memory(state->lb_p3_cim_stencil_update_stream$mem_1$mem,
+                 top->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data,
+                 482);
+
+  // compare_memory(state->lb_grad_yy_2_stencil_update_stream$mem_2$mem,
+  //                top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data,
+  //                484);
+
+  // //char	__VpadToAlign7940[4];
     // VL_SIG16(v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data[486],15,0);
     // //char	__VpadToAlign8916[4];
     // VL_SIG16(v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data[486],15,0);
