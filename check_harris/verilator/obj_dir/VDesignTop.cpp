@@ -324,9 +324,16 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
     // ALWAYS at harris.v:28
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__sub_746_749_750___05Fout;
+
+    cout << "vlTOPp->v__DOT__sub_746_749_750___05Fout = " << vlTOPp->v__DOT__sub_746_749_750___05Fout << endl;
+
     if ((0x1e1U >= (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
 	__Vdlyvval__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1;
+
+        cout << "Assigning to mem rdat" << endl;
+        cout << "vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 = " << vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 << endl;
+        
 	__Vdlyvset__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0 = 1U;
 	__Vdlyvdim0__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
@@ -1099,6 +1106,22 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__9(VDesignTop__Syms* __restrict vlS
     VL_DEBUG_IF(VL_PRINTF("    VDesignTop::_sequent__TOP__9\n"); );
     VDesignTop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
+
+    // vlTOPp->v__DOT__sub_746_749_750___05Fout
+    // vlTOPp->v__DOT__ashr_736_739_740___05Fout
+    // vlTOPp->v__DOT__ashr_737_739_741___05Fout
+    //     					    - 
+    //     					    ((0xffffU 
+    //     					      & VL_SHIFTRS_III(16,16,16, (IData)(vlTOPp->v__DOT__add_695_712_713___05Fout), 7U)) 
+    //     					     * 
+    //     					     (0xffffU 
+    //     					      & VL_SHIFTRS_III(16,16,16, (IData)(vlTOPp->v__DOT__add_695_712_713___05Fout), 7U)))) 
+    //     					   - 
+    //     					   VL_SHIFTRS_III(16,16,16, 
+    //     							  (0xffffU 
+    //     							   & ((IData)(vlTOPp->v__DOT__add_740_741_742___05Fout) 
+    //     							      * (IData)(vlTOPp->v__DOT__add_740_741_742___05Fout))), 4U)));
+    
     vlTOPp->v__DOT__sub_746_749_750___05Fout = (0xffffU 
 						& ((((IData)(vlTOPp->v__DOT__ashr_736_739_740___05Fout) 
 						     * (IData)(vlTOPp->v__DOT__ashr_737_739_741___05Fout)) 
