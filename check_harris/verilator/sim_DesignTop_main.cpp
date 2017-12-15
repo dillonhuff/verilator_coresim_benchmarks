@@ -175,10 +175,10 @@ void set_defaults(circuit_state* state) {
   state->lb_grad_xx_2_stencil_update_stream$reg_1_1= 0;
   state->lb_grad_xx_2_stencil_update_stream$reg_1_2= 0;
   state->lb_grad_xx_2_stencil_update_stream$reg_2_1= 0;
-  state->in_0_auto_reg= 0;
-  state->self_out= 0;
-  state->lb_padded_2_stencil_update_stream$reg_1_1= 0;
-  state->self_in_0= 0;
+  state->in_0_auto_reg = 0;
+  state->self_out = 0b0000000011111111;
+  state->lb_padded_2_stencil_update_stream$reg_1_1 = 0;
+  state->self_in_0 = 0;
 
 }
 
@@ -218,7 +218,8 @@ int main(int argc, char** argv) {
   state.self_clk = 1;
   state.self_clk_last = 0;
   state.self_in_0 = 1;
-  state.self_out = 0;
+  state.self_out = 0b0000000011111111;
+  //state.self_out = 0;
   
   vector<unsigned char> output;
 
