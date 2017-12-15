@@ -33,6 +33,11 @@ def benchmark_application(app_name):
     print 'Verilator: ', result_lines[1]
     
 
+def print_diff(app_name):
+    print 'Difference between ' + app_name + ' outputs:'
+    os.system("cat scratch/" + app_name + "_diff.txt")
+    print 'End of diff.'
+
 #Setup
 os.system("mkdir scratch");
 
@@ -54,9 +59,10 @@ os.system("cd ./check_cascade/verilator/; make -j")
 ## Compare outputs
 os.system("diff ./check_cascade/verilator/verilator_cascade_output.txt ./check_cascade/coresim/coresim_cascade_output.txt > scratch/cascade_diff.txt")
 
-print 'Difference between Cascade outputs:'
-os.system("cat scratch/cascade_diff.txt")
-print 'End of diff.'
+print_diff('cascade')
+# print 'Difference between Cascade outputs:'
+# os.system("cat scratch/cascade_diff.txt")
+# print 'End of diff.'
 
 # ------------------- Correctness testing conv_3_1
 
@@ -79,9 +85,10 @@ os.system("cd ./check_conv_3_1/verilator_ex/; make -j")
 ## Compare outputs
 os.system("diff ./check_conv_3_1/verilator_ex/verilator_conv_output.txt ./check_conv_3_1/coresim/coresim_conv_output.txt > scratch/conv_3_1_diff.txt")
 
-print 'Difference between conv_3_1 outputs:'
-os.system("cat scratch/conv_3_1_diff.txt")
-print 'End of diff.'
+print_diff('conv_3_1')
+# print 'Difference between conv_3_1 outputs:'
+# os.system("cat scratch/conv_3_1_diff.txt")
+# print 'End of diff.'
 
 # ------------------ Correctness testing harris
 
@@ -101,15 +108,16 @@ os.system("cd ./check_harris/verilator/; make -j")
 ## Compare outputs
 os.system("diff ./check_harris/verilator/verilator_harris_output.txt ./check_harris/coresim/coresim_harris_output.txt > scratch/harris_diff.txt")
 
-print 'Difference between Harris outputs:'
-os.system("cat scratch/harris_diff.txt")
-print 'End of diff.'
+print_diff('harris')
+# print 'Difference between Harris outputs:'
+# os.system("cat scratch/harris_diff.txt")
+# print 'End of diff.'
 
-# # conv_3_1
-# benchmark_application("conv_3_1")
+# conv_3_1
+benchmark_application("conv_3_1")
 
-# # Harris
-# benchmark_application("harris")
+# Harris
+benchmark_application("harris")
 
-# # Parallel logic ops stress test
-# benchmark_application("parallel_ops")
+# Parallel logic ops stress test
+benchmark_application("parallel_ops")
