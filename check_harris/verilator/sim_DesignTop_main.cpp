@@ -182,6 +182,50 @@ void set_defaults(circuit_state* state) {
 
 }
 
+void compare_memory(uint16_t* const state_mem,
+                    uint16_t* const top_mem,
+                    const int length) {
+  for (int i = 0; i < length; i++) {
+    assert(state_mem[i] == top_mem[i]);
+  }
+}
+
+void compare_memories(circuit_state* const state, VDesignTop* const top) {
+
+    // VL_SIG16(v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data[484],15,0);
+    // VL_SIG16(v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data[484],15,0);
+
+  cout << "Comparing memories" << endl;
+  compare_memory(state->lb_grad_xx_2_stencil_update_stream$mem_1$mem,
+                 top->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data,
+                 484);
+
+  compare_memory(state->lb_grad_xx_2_stencil_update_stream$mem_2$mem,
+                 top->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data,
+                 484);
+
+    // VL_SIG16(v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data[484],15,0);
+    // VL_SIG16(v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data[484],15,0);
+
+  compare_memory(state->lb_grad_xy_2_stencil_update_stream$mem_1$mem,
+                 top->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data,
+                 484);
+
+  compare_memory(state->lb_grad_xy_2_stencil_update_stream$mem_2$mem,
+                 top->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data,
+                 484);
+  
+    // VL_SIG16(v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data[484],15,0);
+    // VL_SIG16(v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data[484],15,0);
+    // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data[482],15,0);
+    // //char	__VpadToAlign6972[4];
+    // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data[482],15,0);
+    // //char	__VpadToAlign7940[4];
+    // VL_SIG16(v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data[486],15,0);
+    // //char	__VpadToAlign8916[4];
+    // VL_SIG16(v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data[486],15,0);
+  
+}
 
 int main(int argc, char** argv) {
 
@@ -251,7 +295,12 @@ int main(int argc, char** argv) {
     
     // cout << "out = " << (int) top->out << endl;
 
-    cout << "--- Half cycle" << endl;
+    cout << "--- Half cycle " << i << endl;
+    cout << "state.self_clk = " << (int) state.self_clk << endl;
+    cout << "top->clk       = " << (int) top->clk << endl;
+
+    assert(state.self_clk == top->clk);
+
     cout << "top->in_0       = " << (int) top->in_0 << endl;
     cout << "state.self_in_0 = " << (int) state.self_in_0 << endl;
 
@@ -272,9 +321,13 @@ int main(int argc, char** argv) {
 
 // cout << (int) top->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem___05Frdata << endl;    
 //     cout << (int) state.lb_grad_yy_2_stencil_update_stream$mem_2$rdata$reg0 << endl;
-    
+
     cout << "top->out       = " << (int) top->out << endl;
     cout << "state.self_out = " << (int) state.self_out << endl;
+
+    assert(top->out == state.self_out);
+
+    compare_memories(&state, top);
 
     // Note: Addresses can probably be removed by more advanced logic duplication
 
