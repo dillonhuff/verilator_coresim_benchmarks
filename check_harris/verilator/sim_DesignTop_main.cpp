@@ -207,7 +207,7 @@ void compare_memories(circuit_state* const state, VDesignTop* const top) {
     // VL_SIG16(v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data[484],15,0);
     // VL_SIG16(v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data[484],15,0);
 
-  cout << "Comparing memories" << endl;
+  //cout << "Comparing memories" << endl;
   compare_memory(state->lb_grad_xx_2_stencil_update_stream$mem_1$mem,
                  top->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data,
                  484);
@@ -243,9 +243,9 @@ void compare_memories(circuit_state* const state, VDesignTop* const top) {
     // //char	__VpadToAlign6972[4];
     // VL_SIG16(v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data[482],15,0);
 
-  cout << "top->v__DOT__sub_746_749_750___05Fout = " << (int) top->v__DOT__sub_746_749_750___05Fout << endl;
+  //cout << "top->v__DOT__sub_746_749_750___05Fout = " << (int) top->v__DOT__sub_746_749_750___05Fout << endl;
 
-  cout << "Comparing state->lb_p3_cim_stencil_update_stream$mem_1$mem to top->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data" << endl;
+  //cout << "Comparing state->lb_p3_cim_stencil_update_stream$mem_1$mem to top->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data" << endl;
   compare_memory(state->lb_p3_cim_stencil_update_stream$mem_1$mem,
                  top->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data,
                  482);
@@ -310,13 +310,13 @@ int main(int argc, char** argv) {
 
     state.self_clk = i % 2;
 
-    cout << "####### Executing Top ########" << endl;
+    //cout << "####### Executing Top ########" << endl;
     top->eval();
-    cout << "####### Done Top ########" << endl;
+    //cout << "####### Done Top ########" << endl;
 
-    cout << "####### Executing State ########" << endl;
+    //cout << "####### Executing State ########" << endl;
     simulate(&state);
-    cout << "####### Done State ########" << endl;
+    //cout << "####### Done State ########" << endl;
 
     state.self_clk_last = state.self_clk;
 
@@ -333,26 +333,27 @@ int main(int argc, char** argv) {
     
     // cout << "out = " << (int) top->out << endl;
 
-    cout << "--- Half cycle " << i << endl;
-    cout << "state.self_clk = " << (int) state.self_clk << endl;
-    cout << "top->clk       = " << (int) top->clk << endl;
+    // cout << "--- Half cycle " << i << endl;
+    // cout << "state.self_clk = " << (int) state.self_clk << endl;
+    // cout << "top->clk       = " << (int) top->clk << endl;
 
     assert(state.self_clk == top->clk);
 
-    cout << "top->in_0       = " << (int) top->in_0 << endl;
-    cout << "state.self_in_0 = " << (int) state.self_in_0 << endl;
+    // cout << "top->in_0       = " << (int) top->in_0 << endl;
+    // cout << "state.self_in_0 = " << (int) state.self_in_0 << endl;
 
     assert(top->in_0 == state.self_in_0);
-    uint16_t rv = state.lb_padded_2_stencil_update_stream$reg_0_1;
-    uint16_t eval_rv = top->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg;
 
-    cout << "state.rv = " << (int) rv << endl;
-    cout << "top.rv   = " << (int) eval_rv << endl;
+    // uint16_t rv = state.lb_padded_2_stencil_update_stream$reg_0_1;
+    // uint16_t eval_rv = top->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg;
 
-    assert(rv == eval_rv);
+    // cout << "state.rv = " << (int) rv << endl;
+    // cout << "top.rv   = " << (int) eval_rv << endl;
 
-    cout << "top->out       = " << (int) top->out << endl;
-    cout << "state.self_out = " << (int) state.self_out << endl;
+    // assert(rv == eval_rv);
+
+    // cout << "top->out       = " << (int) top->out << endl;
+    // cout << "state.self_out = " << (int) state.self_out << endl;
 
     assert(top->out == state.self_out);
 
