@@ -87,15 +87,15 @@ print_diff('conv_3_1')
 # ------------------ Correctness testing harris
 
 os.system("cp ~/CppWorkspace/CGRAMapper/examples/_harris.json ./check_harris/tmp_harris.json");
-os.system("cd ./check_harris/; coreir -i tmp_harris.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o harris.json");
+os.system("cd ./check_harris/; coreir -i tmp_harris.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o harris.json > scratch.txt");
 
-os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json; cd ../..");
+os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json > scratch.txt; cd ../..");
 
 os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 
 ## run verilator
 ### Create verilog
-os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib");
+os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
 
 os.system("cd ./check_harris/verilator/; make -j")
 

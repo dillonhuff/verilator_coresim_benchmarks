@@ -207,55 +207,55 @@ void VDesignTop::_initial__TOP__1(VDesignTop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_PRINTF("    VDesignTop::_initial__TOP__1\n"); );
     VDesignTop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_0_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_1_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_2_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_0_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_1_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_2_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_1_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_2_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_0_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_1_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_2_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_1_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_2_2__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg = 0U;
 }
 
@@ -305,19 +305,19 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
     __Vdlyvset__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 = 0U;
     __Vdlyvset__v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0 = 0U;
     __Vdlyvset__v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 = 0U;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_1_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_1_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_0_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_0_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__sub_746_749_750___05Fout;
     if ((0x1e1U >= (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
@@ -327,10 +327,10 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_2_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem___05Frdata;
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem___05Frdata;
     if ((0x1e1U >= (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg))) {
@@ -340,22 +340,22 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_2_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_0_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_0_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_1_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_1_1__DOT__outReg;
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__mul_691_693_694___05Fout;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
@@ -365,7 +365,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem___05Frdata;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg))) {
@@ -375,37 +375,37 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_2_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_2_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_0_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_0_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_1_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_1_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_1_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_1_1__DOT__outReg;
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__mul_649_649_650___05Fout;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
@@ -415,7 +415,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__mul_715_715_716___05Fout;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
@@ -425,7 +425,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem___05Frdata;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg))) {
@@ -435,7 +435,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem___05Frdata;
     if ((0x1e3U >= (IData)(vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg))) {
@@ -445,22 +445,22 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_1_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_1_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_2_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_2_1__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_2__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg;
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__in_0_auto_reg__DOT__outReg;
     if ((0x1e5U >= (IData)(vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg))) {
@@ -470,7 +470,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYS at harris.v:44
+    // ALWAYS at harris.v:37
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT____Vlvbound1 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem___05Frdata;
     if ((0x1e5U >= (IData)(vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg))) {
@@ -480,52 +480,52 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	__Vdlyvdim0__v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0 
 	    = vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem__DOT__data__v0;
     }
-    // ALWAYSPOST at harris.v:46
+    // ALWAYSPOST at harris.v:39
     if (__Vdlyvset__v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0) {
 	vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data[__Vdlyvdim0__v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0] 
 	    = __Vdlyvval__v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data__v0;
@@ -534,20 +534,20 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	= (0x1ffU & ((0x1e2U == (0x1ffU & ((IData)(1U) 
 					   + (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg))))
 		      ? 0U : ((IData)(1U) + (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024raddr__024reg0__DOT__outReg))));
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_1_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_0_1__DOT__outReg 
 	= vlTOPp->v__DOT__sub_746_749_750___05Fout;
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024enMux___05Fout 
 	= (0x1ffU & ((0x1e2U == (0x1ffU & ((IData)(1U) 
 					   + (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))))
 		      ? 0U : ((IData)(1U) + (IData)(vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))));
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024waddr__024enMux___05Fout;
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024mem___05Frdata 
@@ -563,16 +563,16 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	= (0x1ffU & ((0x1e4U == (0x1ffU & ((IData)(1U) 
 					   + (IData)(vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))))
 		      ? 0U : ((IData)(1U) + (IData)(vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))));
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_0_1__DOT__outReg 
 	= vlTOPp->v__DOT__mul_691_693_694___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_1_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024waddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024waddr__024enMux___05Fout;
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024mem___05Frdata 
@@ -596,25 +596,25 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	= (0x1ffU & ((0x1e4U == (0x1ffU & ((IData)(1U) 
 					   + (IData)(vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))))
 		      ? 0U : ((IData)(1U) + (IData)(vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))));
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_1__DOT__outReg 
 	= vlTOPp->v__DOT__mul_649_649_650___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_0_1__DOT__outReg 
 	= vlTOPp->v__DOT__mul_715_715_716___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_1_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_1_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024waddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024waddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024waddr__024enMux___05Fout;
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem___05Frdata 
@@ -622,7 +622,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	    ? vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024mem__DOT__data
 	   [vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg]
 	    : 0U);
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024waddr__024enMux___05Fout;
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem___05Frdata 
@@ -630,7 +630,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	    ? vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024mem__DOT__data
 	   [vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg]
 	    : 0U);
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_1_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024mem___05Frdata;
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024raddr__024enMux___05Fout 
@@ -641,16 +641,16 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	= (0x1ffU & ((0x1e6U == (0x1ffU & ((IData)(1U) 
 					   + (IData)(vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))))
 		      ? 0U : ((IData)(1U) + (IData)(vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg))));
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_2_1__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem___05Frdata;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg 
 	= vlTOPp->v__DOT__in_0_auto_reg__DOT__outReg;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024waddr__024enMux___05Fout;
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg 
 	= vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024waddr__024enMux___05Fout;
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024mem___05Frdata 
@@ -683,7 +683,7 @@ VL_INLINE_OPT void VDesignTop::_sequent__TOP__2(VDesignTop__Syms* __restrict vlS
 	    ? vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024mem__DOT__data
 	   [vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024raddr__024reg0__DOT__outReg]
 	    : 0U);
-    // ALWAYS at harris.v:75
+    // ALWAYS at harris.v:95
     vlTOPp->v__DOT__in_0_auto_reg__DOT__outReg = vlTOPp->in_0;
 }
 
@@ -691,49 +691,49 @@ void VDesignTop::_initial__TOP__3(VDesignTop__Syms* __restrict vlSymsp) {
     VL_DEBUG_IF(VL_PRINTF("    VDesignTop::_initial__TOP__3\n"); );
     VDesignTop* __restrict vlTOPp VL_ATTR_UNUSED = vlSymsp->TOPp;
     // Body
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_1_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024reg_0_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_p3_cim_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_0_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024reg_1_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_0_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_0_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024reg_1_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024reg_1_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_xx_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_grad_yy_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_1_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_2_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_1__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__lb_padded_2_stencil_update_stream__024mem_2__024waddr__024reg0__DOT__outReg = 0U;
-    // INITIAL at harris.v:74
+    // INITIAL at harris.v:94
     vlTOPp->v__DOT__in_0_auto_reg__DOT__outReg = 0U;
 }
 
