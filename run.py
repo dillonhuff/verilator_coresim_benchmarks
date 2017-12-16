@@ -38,6 +38,11 @@ def print_diff(app_name):
     os.system("cat scratch/" + app_name + "_diff.txt")
     print 'End of diff.'
 
+def run_coresim(app_name):
+    os.system("cd ./check_" + app_name + "/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
+
+    os.system("cd ./check_" + app_name + "/coresim/; make -j; ./a.out")
+
 #Setup
 os.system("mkdir scratch");
 
@@ -46,9 +51,11 @@ os.system("mkdir scratch");
 os.system("cp ~/CppWorkspace/CGRAMapper/examples/cascade.json ./check_cascade/tmp_cascade.json > scratch.txt")
 os.system("cd ./check_cascade/; coreir -i tmp_cascade.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o cascade.json > scratch.txt")
 
-os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
+run_coresim("cascade")
 
-os.system("cd ./check_cascade/coresim/; make -j; ./a.out")
+# os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
+
+# os.system("cd ./check_cascade/coresim/; make -j; ./a.out")
 
 ## run verilator
 ### Create verilog
@@ -67,9 +74,10 @@ print_diff('cascade')
 os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/tmp_conv_3_1.json > scratch.txt");
 os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json > scratch.txt");
 
-os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json > scratch.json; cd ../..");
+run_coresim("conv_3_1")
+# os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json > scratch.json; cd ../..");
 
-os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
+# os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
 
@@ -89,9 +97,11 @@ print_diff('conv_3_1')
 os.system("cp ~/CppWorkspace/CGRAMapper/examples/_harris.json ./check_harris/tmp_harris.json");
 os.system("cd ./check_harris/; coreir -i tmp_harris.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o harris.json > scratch.txt");
 
-os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json > scratch.txt; cd ../..");
+run_coresim("harris")
 
-os.system("cd ./check_harris/coresim/; make -j; ./a.out")
+# os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json > scratch.txt; cd ../..");
+
+# os.system("cd ./check_harris/coresim/; make -j; ./a.out")
 
 ## run verilator
 ### Create verilog

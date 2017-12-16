@@ -7,6 +7,13 @@ module corebit_const #(parameter value=1) (
 
 endmodule //corebit_const
 
+module corebit_term (
+  input in
+);
+
+
+endmodule //corebit_term
+
 module coreir_add #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -23,22 +30,18 @@ module coreir_const #(parameter value=1, parameter width=1) (
 
 endmodule //coreir_const
 
-module corebit_term (
-  input in
-);
-
-
-endmodule //corebit_term
-
-module coreir_mux #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  input sel,
+module coreir_reg #(parameter init=1, parameter width=1) (
+  input clk,
+  input [width-1:0] in,
   output [width-1:0] out
 );
-  assign out = sel ? in1 : in0;
+reg [width-1:0] outReg=init;
+always @(posedge clk) begin
+  outReg <= in;
+end
+assign out = outReg;
 
-endmodule //coreir_mux
+endmodule //coreir_reg
 
 module coreir_eq #(parameter width=1) (
   input [width-1:0] in0,
@@ -48,15 +51,6 @@ module coreir_eq #(parameter width=1) (
   assign out = in0 == in1;
 
 endmodule //coreir_eq
-
-module coreir_neq #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 != in1;
-
-endmodule //coreir_neq
 
 module mem #(parameter depth=1, parameter width=1) (
   input clk,
@@ -85,18 +79,24 @@ module coreir_mul #(parameter width=1) (
 
 endmodule //coreir_mul
 
-module coreir_reg #(parameter init=1, parameter width=1) (
-  input clk,
-  input [width-1:0] in,
+module coreir_mux #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  input sel,
   output [width-1:0] out
 );
-reg [width-1:0] outReg=init;
-always @(posedge clk) begin
-  outReg <= in;
-end
-assign out = outReg;
+  assign out = sel ? in1 : in0;
 
-endmodule //coreir_reg
+endmodule //coreir_mux
+
+module coreir_neq #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
+);
+  assign out = in0 != in1;
+
+endmodule //coreir_neq
 
 module DesignTop (
   input  clk,
