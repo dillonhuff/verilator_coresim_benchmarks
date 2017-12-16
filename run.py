@@ -43,6 +43,12 @@ def run_coresim(app_name):
 
     os.system("cd ./check_" + app_name + "/coresim/; make -j; ./a.out")
 
+def run_verilator(app_name):
+    ### Create verilog
+    os.system("cd ./check_" + app_name + "/; coreir -i ./" + app_name + ".json -o ./verilator/" + app_name + ".v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt")
+
+    os.system("cd ./check_cascade/verilator/; make -j")
+    
 #Setup
 os.system("mkdir scratch");
 
@@ -53,15 +59,8 @@ os.system("cd ./check_cascade/; coreir -i tmp_cascade.json --load_libs ~/CppWork
 
 run_coresim("cascade")
 
-# os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
-
-# os.system("cd ./check_cascade/coresim/; make -j; ./a.out")
-
 ## run verilator
-### Create verilog
-os.system("cd ./check_cascade/; coreir -i ./cascade.json -o ./verilator/cascade.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
-
-os.system("cd ./check_cascade/verilator/; make -j")
+run_verilator("cascade")
 
 ## Compare outputs
 os.system("diff ./check_cascade/verilator/verilator_cascade_output.txt ./check_cascade/coresim/coresim_cascade_output.txt > scratch/cascade_diff.txt")
@@ -75,9 +74,6 @@ os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/
 os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json > scratch.txt");
 
 run_coresim("conv_3_1")
-# os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json > scratch.json; cd ../..");
-
-# os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
 
@@ -99,15 +95,13 @@ os.system("cd ./check_harris/; coreir -i tmp_harris.json --load_libs ~/CppWorksp
 
 run_coresim("harris")
 
-# os.system("cd ./check_harris/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../harris.json > scratch.txt; cd ../..");
-
-# os.system("cd ./check_harris/coresim/; make -j; ./a.out")
-
 ## run verilator
-### Create verilog
-os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
+run_verilator("harris")
 
-os.system("cd ./check_harris/verilator/; make -j")
+# ### Create verilog
+# os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
+
+# os.system("cd ./check_harris/verilator/; make -j")
 
 ## Compare outputs
 os.system("diff ./check_harris/verilator/verilator_harris_output.txt ./check_harris/coresim/coresim_harris_output.txt > scratch/harris_diff.txt")
