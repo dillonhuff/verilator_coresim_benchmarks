@@ -39,7 +39,7 @@ def print_diff(app_name):
     print 'End of diff.'
 
 def run_coresim(app_name):
-    os.system("cd ./check_" + app_name + "/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
+    os.system("cd ./check_" + app_name + "/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../" + app_name + ".json > scratch.txt; cd ../..")
 
     os.system("cd ./check_" + app_name + "/coresim/; make -j; ./a.out")
 
@@ -71,14 +71,14 @@ print_diff('cascade')
 
 ## run coresim
 os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/tmp_conv_3_1.json > scratch.txt");
-os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json > scratch.txt");
+os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json > scratch.txt")
 
 run_coresim("conv_3_1")
 
 ## run verilator
 
 ### Create verilog
-os.system("cd ./check_conv_3_1/; coreir -i ./conv_3_1.json -o ./verilator_ex/conv_3_1.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
+os.system("cd ./check_conv_3_1/; coreir -i ./conv_3_1.json -o ./verilator_ex/conv_3_1.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt")
 
 ### Compile and run
 os.system("cd ./check_conv_3_1/verilator_ex/; make -j")
@@ -98,10 +98,10 @@ run_coresim("harris")
 ## run verilator
 run_verilator("harris")
 
-# ### Create verilog
-# os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
+### Create verilog
+os.system("cd ./check_harris/; coreir -i ./harris.json -o ./verilator/harris.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
 
-# os.system("cd ./check_harris/verilator/; make -j")
+os.system("cd ./check_harris/verilator/; make -j")
 
 ## Compare outputs
 os.system("diff ./check_harris/verilator/verilator_harris_output.txt ./check_harris/coresim/coresim_harris_output.txt > scratch/harris_diff.txt")
