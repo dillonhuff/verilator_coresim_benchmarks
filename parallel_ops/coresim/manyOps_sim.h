@@ -4010,4 +4010,4 @@ struct __attribute__((packed, aligned(32))) circuit_state {
 	uint16_t self_out_999;
 };
 
-void simulate( circuit_state* state );
+void simulate( circuit_state* __restrict const state );

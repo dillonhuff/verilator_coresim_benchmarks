@@ -72,4 +72,4 @@ struct __attribute__((packed, aligned(32))) circuit_state {
 	uint16_t lb_padded_2_stencil_update_stream$reg_1_1;
 };
 
-void simulate( circuit_state* state );
+void simulate( circuit_state* __restrict const state );
