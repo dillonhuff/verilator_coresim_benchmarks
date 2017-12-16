@@ -43,16 +43,16 @@ os.system("mkdir scratch");
 
 # -------------------- Correctness testing cascade
 
-os.system("cp ~/CppWorkspace/CGRAMapper/examples/cascade.json ./check_cascade/tmp_cascade.json");
-os.system("cd ./check_cascade/; coreir -i tmp_cascade.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o cascade.json");
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/cascade.json ./check_cascade/tmp_cascade.json > scratch.txt")
+os.system("cd ./check_cascade/; coreir -i tmp_cascade.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o cascade.json > scratch.txt")
 
-os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json; cd ../..");
+os.system("cd ./check_cascade/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../cascade.json > scratch.txt; cd ../..")
 
 os.system("cd ./check_cascade/coresim/; make -j; ./a.out")
 
 ## run verilator
 ### Create verilog
-os.system("cd ./check_cascade/; coreir -i ./cascade.json -o ./verilator/cascade.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib");
+os.system("cd ./check_cascade/; coreir -i ./cascade.json -o ./verilator/cascade.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
 
 os.system("cd ./check_cascade/verilator/; make -j")
 
@@ -64,17 +64,17 @@ print_diff('cascade')
 # ------------------- Correctness testing conv_3_1
 
 ## run coresim
-os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/tmp_conv_3_1.json");
-os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json");
+os.system("cp ~/CppWorkspace/CGRAMapper/examples/conv_3_1.json ./check_conv_3_1/tmp_conv_3_1.json > scratch.txt");
+os.system("cd ./check_conv_3_1/; coreir -i tmp_conv_3_1.json --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib  -p rungenerators,flattentypes,flatten,registerinputs,wireclocks-coreir -o conv_3_1.json > scratch.txt");
 
-os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json; cd ../..");
+os.system("cd ./check_conv_3_1/coresim; ~/CppWorkspace/coreir/bin/simulator -i ../conv_3_1.json > scratch.json; cd ../..");
 
 os.system("cd ./check_conv_3_1/coresim/; make -j; ./a.out")
 
 ## run verilator
 
 ### Create verilog
-os.system("cd ./check_conv_3_1/; coreir -i ./conv_3_1.json -o ./verilator_ex/conv_3_1.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib");
+os.system("cd ./check_conv_3_1/; coreir -i ./conv_3_1.json -o ./verilator_ex/conv_3_1.v --load_libs ~/CppWorkspace/coreir/lib/libcoreir-commonlib.dylib > scratch.txt");
 
 ### Compile and run
 os.system("cd ./check_conv_3_1/verilator_ex/; make -j")
