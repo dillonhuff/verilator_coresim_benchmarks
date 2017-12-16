@@ -7,19 +7,6 @@ module corebit_const #(parameter value=1) (
 
 endmodule //corebit_const
 
-module coreir_reg #(parameter init=1, parameter width=1) (
-  input clk,
-  input [width-1:0] in,
-  output [width-1:0] out
-);
-reg [width-1:0] outReg=init;
-always @(posedge clk) begin
-  outReg <= in;
-end
-assign out = outReg;
-
-endmodule //coreir_reg
-
 module corebit_term (
   input in
 );
@@ -27,23 +14,14 @@ module corebit_term (
 
 endmodule //corebit_term
 
-module mem #(parameter depth=1, parameter width=1) (
-  input clk,
-  input [width-1:0] wdata,
-  input [$clog2(depth)-1:0] waddr,
-  input wen,
-  output [width-1:0] rdata,
-  input [$clog2(depth)-1:0] raddr
+module coreir_mul #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output [width-1:0] out
 );
-reg [width-1:0] data[depth];
-always @(posedge clk) begin
-  if (wen) begin
-    data[waddr] <= wdata;
-  end
-end
-assign rdata = data[raddr];
+  assign out = in0 * in1;
 
-endmodule //mem
+endmodule //coreir_mul
 
 module coreir_add #(parameter width=1) (
   input [width-1:0] in0,
@@ -70,15 +48,6 @@ module coreir_eq #(parameter width=1) (
 
 endmodule //coreir_eq
 
-module coreir_mul #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output [width-1:0] out
-);
-  assign out = in0 * in1;
-
-endmodule //coreir_mul
-
 module coreir_mux #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -88,6 +57,37 @@ module coreir_mux #(parameter width=1) (
   assign out = sel ? in1 : in0;
 
 endmodule //coreir_mux
+
+module coreir_reg #(parameter init=1, parameter width=1) (
+  input clk,
+  input [width-1:0] in,
+  output [width-1:0] out
+);
+reg [width-1:0] outReg=init;
+always @(posedge clk) begin
+  outReg <= in;
+end
+assign out = outReg;
+
+endmodule //coreir_reg
+
+module mem #(parameter depth=1, parameter width=1) (
+  input clk,
+  input [width-1:0] wdata,
+  input [$clog2(depth)-1:0] waddr,
+  input wen,
+  output [width-1:0] rdata,
+  input [$clog2(depth)-1:0] raddr
+);
+reg [width-1:0] data[depth];
+always @(posedge clk) begin
+  if (wen) begin
+    data[waddr] <= wdata;
+  end
+end
+assign rdata = data[raddr];
+
+endmodule //mem
 
 module coreir_neq #(parameter width=1) (
   input [width-1:0] in0,

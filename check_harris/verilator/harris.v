@@ -9,6 +9,15 @@ module corebit_and (
 
 endmodule //corebit_and
 
+module coreir_add #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output [width-1:0] out
+);
+  assign out = in0 + in1;
+
+endmodule //coreir_add
+
 module corebit_const #(parameter value=1) (
   output out
 );
@@ -23,21 +32,14 @@ module corebit_term (
 
 endmodule //corebit_term
 
-module coreir_add #(parameter width=1) (
+module coreir_ule #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
-  output [width-1:0] out
+  output out
 );
-  assign out = in0 + in1;
+  assign out = in0 <= in1;
 
-endmodule //coreir_add
-
-module coreir_const #(parameter value=1, parameter width=1) (
-  output [width-1:0] out
-);
-  assign out = value;
-
-endmodule //coreir_const
+endmodule //coreir_ule
 
 module coreir_ashr #(parameter width=1) (
   input [width-1:0] in0,
@@ -61,14 +63,12 @@ assign out = outReg;
 
 endmodule //coreir_reg
 
-module coreir_sge #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
+module coreir_const #(parameter value=1, parameter width=1) (
+  output [width-1:0] out
 );
-  assign out = $signed(in0) >= $signed(in1);
+  assign out = value;
 
-endmodule //coreir_sge
+endmodule //coreir_const
 
 module coreir_eq #(parameter width=1) (
   input [width-1:0] in0,
@@ -97,15 +97,6 @@ assign rdata = data[raddr];
 
 endmodule //mem
 
-module coreir_ule #(parameter width=1) (
-  input [width-1:0] in0,
-  input [width-1:0] in1,
-  output out
-);
-  assign out = in0 <= in1;
-
-endmodule //coreir_ule
-
 module coreir_mul #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -125,6 +116,15 @@ module coreir_mux #(parameter width=1) (
 
 endmodule //coreir_mux
 
+module coreir_neq #(parameter width=1) (
+  input [width-1:0] in0,
+  input [width-1:0] in1,
+  output out
+);
+  assign out = in0 != in1;
+
+endmodule //coreir_neq
+
 module coreir_ult #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
@@ -134,14 +134,14 @@ module coreir_ult #(parameter width=1) (
 
 endmodule //coreir_ult
 
-module coreir_neq #(parameter width=1) (
+module coreir_sge #(parameter width=1) (
   input [width-1:0] in0,
   input [width-1:0] in1,
   output out
 );
-  assign out = in0 != in1;
+  assign out = $signed(in0) >= $signed(in1);
 
-endmodule //coreir_neq
+endmodule //coreir_sge
 
 module coreir_sub #(parameter width=1) (
   input [width-1:0] in0,

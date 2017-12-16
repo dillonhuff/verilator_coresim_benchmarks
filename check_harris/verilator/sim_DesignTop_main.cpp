@@ -290,13 +290,13 @@ int main(int argc, char** argv) {
   top->in_0 = 1;//in_0;
   top->out = 0;//out;
 
-  circuit_state state;
-  set_defaults(&state);
+  // circuit_state state;
+  // set_defaults(&state);
 
-  state.self_clk = 1;
-  state.self_clk_last = 0;
-  state.self_in_0 = 1;
-  state.self_out = 0b0000000011111111;
+  // state.self_clk = 1;
+  // state.self_clk_last = 0;
+  // state.self_in_0 = 1;
+  // state.self_out = 0b0000000011111111;
   //state.self_out = 0;
   
   vector<unsigned char> output;
@@ -308,17 +308,17 @@ int main(int argc, char** argv) {
   for (int i = 0; i < image.size(); i++) {
     top->clk = i % 2;
 
-    state.self_clk = i % 2;
+    //state.self_clk = i % 2;
 
     //cout << "####### Executing Top ########" << endl;
     top->eval();
     //cout << "####### Done Top ########" << endl;
 
     //cout << "####### Executing State ########" << endl;
-    simulate(&state);
+    //simulate(&state);
     //cout << "####### Done State ########" << endl;
 
-    state.self_clk_last = state.self_clk;
+    //state.self_clk_last = state.self_clk;
 
 
     // cout << (int) top->v__DOT__smax_762_763_764__DOT__max_mux___05Fout << endl;
@@ -337,12 +337,12 @@ int main(int argc, char** argv) {
     // cout << "state.self_clk = " << (int) state.self_clk << endl;
     // cout << "top->clk       = " << (int) top->clk << endl;
 
-    assert(state.self_clk == top->clk);
+    //assert(state.self_clk == top->clk);
 
     // cout << "top->in_0       = " << (int) top->in_0 << endl;
     // cout << "state.self_in_0 = " << (int) state.self_in_0 << endl;
 
-    assert(top->in_0 == state.self_in_0);
+    //assert(top->in_0 == state.self_in_0);
 
     // uint16_t rv = state.lb_padded_2_stencil_update_stream$reg_0_1;
     // uint16_t eval_rv = top->v__DOT__lb_padded_2_stencil_update_stream__024reg_0_1__DOT__outReg;
@@ -355,9 +355,9 @@ int main(int argc, char** argv) {
     // cout << "top->out       = " << (int) top->out << endl;
     // cout << "state.self_out = " << (int) state.self_out << endl;
 
-    assert(top->out == state.self_out);
+    //assert(top->out == state.self_out);
 
-    compare_memories(&state, top);
+    //compare_memories(&state, top);
 
     // Note: Addresses can probably be removed by more advanced logic duplication
 
@@ -368,7 +368,7 @@ int main(int argc, char** argv) {
 
     if (top->clk == 1) {
 
-      state.self_in_0 = image[i];
+      //state.self_in_0 = image[i];
       top->in_0 = image[i];
     }
   }
