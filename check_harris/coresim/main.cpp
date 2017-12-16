@@ -285,8 +285,6 @@ int main() {
 
     state.self_clk_last = state.self_clk;
 
-// (state->self_out) = (MASK(0b00000000000000000000000000000001, (MASK(0b00000000000000000000000000000001, ((MASK(0b00000000000000000000000000000001, (((int16_t) smax_762_763_764$max_mux_out)  >=  ((int16_t) sub_746_749_750_out))) ? smax_762_763_764$max_mux_out : sub_746_749_750_out)  <  lb_p3_cim_stencil_update_stream$reg_1_1_out))  &  MASK(0b00000000000000000000000000000001, (0b0000000001100100  <=  lb_p3_cim_stencil_update_stream$reg_1_1_out)))) ? 0b0000000000000000 : 0b0000000011111111);
-
     if ((state.self_clk_last == 0) &&
         ((i + 1) % 2 == 1)) {
       output.push_back(state.self_out);
