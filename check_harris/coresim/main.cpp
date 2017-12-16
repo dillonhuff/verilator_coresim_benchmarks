@@ -9,7 +9,82 @@
 
 using namespace std;
 
+// void set_defaults(circuit_state* state) {
+//   state->self_clk_last = 0;
+//   state->self_clk = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_2_2 = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_1_2 = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_0_2 = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_0_1 = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_2_1 = 0;
+//   state->lb_padded_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
+//   state->lb_padded_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+//   //state->lb_padded_2_stencil_update_stream$mem_2$mem[ 486 ];
+//   state->lb_padded_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
+//   state->lb_padded_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+//   //state->lb_padded_2_stencil_update_stream$mem_1$mem[ 486 ];
+//   state->lb_p3_cim_stencil_update_stream$reg_1_2 = 0;
+//   state->lb_p3_cim_stencil_update_stream$reg_0_2 = 0;
+//   state->lb_p3_cim_stencil_update_stream$reg_0_1 = 0;
+//   state->lb_p3_cim_stencil_update_stream$reg_2_1 = 0;
+//   state->lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0 = 0;
+//   state->lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0 = 0;
+//   //state->lb_p3_cim_stencil_update_stream$mem_2$mem[ 482 ];
+//   state->lb_p3_cim_stencil_update_stream$reg_1_1 = 0;
+//   state->lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0 = 0;
+//   state->lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0 = 0;
+//   //state->lb_p3_cim_stencil_update_stream$mem_1$mem[ 482 ];
+//   state->lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+//   //state->lb_grad_yy_2_stencil_update_stream$mem_2$mem[ 484 ];
+//   state->lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+//   //state->lb_grad_yy_2_stencil_update_stream$mem_1$mem[ 484 ];
+//   state->lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+//   //state->lb_grad_xy_2_stencil_update_stream$mem_2$mem[ 484 ];
+//   state->lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+//   //state->lb_grad_xy_2_stencil_update_stream$mem_1$mem[ 484 ];
+//   state->lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+//   //state->lb_grad_xx_2_stencil_update_stream$mem_2$mem[ 484 ];
+//   state->lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+//   //state->lb_grad_xx_2_stencil_update_stream$mem_1$mem[ 484 ];
+//   state->lb_grad_yy_2_stencil_update_stream$reg_0_1 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$reg_0_2 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$reg_1_1 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$reg_1_2 = 0;
+//   state->lb_grad_yy_2_stencil_update_stream$reg_2_1 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$reg_0_1 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$reg_0_2 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$reg_1_1 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$reg_1_2 = 0;
+//   state->lb_grad_xy_2_stencil_update_stream$reg_2_1 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$reg_0_1 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$reg_0_2 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$reg_1_1 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$reg_1_2 = 0;
+//   state->lb_grad_xx_2_stencil_update_stream$reg_2_1 = 0;
+//   state->self_in_0 = 0;
+//   state->self_out = 0;
+//   //state->lb_grad_xx_2_stencil_update_stream$reg_2_2 = 0;
+//   //state->lb_grad_xy_2_stencil_update_stream$reg_2_2 = 0;
+//   //state->lb_grad_yy_2_stencil_update_stream$reg_2_2 = 0;
+//   //state->lb_p3_cim_stencil_update_stream$reg_2_2 = 0;
+//   state->lb_padded_2_stencil_update_stream$reg_1_1 = 0;
+  
+// }
+
+void set_memory(uint16_t* const mem, const int len) {
+  for (int i = 0; i < len; i++) {
+    mem[i] = 0;
+  }
+}
+
 void set_defaults(circuit_state* state) {
+  state->in_0_auto_reg = 0;
   state->self_clk_last = 0;
   state->self_clk = 0;
   state->lb_padded_2_stencil_update_stream$reg_2_2 = 0;
@@ -19,39 +94,69 @@ void set_defaults(circuit_state* state) {
   state->lb_padded_2_stencil_update_stream$reg_2_1 = 0;
   state->lb_padded_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_padded_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
-  //state->lb_padded_2_stencil_update_stream$mem_2$mem[ 486 ];
+
+  //state->lb_padded_2_stencil_update_stream$mem_2$mem[ 486 ];  
+  set_memory( state->lb_padded_2_stencil_update_stream$mem_2$mem, 486 );
+
   state->lb_padded_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_padded_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+
   //state->lb_padded_2_stencil_update_stream$mem_1$mem[ 486 ];
+  set_memory(state->lb_padded_2_stencil_update_stream$mem_1$mem, 486);
+
   state->lb_p3_cim_stencil_update_stream$reg_1_2 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_0_2 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_0_1 = 0;
   state->lb_p3_cim_stencil_update_stream$reg_2_1 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0 = 0;
+
   //state->lb_p3_cim_stencil_update_stream$mem_2$mem[ 482 ];
+  set_memory( state->lb_p3_cim_stencil_update_stream$mem_2$mem, 482 );
+
   state->lb_p3_cim_stencil_update_stream$reg_1_1 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0 = 0;
+
   //state->lb_p3_cim_stencil_update_stream$mem_1$mem[ 482 ];
+  set_memory(state->lb_p3_cim_stencil_update_stream$mem_1$mem, 482 );
+
   state->lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+
   //state->lb_grad_yy_2_stencil_update_stream$mem_2$mem[ 484 ];
+  set_memory(state->lb_grad_yy_2_stencil_update_stream$mem_2$mem, 484 );
+
   state->lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+
   //state->lb_grad_yy_2_stencil_update_stream$mem_1$mem[ 484 ];
+  set_memory(state->lb_grad_yy_2_stencil_update_stream$mem_1$mem, 484 );
+
   state->lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+
   //state->lb_grad_xy_2_stencil_update_stream$mem_2$mem[ 484 ];
+  set_memory(state->lb_grad_xy_2_stencil_update_stream$mem_2$mem, 484);
+
   state->lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+
   //state->lb_grad_xy_2_stencil_update_stream$mem_1$mem[ 484 ];
+  set_memory(state->lb_grad_xy_2_stencil_update_stream$mem_1$mem, 484);
+
   state->lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0 = 0;
   state->lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0 = 0;
+
   //state->lb_grad_xx_2_stencil_update_stream$mem_2$mem[ 484 ];
+  set_memory(state->lb_grad_xx_2_stencil_update_stream$mem_2$mem, 484);
+
   state->lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0 = 0;
   state->lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0 = 0;
+
   //state->lb_grad_xx_2_stencil_update_stream$mem_1$mem[ 484 ];
+  set_memory(state->lb_grad_xx_2_stencil_update_stream$mem_1$mem, 484);
+
   state->lb_grad_yy_2_stencil_update_stream$reg_0_1 = 0;
   state->lb_grad_yy_2_stencil_update_stream$reg_0_2 = 0;
   state->lb_grad_yy_2_stencil_update_stream$reg_1_1 = 0;
@@ -74,8 +179,73 @@ void set_defaults(circuit_state* state) {
   //state->lb_grad_yy_2_stencil_update_stream$reg_2_2 = 0;
   //state->lb_p3_cim_stencil_update_stream$reg_2_2 = 0;
   state->lb_padded_2_stencil_update_stream$reg_1_1 = 0;
-  
+
+
+  // Defaults again
+  state->self_clk_last= 0;
+  state->self_clk= 0;
+  state->lb_padded_2_stencil_update_stream$reg_2_2= 0;
+  state->lb_padded_2_stencil_update_stream$reg_1_2= 0;
+  state->lb_padded_2_stencil_update_stream$reg_0_2= 0;
+  state->lb_padded_2_stencil_update_stream$reg_2_1= 0;
+  state->lb_padded_2_stencil_update_stream$mem_2$waddr$reg0= 0;
+  state->lb_padded_2_stencil_update_stream$mem_2$raddr$reg0= 0;
+
+  state->lb_padded_2_stencil_update_stream$mem_1$waddr$reg0= 0;
+  state->lb_padded_2_stencil_update_stream$mem_1$raddr$reg0= 0;
+
+  state->lb_p3_cim_stencil_update_stream$reg_1_2= 0;
+  state->lb_p3_cim_stencil_update_stream$reg_0_2= 0;
+  state->lb_p3_cim_stencil_update_stream$reg_0_1= 0;
+  state->lb_p3_cim_stencil_update_stream$reg_2_1= 0;
+  state->lb_p3_cim_stencil_update_stream$mem_2$waddr$reg0= 0;
+  state->lb_p3_cim_stencil_update_stream$mem_2$raddr$reg0= 0;
+
+  state->lb_p3_cim_stencil_update_stream$reg_1_1= 0;
+  state->lb_p3_cim_stencil_update_stream$mem_1$waddr$reg0= 0;
+  state->lb_p3_cim_stencil_update_stream$mem_1$raddr$reg0= 0;
+
+  state->lb_grad_yy_2_stencil_update_stream$mem_2$waddr$reg0= 0;
+  state->lb_grad_yy_2_stencil_update_stream$mem_2$raddr$reg0= 0;
+
+  state->lb_grad_yy_2_stencil_update_stream$mem_1$waddr$reg0= 0;
+  state->lb_grad_yy_2_stencil_update_stream$mem_1$raddr$reg0= 0;
+
+  state->lb_grad_xy_2_stencil_update_stream$mem_2$waddr$reg0= 0;
+  state->lb_grad_xy_2_stencil_update_stream$mem_2$raddr$reg0= 0;
+
+  state->lb_grad_xy_2_stencil_update_stream$mem_1$waddr$reg0= 0;
+  state->lb_grad_xy_2_stencil_update_stream$mem_1$raddr$reg0= 0;
+
+  state->lb_grad_xx_2_stencil_update_stream$mem_2$waddr$reg0= 0;
+  state->lb_grad_xx_2_stencil_update_stream$mem_2$raddr$reg0= 0;
+
+  state->lb_grad_xx_2_stencil_update_stream$mem_1$waddr$reg0= 0;
+  state->lb_grad_xx_2_stencil_update_stream$mem_1$raddr$reg0= 0;
+
+  state->lb_padded_2_stencil_update_stream$reg_0_1= 0;
+  state->lb_grad_yy_2_stencil_update_stream$reg_0_1= 0;
+  state->lb_grad_yy_2_stencil_update_stream$reg_0_2= 0;
+  state->lb_grad_yy_2_stencil_update_stream$reg_1_1= 0;
+  state->lb_grad_yy_2_stencil_update_stream$reg_1_2= 0;
+  state->lb_grad_yy_2_stencil_update_stream$reg_2_1= 0;
+  state->lb_grad_xy_2_stencil_update_stream$reg_0_1= 0;
+  state->lb_grad_xy_2_stencil_update_stream$reg_0_2= 0;
+  state->lb_grad_xy_2_stencil_update_stream$reg_1_1= 0;
+  state->lb_grad_xy_2_stencil_update_stream$reg_1_2= 0;
+  state->lb_grad_xy_2_stencil_update_stream$reg_2_1= 0;
+  state->lb_grad_xx_2_stencil_update_stream$reg_0_1= 0;
+  state->lb_grad_xx_2_stencil_update_stream$reg_0_2= 0;
+  state->lb_grad_xx_2_stencil_update_stream$reg_1_1= 0;
+  state->lb_grad_xx_2_stencil_update_stream$reg_1_2= 0;
+  state->lb_grad_xx_2_stencil_update_stream$reg_2_1= 0;
+  state->in_0_auto_reg = 0;
+  state->self_out = 0b0000000011111111;
+  state->lb_padded_2_stencil_update_stream$reg_1_1 = 0;
+  state->self_in_0 = 0;
+
 }
+
 int main() {
 
   std::vector<unsigned char> image; //the raw pixels
